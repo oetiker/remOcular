@@ -7,8 +7,8 @@
 /**
  * Call the server for updates and dispatch the answers
  */
-qx.Class.define('smokescope.util.aggregator.Counter', {
-    extend: smokescope.util.aggregator.Abstract,
+qx.Class.define('remocular.util.aggregator.Counter', {
+    extend: remocular.util.aggregator.Abstract,
 
     members : {        
         process: function(row){

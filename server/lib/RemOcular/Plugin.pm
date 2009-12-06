@@ -1,18 +1,18 @@
-package SmokeScope::Plugin;
+package RemOcular::Plugin;
 use strict;
 
 =head1 NAME
 
-SmokeScope::Plugin - Base Class for implementing SmokeTrace Plugins
+RemOcular::Plugin - Base Class for implementing SmokeTrace Plugins
 
 =head1 SYNOPSIS
 
- package SmokeScope::Plugin::Traceroute;
- use base qw(SmokeScope::Plugin);
+ package RemOcular::Plugin::Traceroute;
+ use base qw(RemOcular::Plugin);
 
 =head1 DESCRIPTION
 
-Base class for all SmokeScope Plugins.
+Base class for all RemOcular Plugins.
 
 =cut
 
@@ -25,7 +25,7 @@ my $VERSION = "0.$1";
 
 =over
 
-=item $x = SmokeScope::Plugin::new();
+=item $x = RemOcular::Plugin::new();
 
 Create an instnace of the plugin.
 

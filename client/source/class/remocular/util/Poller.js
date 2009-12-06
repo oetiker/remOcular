@@ -7,7 +7,7 @@
 /**
  * Call the server for updates and dispatch the answers
  */
-qx.Class.define('smokescope.util.Poller', {
+qx.Class.define('remocular.util.Poller', {
     extend: qx.core.Object,
     type : "singleton",
 
@@ -49,7 +49,7 @@ qx.Class.define('smokescope.util.Poller', {
             }  
             if (handles.length > 0){                              
                 this.__waitingForServer = true;
-                smokescope.util.Server.getInstance().callAsync(
+                remocular.util.Server.getInstance().callAsync(
                     qx.lang.Function.bind(this.__dispatchData,this),'poll',handles
                 );
             }
@@ -66,7 +66,7 @@ qx.Class.define('smokescope.util.Poller', {
                 }
             }
             else {
-                var msg = smokescope.ui.MsgBox.getInstance();
+                var msg = remocular.ui.MsgBox.getInstance();
                 msg.error(msg.tr('Error'), exc['message'] + ' (' + exc['code'] + ')');
             }
         }

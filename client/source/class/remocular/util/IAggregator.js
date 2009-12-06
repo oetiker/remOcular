@@ -1,4 +1,4 @@
-qx.Interface.define("smokescope.util.IAggregator",{
+qx.Interface.define("remocular.util.IAggregator",{
     members : {
         process: function(rowArray){
             return true;

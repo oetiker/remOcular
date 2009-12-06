@@ -1,7 +1,7 @@
 {
   "info" : 
   {
-    "name" : "smokescope",
+    "name" : "remocular",
 
     "summary" : "Custom Application",
     "description" : "This is a skeleton for a custom application with qooxdoo.",
@@ -23,7 +23,7 @@
   
   "provides" : 
   {
-    "namespace"   : "smokescope",
+    "namespace"   : "remocular",
     "encoding"    : "utf-8",
     "class"       : "source/class",
     "resource"    : "source/resource",

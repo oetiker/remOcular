@@ -1,16 +1,16 @@
-package SmokeScope::Plugin::Top;
+package RemOcular::Plugin::Top;
 use strict;
-use base 'SmokeScope::Plugin';
-use SmokeScope::PluginHelper;
+use base 'RemOcular::Plugin';
+use RemOcular::PluginHelper;
 use Sys::Hostname;
 
 =head1 NAME
 
-SmokeScope::Plugin::Top - Top the Process Monitor
+RemOcular::Plugin::Top - Top the Process Monitor
 
 =head1 SYNOPSIS
 
- use SmokeScope::Plugin::Top
+ use RemOcular::Plugin::Top
 
 =head1 DESCRIPTION
 
@@ -154,7 +154,7 @@ sub start_instance {
     my $params = shift;  
     open(my $fh,'-|','/usr/bin/top','-b','-d',int($params->{interval}),
         ($params->{threads} ? '-H' : ())) or do {
-        SmokeScope::PluginHelper::save($outfile,"#ERROR\t$!\n");
+        RemOcular::PluginHelper::save($outfile,"#ERROR\t$!\n");
         return;
     };
     my $data = "#CLEAR\n";
@@ -168,7 +168,7 @@ sub start_instance {
             $data .= join("\t", "#PUSH", split(/\s+/,$_,12))."\n";
         }
         if ($ok and /^\s*$/){            
-            my $ratio = SmokeScope::PluginHelper::save($outfile,$data);
+            my $ratio = RemOcular::PluginHelper::save($outfile,$data);
             # it seems noone is reading us anymore, so stop;
             if ($ratio < 0.2){
                 unlink $outfile;
@@ -178,7 +178,7 @@ sub start_instance {
             $data = "#CLEAR\n";
         }
     }
-    SmokeScope::PluginHelper::save($outfile,"#STOP\n");
+    RemOcular::PluginHelper::save($outfile,"#STOP\n");
 }
 
 1;

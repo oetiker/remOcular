@@ -8,7 +8,7 @@
 
 ************************************************************************ */
 
-qx.Theme.define("smokescope.theme.Appearance",
+qx.Theme.define("remocular.theme.Appearance",
 {
   extend : qx.theme.modern.Appearance,
 

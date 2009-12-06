@@ -1,17 +1,17 @@
-package SmokeScope::Plugin::MpStat;
+package RemOcular::Plugin::MpStat;
 use strict;
-use base 'SmokeScope::Plugin';
-use SmokeScope::PluginHelper;
+use base 'RemOcular::Plugin';
+use RemOcular::PluginHelper;
 use Sys::Hostname;
 use IPC::Run qw(run timeout new_chunker);
 
 =head1 NAME
 
-SmokeScope::Plugin::MpStat - More Details on your CPU use than you ever wanted to know
+RemOcular::Plugin::MpStat - More Details on your CPU use than you ever wanted to know
 
 =head1 SYNOPSIS
 
- use SmokeScope::Plugin::Top
+ use RemOcular::Plugin::Top
 
 =head1 DESCRIPTION
 
@@ -149,7 +149,7 @@ sub start_instance {
     my $bin =  '/usr/bin/mpstat';
     my $cpu_count = _cpu_count();
     if (not -x $bin){
-        SmokeScope::PluginHelper::save($outfile,"#ERROR\t$bin not found\n");
+        RemOcular::PluginHelper::save($outfile,"#ERROR\t$bin not found\n");
         return;
     }
     my @cmd = ( '/usr/bin/mpstat','-P','ALL',$params->{interval},$params->{rounds} );
@@ -183,14 +183,14 @@ sub start_instance {
                     $data .= "\n";
                     $row++;
                 }
-                SmokeScope::PluginHelper::save($outfile,$data);
+                RemOcular::PluginHelper::save($outfile,$data);
             }
         };
 
         my $err_handler = sub {
             local $_ = shift @_;
             chomp;
-            SmokeScope::PluginHelper::save($outfile,'#ERROR'."\t"."Note:".$_."\n");                
+            RemOcular::PluginHelper::save($outfile,'#ERROR'."\t"."Note:".$_."\n");                
         };
         
         eval {
@@ -199,11 +199,11 @@ sub start_instance {
         };
 
         if ($@){
-            SmokeScope::PluginHelper::save($outfile,"#ERROR\tRunning mpstat: $@\n");
+            RemOcular::PluginHelper::save($outfile,"#ERROR\tRunning mpstat: $@\n");
             last;
         };
 
-    SmokeScope::PluginHelper::save($outfile,"#STOP\n");
+    RemOcular::PluginHelper::save($outfile,"#STOP\n");
 }
 
 1;

@@ -1,36 +1,36 @@
-package SmokeScope::JsonRpc::smoketrace;
+package RemOcular::JsonRpc::smoketrace;
 use strict;
 use POSIX 'setsid';
 use Fcntl ':flock'; # import LOCK_* constants 
 
-use SmokeScope::PluginHelper;
+use RemOcular::PluginHelper;
 use Time::HiRes qw(usleep);
 
 ###############################################################
-#use SmokeScope::Plugin::Top;
-use SmokeScope::Plugin::Df;
-use SmokeScope::Plugin::TraceRoute;
-use SmokeScope::Plugin::IoStat;
-#use SmokeScope::Plugin::Top;
-use SmokeScope::Plugin::MpStat;
+#use RemOcular::Plugin::Top;
+use RemOcular::Plugin::Df;
+use RemOcular::Plugin::TraceRoute;
+use RemOcular::Plugin::IoStat;
+#use RemOcular::Plugin::Top;
+use RemOcular::Plugin::MpStat;
 
 my %plug = (
-#    Top=>SmokeScope::Plugin::Top->new(),
-    IoStat=>SmokeScope::Plugin::IoStat->new(),
-    TraceRoute=>SmokeScope::Plugin::TraceRoute->new(),
-    Df=>SmokeScope::Plugin::Df->new(),
-    MpStat=>SmokeScope::Plugin::MpStat->new()
+#    Top=>RemOcular::Plugin::Top->new(),
+    IoStat=>RemOcular::Plugin::IoStat->new(),
+    TraceRoute=>RemOcular::Plugin::TraceRoute->new(),
+    Df=>RemOcular::Plugin::Df->new(),
+    MpStat=>RemOcular::Plugin::MpStat->new()
 );
 
 my @plug = qw(TraceRoute MpStat Df IoStat);
-my $tmp_prefix = "/tmp/SmokeScope.";
+my $tmp_prefix = "/tmp/RemOcular.";
 ###############################################################
 
 $SIG{CHLD} = 'IGNORE';
     
 =head1 NAME
 
-SmokeScope::JsonRpc::smoketrace - RPC services for SmokeTrace
+RemOcular::JsonRpc::smoketrace - RPC services for SmokeTrace
 
 =head1 SYNOPSIS
 
@@ -122,7 +122,7 @@ sub method_start {
         $session->param($handle,$pid); 
         $session->flush();       
         # start by clearing the table
-        SmokeScope::PluginHelper::save($tmp_prefix.$handle,"#CLEAR\n");
+        RemOcular::PluginHelper::save($tmp_prefix.$handle,"#CLEAR\n");
         # warn "Save Params '$handle' '$pid'\n".$session->dump();
         return { handle => $handle,
                  interval => $interval,

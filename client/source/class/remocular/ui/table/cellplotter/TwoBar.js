@@ -4,7 +4,7 @@
    Authors: Tobi Oetiker <tobi@oetiker.ch>
 ************************************************************************ */
 
-qx.Class.define("smokescope.ui.table.cellplotter.TwoBar",{
+qx.Class.define("remocular.ui.table.cellplotter.TwoBar",{
     extend : qx.core.Object,    
     construct : function(cfg)  {
         this.base(arguments);

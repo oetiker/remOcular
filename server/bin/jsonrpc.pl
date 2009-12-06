@@ -7,7 +7,7 @@ use CGI::Session;
 use Qooxdoo::JSONRPC;
 
 $Qooxdoo::JSONRPC::debug=1;
-$Qooxdoo::JSONRPC::service_path='SmokeScope::JsonRpc';
+$Qooxdoo::JSONRPC::service_path='RemOcular::JsonRpc';
 
 
 '$Revision$ ' =~ /Revision: (\S*)/;

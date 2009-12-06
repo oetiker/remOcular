@@ -1,14 +1,14 @@
-package SmokeScope::PluginHelper;
+package RemOcular::PluginHelper;
 use strict;
 use Fcntl ':flock'; # import LOCK_* constants
 
 =head1 NAME
 
-SmokeScope::PluginHelper - Common function for SmokeTrace functions
+RemOcular::PluginHelper - Common function for SmokeTrace functions
 
 =head1 SYNOPSIS
 
- use SmokeScope::PluginHelper;
+ use RemOcular::PluginHelper;
 
  save($output,@items);
 

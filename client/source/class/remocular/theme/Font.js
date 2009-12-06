@@ -4,7 +4,7 @@
    Authors: Tobi Oetiker <tobi@oetiker.ch>
 ************************************************************************ */
 
-qx.Theme.define("smokescope.theme.Font", {
+qx.Theme.define("remocular.theme.Font", {
     extend : qx.theme.modern.Font,
     fonts : {
         hugeTitle: {

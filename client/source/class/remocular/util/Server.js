@@ -7,7 +7,7 @@
 /**
  * A thd specific rpc call
  */
-qx.Class.define('smokescope.util.Server', {
+qx.Class.define('remocular.util.Server', {
     extend : qx.io.remote.Rpc,
     type : "singleton",
 
@@ -18,7 +18,7 @@ qx.Class.define('smokescope.util.Server', {
             // 3 seconds max
             timeout     : 10000,
             url         : '../jsonrpc.fcgi',
-            serviceName : 'smokescope'
+            serviceName : 'remocular'
         });
     },
 

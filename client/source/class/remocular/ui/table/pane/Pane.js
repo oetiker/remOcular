@@ -1,4 +1,4 @@
-qx.Class.define("smokescope.ui.table.pane.Pane",
+qx.Class.define("remocular.ui.table.pane.Pane",
 {
   extend : qx.ui.table.pane.Pane,
   events :

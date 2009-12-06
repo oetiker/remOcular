@@ -4,8 +4,8 @@
    Authors: Tobias Oetiker
 ************************************************************************ */
 
-qx.Class.define('smokescope.util.aggregator.Minimum', {
-    extend: smokescope.util.aggregator.Abstract,
+qx.Class.define('remocular.util.aggregator.Minimum', {
+    extend: remocular.util.aggregator.Abstract,
 
     members : {        
         process: function(row){

@@ -4,7 +4,7 @@
    Authors: Tobi Oetiker <tobi@oetiker.ch>
 ************************************************************************ */
 
-qx.Class.define("smokescope.ui.table.cellrenderer.Canvas",{
+qx.Class.define("remocular.ui.table.cellrenderer.Canvas",{
     extend : qx.ui.table.cellrenderer.Abstract,    
     construct : function(plotterObj)  {
         this.base(arguments);
@@ -27,7 +27,7 @@ qx.Class.define("smokescope.ui.table.cellrenderer.Canvas",{
                 this.__attachPending = false;
             }
             this.self(arguments).__count++;
-            var id = 'smokescope.ui.PlotCell.'+(this.self(arguments).__count.toString(36));
+            var id = 'remocular.ui.PlotCell.'+(this.self(arguments).__count.toString(36));
             this.__queue.push({
                 id: id,             
                 cellInfo: { value: cellInfo.value,

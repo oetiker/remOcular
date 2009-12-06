@@ -2,7 +2,7 @@
 /**
  * Base class for tables with tooltips for cells.
  */
-qx.Class.define("smokescope.ui.table.model.ToolTip", {
+qx.Class.define("remocular.ui.table.model.ToolTip", {
     extend : qx.ui.table.model.Simple,
 
 

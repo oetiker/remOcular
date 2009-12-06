@@ -1,21 +1,21 @@
-package SmokeScope::Config;
+package RemOcular::Config;
 use strict;
 
 =head1 NAME
 
-SmokeScope::Config - The Configuration File
+RemOcular::Config - The Configuration File
 
 =head1 SYNOPSIS
 
- use SmokeScope::Config;
+ use RemOcular::Config;
 
- my $parser = new SmokeScope::Config(file=>'/etc/SmokeTracessas/system.cfg');
+ my $parser = new RemOcular::Config(file=>'/etc/SmokeTracessas/system.cfg');
  my $cfg = $parser->parse_config();
  my $pod = $parser->make_pod();
 
 =head1 DESCRIPTION
 
-Configuration reader for SmokeScopessas.
+Configuration reader for RemOcularssas.
 
 =cut
 
@@ -23,16 +23,16 @@ use vars qw($VERSION);
 $VERSION   = '0.01';
 use Carp;
 use Config::Grammar;
-use base qw(SmokeScope::Base);
+use base qw(RemOcular::Base);
 
 
 =head1 METHODS
 
-All methods inherited from L<SmokeScope::Base>. As well as the following:
+All methods inherited from L<RemOcular::Base>. As well as the following:
 
 =over
 
-=item my $cfg = SmokeScope::Config->B<new>(file=>'/etc/SmokeTracessas/system.cfg');
+=item my $cfg = RemOcular::Config->B<new>(file=>'/etc/SmokeTracessas/system.cfg');
 
 Parses an THD System configuration file.
 
@@ -120,7 +120,7 @@ sub _make_pod_header {
     return <<"HEADER";
 ${E}head1 NAME
 
-service.cfg - The SmokeScopeSSAS configuration file
+service.cfg - The RemOcularSSAS configuration file
 
 ${E}head1 SYNOPSIS
 
@@ -131,7 +131,7 @@ ${E}head1 SYNOPSIS
  evnt_hid = O2008
 
  *** Email ***
- from = info\@SmokeScope.ch
+ from = info\@RemOcular.ch
  bcc = tobi\@oetiker.ch
  smtp = localhost
 
@@ -158,7 +158,7 @@ sub _make_parser {
         _sections => [ qw(Database Email CodeLetter RegLetter RegUpLetter SponsorLetter)],
         _mandatory => [qw(Database Email CodeLetter RegLetter RegUpLetter SponsorLetter)],
         Database => {
-            _doc => 'Global configuration settings for SmokeScope',
+            _doc => 'Global configuration settings for RemOcular',
             _vars => [ qw(dbi_dsn dbi_user dbi_pass evnt_hid) ],
             _mandatory => [ qw(dbi_dsn dbi_user dbi_pass evnt_hid) ],
             dbi_dsn  => { _doc => 'dbi connect string to access the thd database' },

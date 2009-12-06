@@ -7,7 +7,7 @@
 /**
  * Call the server for updates and dispatch the answers
  */
-qx.Class.define('smokescope.util.aggregator.Abstract', {
+qx.Class.define('remocular.util.aggregator.Abstract', {
     extend: qx.core.Object,
 
     construct : function (cfg){

@@ -1,5 +1,5 @@
 {
-  "name"    : "smokescope",
+  "name"    : "remocular",
 
   "include" :
   [
@@ -30,9 +30,9 @@
 
   "let" :
   {
-    "APPLICATION"  : "smokescope",
+    "APPLICATION"  : "remocular",
     "QOOXDOO_PATH" : "qooxdoo",
-    "QXTHEME"      : "smokescope.theme.Theme",
+    "QXTHEME"      : "remocular.theme.Theme",
     "API_EXCLUDE"  : ["qx.test.*"],
     "LOCALES"      : [ "en" ],
     "CACHE"        : "/home/oetiker/scratch/qooxdoo-oetiker",

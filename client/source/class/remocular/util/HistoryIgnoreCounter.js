@@ -7,7 +7,7 @@
 /**
  * A thd specific rpc call
  */
-qx.Class.define('smokescope.util.HistoryIgnoreCounter', {
+qx.Class.define('remocular.util.HistoryIgnoreCounter', {
     extend : qx.core.Object,
     type : "singleton",
 

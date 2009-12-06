@@ -4,7 +4,7 @@
    Authors: Tobi Oetiker <tobi@oetiker.ch>
 ************************************************************************ */
 
-qx.Class.define("smokescope.ui.form.renderer.Top",{
+qx.Class.define("remocular.ui.form.renderer.Top",{
     extend : qx.ui.form.renderer.AbstractRenderer,
     construct: function(form){
         var layout = new qx.ui.layout.HBox(2);

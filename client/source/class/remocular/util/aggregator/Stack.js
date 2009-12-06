@@ -4,8 +4,8 @@
    Authors: Tobias Oetiker
 ************************************************************************ */
 
-qx.Class.define('smokescope.util.aggregator.Stack', {
-    extend: smokescope.util.aggregator.Abstract,
+qx.Class.define('remocular.util.aggregator.Stack', {
+    extend: remocular.util.aggregator.Abstract,
     members : {        
         process: function(row){
             var cfg = this._getCfg();

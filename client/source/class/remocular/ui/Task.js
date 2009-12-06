@@ -7,10 +7,10 @@
 #asset(qx/icon/${qx.icontheme}/16/actions/media-playback-start.png)
 #asset(qx/icon/${qx.icontheme}/16/actions/media-playback-stop.png)
 #asset(qx/icon/${qx.icontheme}/16/actions/edit-clear.png)
-#asset(smokescope/loader.gif)
+#asset(remocular/loader.gif)
 ************************************************************************ */
 
-qx.Class.define("smokescope.ui.Task",{
+qx.Class.define("remocular.ui.Task",{
     extend : qx.ui.window.Window,
     construct : function(task,id){
         this.__windowName = id;
@@ -31,23 +31,23 @@ qx.Class.define("smokescope.ui.Task",{
         });
         var toolbar = this.__makeToolbar();
         this.add(toolbar);
-        this.__infoBar = new smokescope.ui.InfoBar();
-        this.__dataProcessor = new smokescope.util.DataProcessor(task.table);
+        this.__infoBar = new remocular.ui.InfoBar();
+        this.__dataProcessor = new remocular.util.DataProcessor(task.table);
         this.add(this.__infoBar);
         var table = this.__makeTable();
         if (task.form && task.form_type){
-            this.__form = new smokescope.ui.Form(task.form);
+            this.__form = new remocular.ui.Form(task.form);
             this.__formModel = this.__form.getModel();
             if (task.form_type == 'left'){
                 var pane = new qx.ui.splitpane.Pane("horizontal");
                 this.add(pane,{flex: 1});
-                this.__wigForm = new smokescope.ui.form.renderer.Left(this.__form);
+                this.__wigForm = new remocular.ui.form.renderer.Left(this.__form);
                 this.__wigForm.getLayout().setColumnFlex(1,1);
                 pane.add(this.__wigForm,0);
                 pane.add(table,1);
             }
             else if (task.form_type == 'top'){
-                this.__wigForm =  new smokescope.ui.form.renderer.Top(this.__form).set({
+                this.__wigForm =  new remocular.ui.form.renderer.Top(this.__form).set({
                     marginLeft: 5
                 });
                 table.setDecorator('splitpane');
@@ -56,7 +56,7 @@ qx.Class.define("smokescope.ui.Task",{
                 toolbar.add(part);                                       
                 this.add(table,{flex: 1}); 
             }
-            var image = new qx.ui.basic.Image("smokescope/loader.gif").set({
+            var image = new qx.ui.basic.Image("remocular/loader.gif").set({
                 alignY : 'middle',
                 paddingRight: 8,
                 visibility: 'hidden'
@@ -123,11 +123,11 @@ qx.Class.define("smokescope.ui.Task",{
             this.__infoBar.fade();
             this.__dataProcessor.resetCounters();
             var history = qx.bom.History.getInstance();
-            var ignoreCounter = smokescope.util.HistoryIgnoreCounter.getInstance();
+            var ignoreCounter = remocular.util.HistoryIgnoreCounter.getInstance();
             if (this.__form){
                 var data =  this.__modelToMap(this.__formModel);
                 if (this.__form.validate()) {
-                    smokescope.util.Server.getInstance().callAsync(
+                    remocular.util.Server.getInstance().callAsync(
                         qx.lang.Function.bind(this.__subscribeBus, this),
                         'start',
                         {
@@ -142,7 +142,7 @@ qx.Class.define("smokescope.ui.Task",{
                 }
             }
             else {
-                smokescope.util.Server.getInstance().callAsync(
+                remocular.util.Server.getInstance().callAsync(
                     qx.lang.Function.bind(this.__subscribeBus, this),
                     'start',
                     {plugin: this.__plugin,
@@ -174,8 +174,8 @@ qx.Class.define("smokescope.ui.Task",{
             this.__btStop.setEnabled(false);            
             var bus = qx.event.message.Bus.getInstance();
             bus.unsubscribe(this.__handle,this.__updateTable, this);
-            smokescope.util.Poller.getInstance().deleteHandle(this.__handle);
-            smokescope.util.Server.getInstance().callAsync(
+            remocular.util.Poller.getInstance().deleteHandle(this.__handle);
+            remocular.util.Server.getInstance().callAsync(
                  qx.lang.Function.bind(this.__confirmStop,this),
                 'stop',
                 this.__handle
@@ -212,7 +212,7 @@ qx.Class.define("smokescope.ui.Task",{
                 this.setCaption(ret.caption);
                 var bus =  qx.event.message.Bus.getInstance();
                 bus.subscribe(ret.handle, this.__updateTable, this);
-                smokescope.util.Poller.getInstance().addHandle(ret.handle,ret.interval);
+                remocular.util.Poller.getInstance().addHandle(ret.handle,ret.interval);
 //                this.__setSortable(false);
                 this.__btStop.setEnabled(true);                
                 if (this.__wigForm){
@@ -286,7 +286,7 @@ qx.Class.define("smokescope.ui.Task",{
         },
 
         __makeTable: function(table){
-            this.__tableModel = new smokescope.ui.table.model.ToolTip();
+            this.__tableModel = new remocular.ui.table.model.ToolTip();
             this.__tableModel.setColumns(this.__dataProcessor.getColumnNames());
             this.__tableColumnCount = this.__dataProcessor.getColumnCount();
             var tableOpts = {
@@ -294,10 +294,10 @@ qx.Class.define("smokescope.ui.Task",{
                     return new qx.ui.table.columnmodel.Resize(obj);
                 },
                 tablePane: function(obj) {
-                    return new smokescope.ui.table.pane.Pane(obj);
+                    return new remocular.ui.table.pane.Pane(obj);
                 }
             };
-            var t = new  smokescope.ui.table.Table(this.__tableModel,tableOpts).set({
+            var t = new  remocular.ui.table.Table(this.__tableModel,tableOpts).set({
                 decorator: null,
                 showHeaderToolTip: true
             });

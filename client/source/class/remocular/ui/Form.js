@@ -9,7 +9,7 @@
 #asset(qx/icon/${qx.icontheme}/16/actions/edit-clear.png)
 ************************************************************************ */
 
-qx.Class.define("smokescope.ui.Form",{
+qx.Class.define("remocular.ui.Form",{
     extend : qx.ui.form.Form,
     construct : function(form){
         this.base(arguments);

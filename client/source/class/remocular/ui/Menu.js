@@ -4,7 +4,7 @@
    Authors: Tobi Oetiker <tobi@oetiker.ch>
 ************************************************************************ */
 
-qx.Class.define("smokescope.ui.Menu",{
+qx.Class.define("remocular.ui.Menu",{
     extend : qx.ui.window.Window,
     construct : function(){
         this.base(arguments,this.tr('Task Selector'));
@@ -19,7 +19,7 @@ qx.Class.define("smokescope.ui.Menu",{
             contentPadding: [3,3,3,3]
         });
         this.setLayout(new qx.ui.layout.VBox(3));
-        smokescope.util.Server.getInstance().callAsync(
+        remocular.util.Server.getInstance().callAsync(
             qx.lang.Function.bind(this.__fillMenu,this),
             'config'
         );
@@ -43,7 +43,7 @@ qx.Class.define("smokescope.ui.Menu",{
                 this.open();
             }
             else {
-                var msg = smokescope.ui.MsgBox.getInstance();
+                var msg = remocular.ui.MsgBox.getInstance();
                 msg.error(this.tr('Error'), exc['message'] + ' (' + exc['code'] + ')');
             };
         },
@@ -53,7 +53,7 @@ qx.Class.define("smokescope.ui.Menu",{
                 width: 120
             });
             button.addListener('execute',function(){
-                var task = new smokescope.ui.Task(item['task']);
+                var task = new remocular.ui.Task(item['task']);
                 task.open();
             },this);
             this.__pluginList[item['task'].plugin] = item['task'];
@@ -65,8 +65,8 @@ qx.Class.define("smokescope.ui.Menu",{
                 return;
             }
             var data = this.__decodeRequest(input);            
-            var msg = smokescope.ui.MsgBox.getInstance();
-            var ignoreCounter = smokescope.util.HistoryIgnoreCounter.getInstance();
+            var msg = remocular.ui.MsgBox.getInstance();
+            var ignoreCounter = remocular.util.HistoryIgnoreCounter.getInstance();
             if (ignoreCounter.isIgnorable()){
                 return;
             }
@@ -81,7 +81,7 @@ qx.Class.define("smokescope.ui.Menu",{
             if (task == undefined){
                 if (data.PLG){
                     if (this.__pluginList[data.PLG]){
-                        task = new smokescope.ui.Task(this.__pluginList[data.PLG],data.ID);
+                        task = new remocular.ui.Task(this.__pluginList[data.PLG],data.ID);
                         task.open();
                     }
                     else {

@@ -15,7 +15,7 @@
  * An Error Popup Window that shows messages
  * sent to to 'error' message bus.
  */
-qx.Class.define("smokescope.ui.InfoBar", {
+qx.Class.define("remocular.ui.InfoBar", {
     extend : qx.ui.container.Composite,
     construct : function() {
         this.base(arguments);

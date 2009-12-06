@@ -7,8 +7,8 @@
 /**
  * Call the server for updates and dispatch the answers
  */
-qx.Class.define('smokescope.util.aggregator.Static', {
-    extend: smokescope.util.aggregator.Abstract,
+qx.Class.define('remocular.util.aggregator.Static', {
+    extend: remocular.util.aggregator.Abstract,
     members : {        
         process: function(row){
             return this._getCfg().message;

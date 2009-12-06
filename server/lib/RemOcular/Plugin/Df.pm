@@ -1,16 +1,16 @@
-package SmokeScope::Plugin::Df;
+package RemOcular::Plugin::Df;
 use strict;
-use base 'SmokeScope::Plugin';
-use SmokeScope::PluginHelper;
+use base 'RemOcular::Plugin';
+use RemOcular::PluginHelper;
 use Sys::Hostname;
 
 =head1 NAME
 
-SmokeScope::Plugin::Df - DiskFree Probe
+RemOcular::Plugin::Df - DiskFree Probe
 
 =head1 SYNOPSIS
 
- use SmokeScope::Plugin::Df
+ use RemOcular::Plugin::Df
 
 =head1 DESCRIPTION
 
@@ -100,7 +100,7 @@ sub start_instance {
     my $params = shift;  
     my $data = '';
     open(my $fh,'-|','/bin/df','-k','-P') or do {
-       SmokeScope::PluginHelper::save($outfile,"#ERROR\t$!\n");
+       RemOcular::PluginHelper::save($outfile,"#ERROR\t$!\n");
        return;
     };
     my $ok = 0;
@@ -112,8 +112,8 @@ sub start_instance {
         $data .= join("\t", "#PUSH", split(/\s+/,$_,6))."\n";
     }
     close $fh;
-    SmokeScope::PluginHelper::save($outfile,$data);
-    SmokeScope::PluginHelper::save($outfile,"#STOP\n");
+    RemOcular::PluginHelper::save($outfile,$data);
+    RemOcular::PluginHelper::save($outfile,"#STOP\n");
 }
 
 1;

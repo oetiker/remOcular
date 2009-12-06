@@ -1,16 +1,16 @@
-package SmokeScope::Plugin::TraceRoute;
+package RemOcular::Plugin::TraceRoute;
 use strict;
-use base 'SmokeScope::Plugin';
-use SmokeScope::PluginHelper;
+use base 'RemOcular::Plugin';
+use RemOcular::PluginHelper;
 use IPC::Run qw(run timeout new_chunker);
 
 =head1 NAME
 
-SmokeScope::Plugin::TraceRoute - TraceRoute Interface
+RemOcular::Plugin::TraceRoute - TraceRoute Interface
 
 =head1 SYNOPSIS
 
- use SmokeScope::Plugin::Top
+ use RemOcular::Plugin::Top
 
 =head1 DESCRIPTION
 
@@ -219,7 +219,7 @@ sub start_instance {
     my $params = shift;  
     my $bin =  '/usr/sbin/traceroute';
     if (not -x $bin){
-        SmokeScope::PluginHelper::save($outfile,"#ERROR\t$bin not found\n");
+        RemOcular::PluginHelper::save($outfile,"#ERROR\t$bin not found\n");
         return;
     }
     for (my $r=0;$r<$params->{rounds};$r++){
@@ -245,14 +245,14 @@ sub start_instance {
                 unshift @row,$row[0];
                 $row[0]--;                
                 my $data = join("\t", @row)."\n";
-                my $ratio = SmokeScope::PluginHelper::save($outfile,$data);
+                my $ratio = RemOcular::PluginHelper::save($outfile,$data);
             }
         };
 
         my $err_handler = sub {
             local $_ = shift @_;
             chomp;
-            SmokeScope::PluginHelper::save($outfile,'#ERROR'."\t"."Note:".$_."\n");                
+            RemOcular::PluginHelper::save($outfile,'#ERROR'."\t"."Note:".$_."\n");                
         };
         
         eval {
@@ -261,7 +261,7 @@ sub start_instance {
         };
 
         if ($@){
-            SmokeScope::PluginHelper::save($outfile,"#ERROR\tRunning traceroute: $@\n");
+            RemOcular::PluginHelper::save($outfile,"#ERROR\tRunning traceroute: $@\n");
             last;
         };
 
@@ -270,7 +270,7 @@ sub start_instance {
         }
         sleep $params->{interval};
     }
-    SmokeScope::PluginHelper::save($outfile,"#STOP\n");
+    RemOcular::PluginHelper::save($outfile,"#STOP\n");
 }
 
 1;

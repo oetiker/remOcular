@@ -4,7 +4,7 @@
    Authors: Tobi Oetiker <tobi@oetiker.ch>
 ************************************************************************ */
 
-qx.Class.define("smokescope.ui.form.renderer.Left",{
+qx.Class.define("remocular.ui.form.renderer.Left",{
     extend : qx.ui.form.renderer.Single,
     construct: function(form){
         this.base(arguments,form);

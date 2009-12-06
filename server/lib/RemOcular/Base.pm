@@ -1,15 +1,15 @@
-package SmokeScope::Base;
+package RemOcular::Base;
 use strict;
 use POSIX qw(strftime);
 
 =head1 NAME
 
-SmokeScope::Base - Base Class for SmokeTrace Objects
+RemOcular::Base - Base Class for SmokeTrace Objects
 
 =head1 SYNOPSIS
 
- package SmokeScope::Demo;
- use base qw(SmokeScope::Base);
+ package RemOcular::Demo;
+ use base qw(RemOcular::Base);
 
  sub new {
      my $proto        = shift;

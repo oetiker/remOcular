@@ -7,7 +7,7 @@
 /**
  * Call the server for updates and dispatch the answers
  */
-qx.Class.define('smokescope.util.DataProcessor', {
+qx.Class.define('remocular.util.DataProcessor', {
     extend: qx.core.Object,
 
     construct : function (cfg){
@@ -29,7 +29,7 @@ qx.Class.define('smokescope.util.DataProcessor', {
                 }
             }
             else {
-                p.push(new smokescope.util.aggregator.PassThrough({source_col: auto_col++}));
+                p.push(new remocular.util.aggregator.PassThrough({source_col: auto_col++}));
             }
         }
 
@@ -63,34 +63,34 @@ qx.Class.define('smokescope.util.DataProcessor', {
                                                 
         __getProcessor: function(dataCfg){
             var name = dataCfg.processor;            
-            var msg = smokescope.ui.MsgBox.getInstance();
+            var msg = remocular.ui.MsgBox.getInstance();
             switch(name){
             case 'COUNT': 
-                return new smokescope.util.aggregator.Counter(dataCfg);
+                return new remocular.util.aggregator.Counter(dataCfg);
                 break;
             case 'MIN':
-                return new smokescope.util.aggregator.Minimum(dataCfg);
+                return new remocular.util.aggregator.Minimum(dataCfg);
                 break;
             case 'MAX':
-                return new smokescope.util.aggregator.Maximum(dataCfg);
+                return new remocular.util.aggregator.Maximum(dataCfg);
                 break;
             case 'STDDEV':
-                return new smokescope.util.aggregator.StandardDeviation(dataCfg);
+                return new remocular.util.aggregator.StandardDeviation(dataCfg);
                 break;
             case 'AVG':
-                return new smokescope.util.aggregator.Average(dataCfg);
+                return new remocular.util.aggregator.Average(dataCfg);
                 break;
             case 'MEDIAN':
-                return new smokescope.util.aggregator.Median(dataCfg);
+                return new remocular.util.aggregator.Median(dataCfg);
                 break;
             case 'STACK':
-                return new smokescope.util.aggregator.Stack(dataCfg);
+                return new remocular.util.aggregator.Stack(dataCfg);
                 break;
             case 'PASSTHROUGH':
-                return new smokescope.util.aggregator.PassThrough(dataCfg);
+                return new remocular.util.aggregator.PassThrough(dataCfg);
                 break;
             default:
-                return new smokescope.util.aggregator.Static({message: name + ' unknown'});
+                return new remocular.util.aggregator.Static({message: name + ' unknown'});
                 break;
             }    
         },
@@ -164,25 +164,25 @@ qx.Class.define('smokescope.util.DataProcessor', {
                     r = new qx.ui.table.cellrenderer.String(p.align);
                     break;
                 case 'TWOBARPLOT':
-                    var plotter = new smokescope.ui.table.cellplotter.TwoBar({
+                    var plotter = new remocular.ui.table.cellplotter.TwoBar({
                         mainbarFill: p.mainbar.fill,
                         mainbarBorder: p.mainbar.border,
                         stackbarFill: p.stackbar.fill,
                         stackbarBorder: p.stackbar.border               
                     });
-                    r = new smokescope.ui.table.cellrenderer.Canvas(plotter);
+                    r = new remocular.ui.table.cellrenderer.Canvas(plotter);
                     this.__renderer.push(r);
                     break;
                 case 'BARPLOT':
-                    var plotter = new smokescope.ui.table.cellplotter.Bar({
+                    var plotter = new remocular.ui.table.cellplotter.Bar({
                         fill: p.fill,
                         border: p.border
                     });
-                    r = new smokescope.ui.table.cellrenderer.Canvas(plotter);
+                    r = new remocular.ui.table.cellrenderer.Canvas(plotter);
                     this.__renderer.push(r);
                     break;
                 case 'SPARKLINE':
-                    var plotter = new smokescope.ui.table.cellplotter.SparkLine({
+                    var plotter = new remocular.ui.table.cellplotter.SparkLine({
                         lineWidth: p.line_width || 0.5,
                         lineColor: p.line_color || '#2f2',
                         sparkRadius: p.spark_radius || 1,
@@ -190,11 +190,11 @@ qx.Class.define('smokescope.util.DataProcessor', {
                         singleScale: p.single_scale ? true : false,
                         depth: p.depth || 30
                     });
-                    r = new smokescope.ui.table.cellrenderer.Canvas(plotter);
+                    r = new remocular.ui.table.cellrenderer.Canvas(plotter);
                     this.__renderer.push(r);
                     break;
                 default:
-                    var msg = smokescope.ui.MsgBox.getInstance();
+                    var msg = remocular.ui.MsgBox.getInstance();
                     msg.error('Error','Unknown Renderer '+p.renderer);
                 }
             }

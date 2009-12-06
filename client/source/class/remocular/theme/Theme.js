@@ -8,14 +8,14 @@
 
 ************************************************************************ */
 
-qx.Theme.define("smokescope.theme.Theme",
+qx.Theme.define("remocular.theme.Theme",
 {
   meta :
   {
-    color : smokescope.theme.Color,
-    decoration : smokescope.theme.Decoration,
-    font : smokescope.theme.Font,
+    color : remocular.theme.Color,
+    decoration : remocular.theme.Decoration,
+    font : remocular.theme.Font,
     icon : qx.theme.icon.Tango,
-    appearance : smokescope.theme.Appearance
+    appearance : remocular.theme.Appearance
   }
 });

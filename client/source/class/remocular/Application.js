@@ -5,13 +5,13 @@
 ************************************************************************ */
 
 /* ************************************************************************
-#asset(smokescope/*)
+#asset(remocular/*)
 ************************************************************************ */
 
 /**
- * This is the main application class of your custom application "smokescope"
+ * This is the main application class of your custom application "remocular"
  */
-qx.Class.define("smokescope.Application", {
+qx.Class.define("remocular.Application", {
     extend : qx.application.Standalone,
     members : {
         /**
@@ -21,7 +21,7 @@ qx.Class.define("smokescope.Application", {
         main : function() {
             // Call super class
             this.base(arguments);
-            qx.Class.patch(qx.bom.History,smokescope.patch.HistoryEncoder);
+            qx.Class.patch(qx.bom.History,remocular.patch.HistoryEncoder);
             // Enable logging in debug variant
             if (qx.core.Variant.isSet("qx.debug", "on")){
                 // support native logging capabilities, e.g. Firebug for Firefox
@@ -30,7 +30,7 @@ qx.Class.define("smokescope.Application", {
                 qx.log.appender.Console;
             };
 
-            smokescope.util.Server.getInstance().setLocalUrl('http://localhost/~oetiker/smoketrace/');
+            remocular.util.Server.getInstance().setLocalUrl('http://localhost/~oetiker/smoketrace/');
 
             var root = new qx.ui.container.Composite(new qx.ui.layout.Dock());
             this.getRoot().add(root,{left: 0, top:0, right: 0, bottom: 0});
@@ -44,7 +44,7 @@ qx.Class.define("smokescope.Application", {
                 edge: 'center'
             });
 
-            new smokescope.ui.Menu();
+            new remocular.ui.Menu();
         }
     }
 });

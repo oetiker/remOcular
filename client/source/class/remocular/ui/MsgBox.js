@@ -20,7 +20,7 @@
  * An Error Popup Window that shows messages
  * sent to to 'error' message bus.
  */
-qx.Class.define("smokescope.ui.MsgBox", {
+qx.Class.define("remocular.ui.MsgBox", {
     extend : qx.ui.window.Window,
     type : "singleton",
 
