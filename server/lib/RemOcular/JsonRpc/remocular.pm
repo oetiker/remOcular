@@ -107,7 +107,6 @@ sub method_start {
         # no more magic error handling
         $SIG{__WARN__} = undef;
         $SIG{__DIE__} = undef;
-        map { $SIG{$_} = undef} keys %SIG;
         # since fcgi ties the standard io handles
         # we have to untie them first
         untie *STDOUT if tied (*STDOUT);
