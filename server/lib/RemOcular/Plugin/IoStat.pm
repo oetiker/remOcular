@@ -39,18 +39,18 @@ sub get_config {
            form => [
                {
                     type=> 'Spinner',
-                    label=> 'Rounds',
-                    name=> 'rounds',
-                    min=> 1,
-                    max=> 100,
-                    initial=> 3
-               },
-               {
-                    type=> 'Spinner',
                     label=> 'Interval',
                     name=> 'interval',
                     min=> 1,
                     max=> 60,
+                    initial=> 2
+               },
+               {
+                    type=> 'Spinner',
+                    label=> 'Rounds',
+                    name=> 'rounds',
+                    min=> 1,
+                    max=> 100,
                     initial=> 5
                },
            ],

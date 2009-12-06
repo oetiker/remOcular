@@ -1,6 +1,6 @@
-package RemOcular::JsonRpc::smoketrace;
+package RemOcular::JsonRpc::remocular;
 use strict;
-use POSIX 'setsid';
+use POSIX qw(setsid sigprocmask);
 use Fcntl ':flock'; # import LOCK_* constants 
 
 use RemOcular::PluginHelper;
@@ -23,14 +23,15 @@ my %plug = (
 );
 
 my @plug = qw(TraceRoute MpStat Df IoStat);
-my $tmp_prefix = "/tmp/RemOcular.";
+ my $user = (getpwuid($<))[0];
+my $tmp_prefix = "/tmp/remocular_session_${user}/data.";
 ###############################################################
 
 $SIG{CHLD} = 'IGNORE';
     
 =head1 NAME
 
-RemOcular::JsonRpc::smoketrace - RPC services for SmokeTrace
+RemOcular::JsonRpc::remocular - RPC services for remocular
 
 =head1 SYNOPSIS
 
@@ -104,8 +105,9 @@ sub method_start {
         chdir '/'               or die "Can't chdir to /: $!";
         setsid;
         # no more magic error handling
-        local $SIG{__DIE__};
-        local $SIG{__WARN__};
+        $SIG{__WARN__} = undef;
+        $SIG{__DIE__} = undef;
+        map { $SIG{$_} = undef} keys %SIG;
         # since fcgi ties the standard io handles
         # we have to untie them first
         untie *STDOUT if tied (*STDOUT);
@@ -115,6 +117,11 @@ sub method_start {
         open STDIN, '</dev/null' or die "Can't read /dev/null: $!";
         open STDOUT, '>/dev/null' or die "Can't write to /dev/null: $!";
         open STDERR, '>&STDOUT' or die "Can't dup stdout: $!";
+        # it seems that apache block sigalarm in its childs,
+        # we can't have that here ... 
+        my $sigset = POSIX::SigSet->new();
+        $sigset->fillset();
+        sigprocmask(&POSIX::SIG_UNBLOCK,$sigset,undef);
         # ready to start the plugin
         $plug{$plugin}->start_instance($tmp_prefix.$handle,$args);
         exit 0;

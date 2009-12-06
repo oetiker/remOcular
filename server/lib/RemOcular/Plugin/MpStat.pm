@@ -70,7 +70,7 @@ sub get_config {
                     name=> 'rounds',
                     min => 1,
                     max => 60,
-                    initial=> 40,
+                    initial=> 5,
                     required=> 1
                }
            ],
@@ -152,56 +152,54 @@ sub start_instance {
         RemOcular::PluginHelper::save($outfile,"#ERROR\t$bin not found\n");
         return;
     }
-    my @cmd = ( '/usr/bin/mpstat','-P','ALL',$params->{interval},$params->{rounds} );
+    my @cmd = ( $bin,'-P','ALL',$params->{interval},$params->{rounds} );
         
-        my $ok = 0;   
-        my %store;
-        my @cols;
-        my $out_handler = sub {
-            local $_ = shift @_;
-            chomp;
-            if (s/^.+?\s+(CPU|all|\d+)\s+/$1 /){
-                my @line = split;
-                my $key = shift @line;
-                if ($key eq 'CPU'){                 
-                    @cols = @line;
-                    map { s/^%// } @cols;
-                } else {
-                    for my $col (@cols){
-                        $store{$key}{$col} = pop @line;
-                    } 
-                }
-             }
-             elsif (/^\s*$/){
-                my $data = '';
-                my $row = 0;
-                for my $type (@cols){
-                    $data .= $row."\t".$type."\t".$store{all}{$type};
-                    for my $cpu (0..${cpu_count}){
-                        $data .= "\t".$store{$cpu}{$type};
-                    }
-                    $data .= "\n";
-                    $row++;
-                }
-                RemOcular::PluginHelper::save($outfile,$data);
+    my %store;
+    my @cols;
+    my $out_handler = sub {
+        local $_ = shift @_;
+        chomp;
+        if (s/^\S+\s+(CPU|all|\d+)\s+/$1 /){
+            my @line = split;
+            my $key = shift @line;
+            if ($key eq 'CPU'){                 
+                @cols = @line;
+            } else {
+                for my $col (@cols){
+                    $store{$key}{$col} = shift @line;
+                } 
             }
-        };
+        }
+        elsif (/^\s*$/){
+            my $data = '';
+            my $row = 0;
+            for my $type (@cols){
+                next if not $type =~ /%(.+)/;
+                $data .= $row."\t".${1}."\t".$store{all}{$type};
+                for my $cpu (0..${cpu_count}){
+                    $data .= "\t".$store{$cpu}{$type};
+                }
+                $data .= "\n";
+                $row++;
+            }
+            RemOcular::PluginHelper::save($outfile,$data);
+        }
+    };
 
-        my $err_handler = sub {
-            local $_ = shift @_;
-            chomp;
-            RemOcular::PluginHelper::save($outfile,'#ERROR'."\t"."Note:".$_."\n");                
-        };
+    my $err_handler = sub {
+        local $_ = shift @_;
+        chomp;
+        RemOcular::PluginHelper::save($outfile,'#ERROR'."\t"."Note:".$_."\n");                
+    };
         
-        eval {
-            run(\@cmd,'>',new_chunker,$out_handler,
-                  '2>',new_chunker,$err_handler)
-        };
-
-        if ($@){
-            RemOcular::PluginHelper::save($outfile,"#ERROR\tRunning mpstat: $@\n");
-            last;
-        };
+    eval {
+        run(\@cmd,'>',new_chunker,$out_handler,
+                 '2>',new_chunker,$err_handler)
+    };
+    if ($@){
+        RemOcular::PluginHelper::save($outfile,"#ERROR\tRunnig $bin: $@\n");
+        last;
+    };
 
     RemOcular::PluginHelper::save($outfile,"#STOP\n");
 }

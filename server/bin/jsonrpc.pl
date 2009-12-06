@@ -22,7 +22,7 @@ sub main {
 #    my $cfg_mod = 0;
     my $user = (getpwuid($<))[0];
     my $tmp = $ENV{TEMP} || $ENV{TMP} || "/tmp";
-    my $session_dir = $tmp."/smokescope_session_$user";
+    my $session_dir = $tmp."/remocular_session_$user";
     mkdir $session_dir if not -d $session_dir;
     my $count = 0;
     while (my $cgi = new CGI::Fast){
@@ -33,7 +33,7 @@ sub main {
 #    	    $cfg_mod = $cfg_mod_new;
 #	    }
         if ( $count++ > 50 ){
-            my $min_age = time() - 24*3600;
+            my $min_age = time() - 3600;
             for my $file (glob($session_dir.'/*')){
                 if ((stat $file)[8] < $min_age){
                     unlink $file;
@@ -41,8 +41,8 @@ sub main {
             }
             $count = 0;
         }
-#        $session->param('cfg',$cfg);
-        Qooxdoo::JSONRPC::handle_request ($cgi, $session, ['smokescope']);
+#       $session->param('cfg',$cfg);
+        Qooxdoo::JSONRPC::handle_request ($cgi, $session, ['remocular']);
     }
 }
 

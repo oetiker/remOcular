@@ -2,6 +2,7 @@
    Copyright: 2009 OETIKER+PARTNER AG
    License: GPL
    Authors: Tobi Oetiker <tobi@oetiker.ch>
+   UtfCheck: äöü
 ************************************************************************ */
 
 /* ************************************************************************
@@ -30,17 +31,50 @@ qx.Class.define("remocular.Application", {
                 qx.log.appender.Console;
             };
 
-            remocular.util.Server.getInstance().setLocalUrl('http://localhost/~oetiker/smoketrace/');
+            remocular.util.Server.getInstance().setLocalUrl('http://johan.oetiker.ch/~oetiker/remocular/');
 
-            var root = new qx.ui.container.Composite(new qx.ui.layout.Dock());
+            var root = new qx.ui.container.Composite(new qx.ui.layout.Dock()).set({
+                backgroundColor: '#fff'
+            });
             this.getRoot().add(root,{left: 0, top:0, right: 0, bottom: 0});
 
-            root.add(new qx.ui.basic.Label(this.tr("SmokeTrace")).set({
+            var logo = new qx.ui.container.Composite(new qx.ui.layout.VBox()).set({
+                cursor  : 'pointer',
+                opacity : 0.7
+            }).set({
+                allowGrowX: false,
+                allowGrowY: false,
+                alignY: 'middle',
+                alignX: 'center'
+           });
+
+            logo.add(new qx.ui.basic.Label("rem◎cular").set({
                 font: 'hugeTitle',
-                textColor: '#bfbfbf',
-                alignX: 'center',
-                alignY: 'middle'
-            }),{
+                textColor: '#aaa',
+                alignX: 'left',
+                paddingRight: 40
+            }));
+
+            logo.add(new qx.ui.basic.Label(this.tr("your remote eye in the cloud | www.remocular.org")).set({
+                marginTop: -10,
+                font: 'smallTitle',
+                textColor: '#aaa',
+                alignX: 'right'
+            }));
+
+            logo.addListener('click', function(e) {
+                qx.bom.Window.open('http://www.remocular.org/v/VERSION', 'remoscope.org');
+            });
+
+            logo.addListener('mouseover', function(e) {
+                this.setOpacity(1);
+            }, logo);
+
+            logo.addListener('mouseout', function(e) {
+                this.setOpacity(0.7);
+            }, logo);
+
+            root.add(logo,{
                 edge: 'center'
             });
 
