@@ -1,0 +1,25 @@
+/* ************************************************************************
+   Copyright: 2009, OETIKER+PARTNER AG
+   License: GPL
+   Authors: Tobias Oetiker
+************************************************************************ */
+
+/**
+ * Call the server for updates and dispatch the answers
+ */
+qx.Class.define('smokescope.util.aggregator.Counter', {
+    extend: smokescope.util.aggregator.Abstract,
+
+    members : {        
+        process: function(row){
+            var cfg = this._getCfg();
+            var sto = this._getStore();
+            var key = row[cfg.key_col];
+            if ( sto[key] == undefined){
+                sto[key] = 0;
+            }
+            sto[key]++;
+            return sto[key];
+        }
+    }
+});
