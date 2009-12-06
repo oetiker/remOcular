@@ -105,8 +105,9 @@ sub method_start {
         chdir '/'               or die "Can't chdir to /: $!";
         setsid;
         # no more magic error handling
-        $SIG{__WARN__} = undef;
-        $SIG{__DIE__} = undef;
+        local $SIG{__WARN__};
+        local $SIG{__DIE__};
+#       map { $SIG{$_} = undef} keys %SIG;
         # since fcgi ties the standard io handles
         # we have to untie them first
         untie *STDOUT if tied (*STDOUT);
