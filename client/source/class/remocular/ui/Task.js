@@ -25,6 +25,8 @@ qx.Class.define("remocular.ui.Task",{
         this.set({
             allowMinimize: false,
             showMinimize: false,
+            useMoveFrame: true,
+            useResizeFrame: true,
             width: 800,
             height: 400,
             contentPadding: [0,0,0,0]

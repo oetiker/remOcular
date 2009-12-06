@@ -40,7 +40,7 @@ qx.Class.define("remocular.Application", {
 
             var logo = new qx.ui.container.Composite(new qx.ui.layout.VBox()).set({
                 cursor  : 'pointer',
-                opacity : 0.7
+                opacity : 0.5
             }).set({
                 allowGrowX: false,
                 allowGrowY: false,
@@ -48,31 +48,32 @@ qx.Class.define("remocular.Application", {
                 alignX: 'center'
            });
 
-            logo.add(new qx.ui.basic.Label("rem◎cular").set({
-                font: 'hugeTitle',
-                textColor: '#aaa',
-                alignX: 'left',
-                paddingRight: 40
-            }));
-
-            logo.add(new qx.ui.basic.Label(this.tr("your remote eye in the cloud | www.remocular.org")).set({
-                marginTop: -10,
-                font: 'smallTitle',
-                textColor: '#aaa',
-                alignX: 'right'
-            }));
+            logo.add(new qx.ui.basic.Image("remocular/logo.png"));
 
             logo.addListener('click', function(e) {
-                qx.bom.Window.open('http://www.remocular.org/v/VERSION', 'remoscope.org');
+                qx.bom.Window.open('http://www.remocular.org/v/VERSION', 'remocular.org');
             });
 
-            logo.addListener('mouseover', function(e) {
-                this.setOpacity(1);
-            }, logo);
+            logo.addListenerOnce('appear',function(){
+                var logoEl = logo.getContainerElement().getDomElement();
 
-            logo.addListener('mouseout', function(e) {
-                this.setOpacity(0.7);
-            }, logo);
+                var fadein = new qx.fx.effect.core.Fade(logoEl).set({
+                    from: 0.5,
+                    to: 1
+                });
+                var fadeout = new qx.fx.effect.core.Fade(logoEl).set({
+                    from: 1,
+                    to: 0.5
+                });
+            
+                logo.addListener('mouseover', function(e) {
+                    fadein.start();
+                }, logo);
+
+                logo.addListener('mouseout', function(e) {
+                    fadeout.start();
+                }, logo);
+            });
 
             root.add(logo,{
                 edge: 'center'

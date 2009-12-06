@@ -16,6 +16,8 @@ qx.Class.define("remocular.ui.Menu",{
             showMaximize: false,
             allowMinimize: false,
             showMinimize: false,
+            resizable: false,
+            useMoveFrame: true,
             contentPadding: [3,3,3,3]
         });
         this.setLayout(new qx.ui.layout.VBox(3));
