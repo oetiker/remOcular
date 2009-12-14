@@ -23,74 +23,75 @@ use vars qw($VERSION);
 '$Revision$ ' =~ /Revision: (\S*)/;
 my $VERSION = "0.$1";
 
-
 sub get_config {
     my $self = shift;
     return {
-       menu => 'DiskFree',
-       task => {
-           plugin  => 'Df',
-           title => "DiskFree",
-           table => [
-                { 
-                  label    => 'Filesystem',
-                  tooltip  => 'Filesystem',
-                  width    => 6,
-                },
-                { 
-                  label    => 'Blocks',
-                  tooltip  => 'Total Blocks (1 Block = 1024 Byte)',
-                  width    => 2,
-                },
-                { 
-                  label    => 'Used',
-                  tooltip  => 'Used Blocks',
-                  width    => 2,
-                },
-                { 
-                  label    => 'Free',
-                  tooltip  => 'Free Blocks',                  
-                  width    => 2,
-                },
-                { 
-                  label    => 'Capacity',
-                  tooltip  => 'Used Capacity',
-                  width    => 1,
-                },
-                {
-                  label    => 'Capacity Chart',
-                  width    => 4,
-                  data => {
-                      processor  => 'PASSTHROUGH',
-                      source_col => 4,
-                      key_col    => 0
-                  },
-                  presentation => {
-                    renderer   => 'BARPLOT',
-                    fill => '#88f',
-                    border => '#448'
-                  }
-		},
-                { 
-                  label    => 'Mountpoint',
-                  tooltip  => 'Mountpoint',                  
-                  width    => 4,
-                  source   => 5, 
-                }
-            ]
-        }
+        menu => 'DiskFree',
+        title => 'Diskfree Plugin',
+        byline => qq{Version $VERSION, 2009-12-11, by Tobi Oetiker},
+        link  => qq{http://tobi.oetiker.ch},
+        about => <<ABOUT_END,
+The Diskfree plugin shows all the mounted file systems
+as reported by the <code>df</code> command.
+ABOUT_END
     }
 }
 
 sub check_params {
     my $self = shift;
     my $params = shift;
-    my $error;
-    return (
-        "DiskFree on ".hostname(),
-        1,
-        $error
-    )
+    # no params to  check here, so we are just happy as is
+    return {
+        table => [
+            { 
+                label    => 'Filesystem',
+                tooltip  => 'Filesystem',
+                width    => 6,
+            },
+            { 
+                label    => 'Blocks',
+                tooltip  => 'Total Blocks (1 Block = 1024 Byte)',
+                width    => 2,
+            },
+            { 
+                label    => 'Used',
+                tooltip  => 'Used Blocks',
+                width    => 2,
+            },
+            { 
+                label    => 'Free',
+                tooltip  => 'Free Blocks',                  
+                width    => 2,
+            },
+            { 
+                label    => 'Capacity',
+                tooltip  => 'Used Capacity',
+                width    => 1,
+            },
+            {
+                label    => 'Capacity Chart',
+                width    => 4,
+                data => {
+                    processor  => 'PASSTHROUGH',
+                    source_col => 4,
+                    key_col    => 0
+                },
+                presentation => {
+                    renderer   => 'BARPLOT',
+                    fill => '#88f',
+                    border => '#448'
+                }
+      		},
+            { 
+                label    => 'Mountpoint',
+                tooltip  => 'Mountpoint',                  
+                width    => 4,
+            }
+        ],
+        title => "DiskFree on ".hostname(),
+        # this runs only once, go get it!
+        interval => 250
+    };
 }
 
 
@@ -112,8 +113,8 @@ sub start_instance {
         $data .= join("\t", "#PUSH", split(/\s+/,$_,6))."\n";
     }
     close $fh;
+    $data .= "#STOP\n";
     RemOcular::PluginHelper::save($outfile,$data);
-    RemOcular::PluginHelper::save($outfile,"#STOP\n");
 }
 
 1;

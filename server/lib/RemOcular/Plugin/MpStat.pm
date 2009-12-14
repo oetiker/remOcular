@@ -41,104 +41,110 @@ sub _cpu_count {
 
 sub get_config {
     my $self = shift;
-    my $cpu_count = _cpu_count();
-    my $pct = {
-        renderer   => 'NUMBER',
-        decimals   => 2,
-        postfix    => ' %'
-    };
-           
     return {
-       menu => 'MpStat',
-       task => {
-           plugin  => 'MpStat',
-           title=> "CPU Statistics for ".hostname(),
-   	   form_type => 'top',
-           form=> [
-               {
-                    type=> 'Spinner',
-                    label=> 'Interval',
-                    name=> 'interval',
-                    min => 1,
-                    max => 60,
-                    initial=> 2,
-                    required=> 1
-               },
-               {
-                    type=> 'Spinner',
-                    label=> 'Rounds',
-                    name=> 'rounds',
-                    min => 1,
-                    max => 60,
-                    initial=> 5,
-                    required=> 1
-               }
-           ],
-           table => [
-                { 
-                  label    => 'Prop',
-                  tooltip  => 'Property',
-                  width    => 2,
-                },
-                { label => 'All',
-                  width => 2,
-                  presentation => $pct
-                },                
-                { label    => 'SparkLine',
-                  width    => 4,
-                  data => {
-                    processor  => 'STACK',
-                    source_col => 1,
-                    key_col => 0,
-                    depth => 30
-                  },
-                  presentation => {
-                    renderer   => 'SPARKLINE',
-                    line_color => '#484',
-                    spark_color => '#f00',
-                    line_width => 0.5,
-                    spark_radius => 1.5,
-                    single_scale => 0
-                  }
-		},
-                { label    => 'Bar Chart',
-                  width    => 4,
-                  data => {
-                    processor  => 'PASSTHROUGH',
-                    source_col => 1,
-                    key_col => 0
-                  },
-                  presentation => {
-                    renderer   => 'BARPLOT',
-                    fill => '#8f8',
-                    border => '#484',
-                  }
-		},
-                map {
-                  { 
-                      label    => 'CPU '.$_,
-                      width    => 2,
-                      presentation => $pct
-                  }
-                } (0..${cpu_count})
-                                               
-           ]
-      }
-   }
+        menu => 'MpStat',
+        title=> "CPU Statistics for ".hostname(),
+   	    form_type => 'top',
+        form=> [
+            {
+                type=> 'Spinner',
+                label=> 'Interval',
+                name=> 'interval',
+                min => 1,
+                max => 60,
+                initial=> 2,
+                required=> 1
+            },
+            {
+                type=> 'Spinner',
+                label=> 'Rounds',
+                name=> 'rounds',
+                min => 1,
+                max => 60,
+                initial=> 5,
+                required=> 1
+            }
+        ],
+        byline => qq{Version $VERSION, 2009-12-11, by Tobi Oetiker},
+        link  => qq{http://tobi.oetiker.ch},
+        about => <<ABOUT_END,
+The MpStat plugin shows CPU statistics
+as reported by the <code>mpstat</code> command.
+ABOUT_END
+    }
 }
 
 sub check_params {
     my $self = shift;
     my $params = shift;
     my $error;
-    if (int($params->{interval}) < 1){
-        $error = "Interval must be at least 1 second";
+    if (int($params->{interval}||0) < 1){
+        return "Interval must be at least 1 second";
     }                
-    return (
-        "MP Stats for ".hostname(),        
-        int(1000),
-        $error
-    )
+
+    my $pct = {
+        renderer   => 'NUMBER',
+        decimals   => 2,
+        postfix    => ' %'
+    };
+
+    my $cpu_count = _cpu_count();
+           
+    return {
+        table => [
+            { 
+                label    => 'Prop',
+                tooltip  => 'Property',
+                width    => 2,
+            },
+            {
+                label => 'All',
+                width => 2,
+                presentation => $pct
+            },                
+            { 
+                label    => 'SparkLine',
+                width    => 4,
+                data => {
+                    processor  => 'STACK',
+                    source_col => 1,
+                    key_col => 0,
+                    depth => 30
+                },
+                presentation => {
+                    renderer   => 'SPARKLINE',
+                    line_color => '#484',
+                    spark_color => '#f00',
+                    line_width => 0.5,
+                    spark_radius => 1.5,
+                    single_scale => 0
+                }
+            },
+            {
+                label    => 'Bar Chart',
+                width    => 4,
+                data => {
+                    processor  => 'PASSTHROUGH',
+                    source_col => 1,
+                    key_col => 0
+                },
+                presentation => {
+                    renderer   => 'BARPLOT',
+                    fill => '#8f8',
+                    border => '#484',
+                }
+		    },
+            map {
+                { 
+                    label    => 'CPU '.$_,
+                    width    => 2,
+                    presentation => $pct
+                }
+            } (0..${cpu_count})
+        ],
+        title => "MP Stats for ".hostname(),
+        interval => 1000
+    }
 }
 
 

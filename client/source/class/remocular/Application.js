@@ -34,7 +34,8 @@ qx.Class.define("remocular.Application", {
             remocular.util.Server.getInstance().setLocalUrl('http://johan.oetiker.ch/~oetiker/remocular/');
 
             var root = new qx.ui.container.Composite(new qx.ui.layout.Dock()).set({
-                backgroundColor: '#fff'
+                backgroundColor: '#fff',
+                padding: [5,5,5,5]
             });
             this.getRoot().add(root,{left: 0, top:0, right: 0, bottom: 0});
 
@@ -48,13 +49,13 @@ qx.Class.define("remocular.Application", {
                 alignX: 'center'
            });
 
-            logo.add(new qx.ui.basic.Image("remocular/logo.png"));
+           logo.add(new qx.ui.basic.Image("remocular/logo.png"));
 
-            logo.addListener('click', function(e) {
+           logo.addListener('click', function(e) {
                 qx.bom.Window.open('http://www.remocular.org/v/VERSION', 'remocular.org');
-            });
+           });
 
-            logo.addListenerOnce('appear',function(){
+           logo.addListenerOnce('appear',function(){
                 var logoEl = logo.getContainerElement().getDomElement();
 
                 var fadein = new qx.fx.effect.core.Fade(logoEl).set({
@@ -78,7 +79,17 @@ qx.Class.define("remocular.Application", {
             root.add(logo,{
                 edge: 'center'
             });
-
+            var copy = new qx.ui.basic.Label(this.tr('remOcular %1, Copyright %2 by Tobias Oetiker, OETIKER+PARTNER AG, GPL Licensed','1.0','2009'));
+            copy.set({
+                cursor: 'pointer',
+                alignX: 'right'
+            });
+            copy.addListener('click', function(){
+                qx.bom.Window.open('http://www.remocular.org/v/VERSION', 'remocular.org');
+            });
+            root.add(copy,{
+                edge: 'south'
+            });
             new remocular.ui.Menu();
         }
     }

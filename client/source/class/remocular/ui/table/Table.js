@@ -14,6 +14,7 @@ qx.Class.define("remocular.ui.table.Table", {
         this.addListener("cellOver", this._onCellOver, this);
         this.addListener("headerOver", this._onHeaderOver, this);
         this.addListener("mousemove", this._onMouseMove, this);
+        this._hideToolTip();
     },
 
 

@@ -27,143 +27,161 @@ my $VERSION = "0.$1";
 sub get_config {
     my $self = shift;
     return {
-       menu => 'TraceRoute',
-       task => {
-           plugin  => 'TraceRoute',
-           title=> "TraceRoute",
-           form_type => 'left',
-           form=> [
-               {
-                    type=> 'TextField',
-                    label=> 'Host',
-                    name=> 'host',
-                    required=> 1,
-               },
-               {
-                    type=> 'Spinner',
-                    label=> 'Rounds',
-                    name=> 'rounds',
-                    min=> 1,
-                    max=> 30,
-                    initial=> 3
-               },
-               {
-                    type=> 'Spinner',
-                    label=> 'Interval',
-                    name=> 'interval',
-                    min=> 1,
-                    max=> 30,
-                    initial=> 5
-               },
-               {
-                    type=> 'SelectBox',
-                    label=> 'IP Level',
-                    name=>  'iplevel',
-    	            initial => 'IPv4',
-                    data=> [qw(IPv4 IPv6)],
-               },               
-               {
-                    type=> 'SelectBox',
-                    label=> 'Method',
-                    name=>  'method',
-                    data=> [qw(default icmp tcp tcpconn udp udplite raw)],
-               },               
-               {
-                    type=> 'TextField',
-                    label=> 'Source',
-                    name=> 'source',
-                    required=> 0,
-               },        
-           ],
-           table => [
-                { 
-                  label    => 'Hop',
-                  tooltip  => 'Hop Count',
-                  width    => 1,                
-                },
-                { 
-                  label    => 'Host',
-                  tooltip  => 'Hostname',
-                  width    => 3,
-                },
-                { 
-                  label    => 'Ip',
-                  tooltip  => 'IP Number',
-                  width    => 3,
-                },
-                { 
-                  label    => 'RTT Now',
-                  tooltip  => 'Round Trip Time',
-                  width    => 2,
-                },
-                {
-                  label    => 'Count',
-                  tooltip  => 'Number of traces',
-                  width    => 1,
-                  data     => {
+        menu => 'TraceRoute',
+        title=> "TraceRoute",
+        form_type => 'left',
+        form=> [
+            {
+                type=> 'TextField',
+                label=> 'Host',
+                name=> 'host',
+                required=> 1,
+            },
+            {
+                type=> 'Spinner',
+                label=> 'Rounds',
+                name=> 'rounds',
+                min=> 1,
+                max=> 30,
+                initial=> 3
+            },
+            {
+                type=> 'Spinner',
+                label=> 'Interval',
+                name=> 'interval',
+                min=> 1,
+                max=> 30,
+                initial=> 5
+            },
+            {
+                type=> 'SelectBox',
+                label=> 'IP Level',
+                name=>  'iplevel',
+    	        initial => 'IPv4',
+                data=> [qw(IPv4 IPv6)],
+            },               
+            {
+                type=> 'SelectBox',
+                label=> 'Method',
+                name=>  'method',
+                data=> [qw(default icmp tcp tcpconn udp udplite raw)],
+            },               
+            {
+                type=> 'TextField',
+                label=> 'Source',
+                name=> 'source',
+                required=> 0,
+            }
+        ],
+        byline => qq{Version $VERSION, 2009-12-11, by Tobi Oetiker},
+        link  => qq{http://tobi.oetiker.ch},
+        about => <<ABOUT_END,
+Online variant of <code>traceroute</code>.
+ABOUT_END
+
+    }
+}
+
+sub check_params {
+    my $self = shift;
+    my $params = shift;
+    my $error;
+    if (int($params->{interval}||0) < 1){
+        return "Interval must be at least 1 second";
+    }
+    elsif (int($params->{rounds}||1) > 30){
+        return "Not more than 30 rounds allowed";
+    }
+    return {
+        table => [
+            { 
+                label    => 'Hop',
+                tooltip  => 'Hop Count',
+                width    => 1,                
+            },
+            { 
+                label    => 'Host',
+                tooltip  => 'Hostname',
+                width    => 3,
+            },
+            { 
+                label    => 'Ip',
+                tooltip  => 'IP Number',
+                width    => 3,
+            },
+            { 
+                label    => 'RTT Now',
+                tooltip  => 'Round Trip Time',
+                width    => 2,
+            },
+            {
+                label    => 'Count',
+                tooltip  => 'Number of traces',
+                width    => 1,
+                data     => {
                     processor  => 'COUNT',
                     key_col    => 2
-                  },
-                  presentation => {
+                },
+                presentation => {
                     renderer => 'NUMBER',
                     decimals => 0
-                  }
-                },
-                {
-                  label    => 'Avg',
-                  tooltip  => 'Average Round Trip Time',
-                  width    => 2,                  
-                  data     => {
+                }
+            },
+            {
+                label    => 'Avg',
+                tooltip  => 'Average Round Trip Time',
+                width    => 2,                  
+                data     => {
                     processor  => 'AVG',
                     source_col => 3,
                     key_col    => 2
-                  }
-                },
-                {
-                  label    => 'Min',
-                  tooltip  => 'Minimum Round Trip Time',
-                  width    => 2,
-                  data   => {
+                }
+            },
+            {
+                label    => 'Min',
+                tooltip  => 'Minimum Round Trip Time',
+                width    => 2,
+                data   => {
                     processor  => 'MIN',
                     source_col => 3,
                     key_col    => 2
-                  }
-                },
-                {
-                  label    => 'Max',
-                  tooltip  => 'Maximum Round Trip Time',
-                  width    => 2,
-                  data => {
+                }
+            },
+            {
+                label    => 'Max',
+                tooltip  => 'Maximum Round Trip Time',
+                width    => 2,
+                data => {
                     processor  => 'MAX',
                     source_col => 3,
                     key_col    => 2
-                  }
-                },
-                {
-                  label    => 'Med',
-                  tooltip  => 'Median Round Trip Time',
-                  width    => 2,
-                  data => {
+                }
+            },
+            {
+                label    => 'Med',
+                tooltip  => 'Median Round Trip Time',
+                width    => 2,
+                data => {
                     processor  => 'MEDIAN',
                     source_col => 3,
                     key_col    => 2
-                  }
-                },
-                {
-                  label    => 'StDev',
-                  tooltip  => 'Standard Deviation Round Trip Time',
-                  width    => 2,
-                  data => {
-                    processor  => 'STDDEV',
-                    source_col => 3,
-                    key_col    => 2
-                  }
-                },
-                {
-                  label    => 'Average Plot',
-                  tooltip  => 'Average and Standard Deviation',
-                  width    => 4,
-                  data => {
+                }
+            },
+            {
+                label    => 'StDev',
+                tooltip  => 'Standard Deviation Round Trip Time',
+                width    => 2,
+                data => {
+                   processor  => 'STDDEV',
+                   source_col => 3,
+                   key_col    => 2
+                }
+            },
+            {
+                label    => 'Average Plot',
+                tooltip  => 'Average and Standard Deviation',
+                width    => 4,
+                data => {
                     processor  => 'MAP',
                     structure => {
                         mainbar => {
@@ -177,8 +195,8 @@ sub get_config {
                             key_col    => 2
                         }
                     }
-                  },
-                  presentation => {
+                },
+                presentation => {
                     renderer   => 'TWOBARPLOT',
                     mainbar => {
                         fill => '#f88',
@@ -188,28 +206,12 @@ sub get_config {
                         fill => '#88f',
                         border => '#448'
                     }
-                 }
-              }                                 
-           ]
-      }
-   }
-}
-
-sub check_params {
-    my $self = shift;
-    my $params = shift;
-    my $error;
-    if (int($params->{interval}) < 1){
-        $error = "Interval must be at least 1 second";
+                }
+            }                                 
+        ],
+        title => "TraceRoute to $params->{host}",
+        interval => int(1000),
     }
-    elsif (int($params->{rounds}) > 30){
-        $error = "Not more than 30 rounds allowed";
-    }
-    return (
-        "TraceRoute to $params->{host}",
-        int(1000),
-        $error
-    )
 }
 
 

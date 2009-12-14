@@ -342,19 +342,19 @@ function perlmodule (){
    rm -f config.cache 
    PERL=${PERL:-/usr/bin/perl}
    PERL_VERSION=`$PERL -e 'printf "%vd\n", $^V;'`
-   export PERL5LIB=$PREFIX/lib/perl:${PERL5LIB:-}
+   export PERL5LIB=$PREFIX/lib:${PERL5LIB:-}
    if [ -f Makefile.PL ]; then
-     $PERL -I/$PREFIX/lib/perl Makefile.PL \
-        LIB=$PREFIX/lib/perl/$PERL_VERSION PREFIX=$PREFIX "$@" 2>&1 | tee -a ../${simpleprogram}.output
+     $PERL -I/$PREFIX/lib Makefile.PL \
+        LIB=$PREFIX/lib/$PERL_VERSION PREFIX=$PREFIX "$@" 2>&1 | tee -a ../${simpleprogram}.output
      [ ${PIPESTATUS[0]} = 0 ] || exit ${PIPESTATUS[0]}     
       gmake   2>&1 | tee -a ../${simpleprogram}.output
      [ ${PIPESTATUS[0]} = 0 ] || exit ${PIPESTATUS[0]}     
      gmake install 2>&1 | tee -a ../${simpleprogram}.output
      [ ${PIPESTATUS[0]} = 0 ] || exit ${PIPESTATUS[0]}     
   else        
-      $PERL -I$PREFIX/lib/perl Build.PL \
-        --config installvendorarch=lib/perl/$PERL_VERSION/`$PERL -MConfig -e 'print $Config{archname}'` \
-        --config installvendorlib=lib/perl/$PERL_VERSION \
+      $PERL -I$PREFIX/lib Build.PL \
+        --config installvendorarch=lib/$PERL_VERSION/`$PERL -MConfig -e 'print $Config{archname}'` \
+        --config installvendorlib=lib/$PERL_VERSION \
         --config installvendorbin=bin \
         --config installvendorman3dir=man/man3 \
         --config installvendorman1dir=man/man1 \

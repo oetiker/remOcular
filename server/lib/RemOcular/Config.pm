@@ -32,9 +32,9 @@ All methods inherited from L<RemOcular::Base>. As well as the following:
 
 =over
 
-=item my $cfg = RemOcular::Config->B<new>(file=>'/etc/SmokeTracessas/system.cfg');
+=item my $cfg = RemOcular::Config->B<new>(file=>'/etc/remocular.cfg');
 
-Parses an THD System configuration file.
+Parses a remocular configuration file.
 
 =cut
 
@@ -120,20 +120,22 @@ sub _make_pod_header {
     return <<"HEADER";
 ${E}head1 NAME
 
-service.cfg - The RemOcularSSAS configuration file
+remocular.cfg - The RemOcular configuration file
 
 ${E}head1 SYNOPSIS
 
- *** Database *** 
- db_dbi = any_dbi_but_only_pg_tested
- db_user = user
- db_pass = password
- evnt_hid = O2008
+ *** General ***
+ admin_name = tobi oetiker
+ admin_link = http://tobi.oetiker.ch
+ plugin_path = /var/lib/remocular/plugin
 
- *** Email ***
- from = info\@RemOcular.ch
- bcc = tobi\@oetiker.ch
- smtp = localhost
+ *** Plugin ***
+ +RemOcular::Plugin::TraceRoute
+ +RemOcular::Plugin::IoStat
+ +RemOcular::Plugin::Df
+ +RemOcular::Plugin::IoStat
+ +RemOcular::Plugin::MpStat
+ +RemOcular::Plugin::Top
 
 ${E}head1 DESCRIPTION
 
@@ -147,7 +149,7 @@ HEADER
 
 =item $x->B<_make_parser>()
 
-Create a parse config parser for THD.
+Create a parse config parser for remocular.
 
 =cut
 
@@ -155,48 +157,25 @@ sub _make_parser {
     my $self = shift;
     my $E = '=';
     my $grammar = {
-        _sections => [ qw(Database Email CodeLetter RegLetter RegUpLetter SponsorLetter)],
-        _mandatory => [qw(Database Email CodeLetter RegLetter RegUpLetter SponsorLetter)],
-        Database => {
-            _doc => 'Global configuration settings for RemOcular',
-            _vars => [ qw(dbi_dsn dbi_user dbi_pass evnt_hid) ],
-            _mandatory => [ qw(dbi_dsn dbi_user dbi_pass evnt_hid) ],
-            dbi_dsn  => { _doc => 'dbi connect string to access the thd database' },
-            dbi_user => { _doc => 'database user with select privilege' },
-            dbi_pass => { _doc => 'password for database user' },
-            evnt_hid  => { _doc => 'event id of the current event' },
+        _sections => [ qw(General Plugin)],
+        _mandatory => [qw(General Plugin)],
+        General => {
+            _doc => 'Global configuration settings for remOcular',
+            _vars => [ qw(admin_name admin_link plugin_path) ],
+            admin_name => { _doc => 'who is running this service' },
+            admin_link => { _doc => 'link for service admin' },
+            plugin_path => { _doc => 'remocular plugins are perlmodules and they get found in the same way as perl modules. If you have extra locations to look for them. Set them here.' }
         },
-        Email => {
-            _doc => 'Configuration for the mail sender',
-            _vars => [ qw(from bcc smtp) ],
-            _mandatory => [ qw(from smtp) ],
-            from => {_doc => 'sender address for code emails'},
-            bcc => {_doc => 'send a copy of all email to this address'},
-            smtp => {_doc => 'use this instead of localhost as your smtp server'}
-        },
-        CodeLetter => {
-            _vars => [ qw(to cc subject) ],
-            _sections => [qw(message) ],
-            _mandatory => [qw(to subject message) ],
-            message => { _text => {} },
-        },
-        RegLetter => {
-            _vars => [ qw(to cc subject) ],
-            _sections => [qw(message) ],
-            _mandatory => [qw(to subject message) ],
-            message => { _text => {} },
-        },
-        RegUpLetter => {
-            _vars => [ qw(to cc subject) ],
-            _sections => [qw(message) ],
-            _mandatory => [qw(to subject message) ],
-            message => { _text => {} },
-        },
-        SponsorLetter => {
-            _vars => [ qw(to cc subject) ],
-            _sections => [qw(message) ],
-            _mandatory => [qw(to subject message) ],
-            message => { _text => {} },
+        Plugin => {
+            _doc => 'Select the Plugins to run in your setup',
+            _sections => [ qw(/\S+/) ],
+            '/\S+/' => {
+                _order => 1,
+                _doc => 'Plugin Name',
+                _example => 'RemOcular::Plugin::TraceRoute',
+                _vars => [ '/\S+/' ],
+                '/\S+/' => {_doc => 'arbitrary plugin properties'},
+            }
         },
     };
     my $parser =  Config::Grammar->new ($grammar);

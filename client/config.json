@@ -37,41 +37,45 @@
     "LOCALES"      : [ "en" ],
     "CACHE"        : "/home/oetiker/scratch/qooxdoo-oetiker",
     "ROOT"         : "."
-  }
+  },
 
   // You only need to edit the remainder of this file, if you want to customize
   // specific jobs, or add own job definitions.
 
-  /*
   "jobs" :
   {
-    // Uncomment the following entry to add a contrib or library to your
-    // project; make sure to adapt the path to the Manifest.json; if you are
-    // using a contrib: library, it will be downloaded into the path specified
-    // by the 'cache/downloads' config key
-    "libraries" : 
+    "build" :
     {
-      "library" :
-      [
+      "copy-files": {
+          "files" : [ "resource/excanvas.js" ]
+       }
+     },
+     "pretty" :
+     {
+        "pretty-print" : 
         {
-          "manifest" : "contrib://SkeletonApplication/trunk/Manifest.json"
+            "general" : 
+            {           
+               "indent-string"            : "    "
+            },
+            "comments" :
+            {
+                "trailing" :
+                {
+                    "keep-column"         : false,
+                    "padding"             : "* "
+                }
+            },
+            "blocks" :
+            {
+                "align-with-curlies"     :  false,
+                "open-curly" :
+                { 
+                    "newline-before"      : "n",
+                     "indent-before"        : false
+                }
+            }
         }
-      ]
-    },
-
-    // If you want to tweak a job setting, see the following sample where
-    // the "format" feature of the "build-script" job is overridden.
-    // To see a list of available jobs, invoke 'generate.py x'.
-    "build-script" :
-    {
-      "compile-dist" : 
-      {
-        "code" :
-        {
-          "format" : false
-        }
-      }
     }
   }
-  */
 }

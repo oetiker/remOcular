@@ -27,59 +27,61 @@ my $VERSION = "0.$1";
 
 sub get_config {
     my $self = shift;
-    my @cols = split /\s+/,(grep /Device/, split /\n/, `/usr/bin/iostat -x 1 1`)[0];
-    shift @cols;
-    my $src = 1;
     return {
        menu => 'IoStat',
-       task => {
-           plugin  => 'IoStat',
-           title=> "IO Statistics",
-           form_type => 'top',
-           form => [
-               {
-                    type=> 'Spinner',
-                    label=> 'Interval',
-                    name=> 'interval',
-                    min=> 1,
-                    max=> 60,
-                    initial=> 2
-               },
-               {
-                    type=> 'Spinner',
-                    label=> 'Rounds',
-                    name=> 'rounds',
-                    min=> 1,
-                    max=> 100,
-                    initial=> 5
-               },
-           ],
-           table => [
-                { 
-                  label    => 'device',
-                  tooltip  => 'Block Device Name',
-                  width    => 2,
-                },
-                map {
-                    {
-                      label    => $_,
-                      width    => 2
-                    }
-                } @cols
-            ]
-        }
+       title => 'Disk I/O Statistics',    
+       byline => qq{Version $VERSION, 2009-12-11, by Tobi Oetiker},
+       link  => qq{http://tobi.oetiker.ch},        
+       about => <<ABOUT_END,
+The IoStat plugin shows disk I/O
+as reported by the <code>iostat</code> command.
+ABOUT_END
+       form_type => 'top',
+       form => [
+           {
+               type=> 'Spinner',
+               label=> 'Interval',
+               name=> 'interval',
+               min=> 1,
+               max=> 60,
+               initial=> 2
+           },
+           {
+               type=> 'Spinner',
+               label=> 'Rounds',
+               name=> 'rounds',
+               min=> 1,
+               max=> 100,
+               initial=> 5
+           },
+       ],
     }
+
 }
 
 sub check_params {
     my $self = shift;
     my $params = shift;
-    my $error;
-    return (
-        "Io Stat for ".hostname(),
-        $params->{interval} * 1000,
-        $error
-    )
+    my @cols = split /\s+/,(grep /Device/, split /\n/, `/usr/bin/iostat -x 1 1`)[0];
+    shift @cols;
+    my $src = 1;
+    return {
+        table => [
+            { 
+                label    => 'device',
+                tooltip  => 'Block Device Name',
+                width    => 2,
+            },
+            map {
+                    {
+                        label    => $_,
+                        width    => 2
+                    }
+            } @cols
+        ],
+        title => "Io Stat for ".hostname(),
+        interval => $params->{interval} * 1000
+    }
 }
 
 sub start_instance {

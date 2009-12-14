@@ -27,108 +27,32 @@ my $VERSION = "0.$1";
 sub get_config {
     my $self = shift;
     return {
-       menu => 'Top',
-       task => {
-           plugin  => 'Top',
-           title=> "Top Process Monitor",
-           form_type => 'top',
-           form=> [
-               {
-                    type=> 'Spinner',
-                    label=> 'Interval',
-                    name=> 'interval',
-                    min => 1,
-                    max => 60,
-                    initial=> 5,
-                    required=> 1,
-               },
-               {
-                    type=> 'CheckBox',
-                    label=> 'Show Threads',
-                    name=>  'threads',
-                    initial=> 0
-               },
-           ],
-           table => [
-                { 
-                  label    => 'PID',
-                  tooltip  => 'Process ID',
-                  width    => 2,
-                },
-                { 
-                  label    => 'USER',
-                  tooltip  => 'User ID',
-                  width    => 2,
-                },
-                { 
-                  label    => 'PR',
-                  tooltip  => 'Priority',
-                  width    => 1,
-                },
-                { 
-                  label    => 'NI',
-                  tooltip  => 'Nice Level',                  
-                  width    => 1,
-                },
-                { 
-                  label    => 'VIRT',
-                  tooltip  => 'Virtual Memory',
-                  width    => 3,
-                },
-                { 
-                  label    => 'RES',
-                  tooltip  => 'Resident Memory',                  
-                  width    => 3,
-                },
-                { 
-                  label    => 'SHR',
-                  tooltip  => 'Shared Memory',                  
-                  width    => 3,
-                },
-                { 
-                  label    => 'S',
-                  tooltip  => 'State (D = uninterruptible sleep, R = running, S = sleeping, T = traced or stopped, Z = zombie',
-                  width    => 1,
-                },
-                { 
-                  label    => 'CPU',
-                  tooltip  => 'CPU Usage',                  
-                  width    => 1,
-                },
-                { label    => 'CPU Spark',
-                  width    => 4,
-                  data => {
-                    processor  => 'STACK',
-                    source_col => 8,
-                    key_col => 0,
-                    depth => 30
-                  },
-                  presentation => {
-                    renderer   => 'SPARKLINE',
-                    line_color => '#484',
-                    spark_color => '#f00',
-                    line_width => 0.5,
-                    spark_radius => 1,
-                    single_scale => 1
-                  }
-                },
-                { 
-                  label    => 'MEM',
-                  tooltip  => 'Memory Usage (RES)',
-                  width    => 2,
-                },
-                { 
-                  label    => 'TIME',
-                  tooltip  => 'Total CPU Time' ,
-                  width    => 3,
-                },
-                { 
-                  label    => 'COMMAND',
-                  tooltip  => 'Command Line',                  
-                  width    => 4,
-                }
-            ]
-        }
+        menu => 'Top',
+        title=> "Top Process Monitor",
+        form_type => 'top',
+        form=> [
+            {
+                type=> 'Spinner',
+                label=> 'Interval',
+                name=> 'interval',
+                min => 1,
+                max => 60,
+                initial=> 5,
+                required=> 1,
+            },
+            {
+                type=> 'CheckBox',
+                label=> 'Show Threads',
+                name=>  'threads',
+                initial=> 0
+            },
+        ],
+        byline => qq{Version $VERSION, 2009-12-11, by Tobi Oetiker},
+        link  => qq{http://tobi.oetiker.ch},
+        about => <<ABOUT_END,
+Online variant of <code>top</code> the unix commandline process viewer.
+ABOUT_END
+
     }
 }
 
@@ -136,15 +60,93 @@ sub check_params {
     my $self = shift;
     my $params = shift;
     my $error;
-    if (int($params->{interval}) < 1){
-        $error = "Interval must be at least 1 second";
+    if (int($params->{interval}||0) < 1){
+        return "Interval must be at least 1 second";
     }
-
-    return (
-        "Top Processes on ".hostname(),
-        int($params->{interval})*1000,
-        $error
-    )
+    return {
+        table => [
+            { 
+                label    => 'PID',
+                tooltip  => 'Process ID',
+                width    => 2,
+            },
+            { 
+                label    => 'USER',
+                tooltip  => 'User ID',
+                width    => 2,
+            },
+            { 
+                label    => 'PR',
+                tooltip  => 'Priority',
+                width    => 1,
+            },
+            { 
+                label    => 'NI',
+                tooltip  => 'Nice Level',                  
+                width    => 1,
+            },
+            { 
+                label    => 'VIRT',
+                tooltip  => 'Virtual Memory',
+                width    => 3,
+            },
+            { 
+                label    => 'RES',
+                tooltip  => 'Resident Memory',                  
+                width    => 3,
+            },
+            { 
+                label    => 'SHR',
+                tooltip  => 'Shared Memory',                  
+                width    => 3,
+            },
+            { 
+                label    => 'S',
+                tooltip  => 'State (D = uninterruptible sleep, R = running, S = sleeping, T = traced or stopped, Z = zombie',
+                width    => 1,
+            },
+            { 
+                label    => 'CPU',
+                tooltip  => 'CPU Usage',                  
+                width    => 1,
+            },
+            {
+                label    => 'CPU Spark',
+                width    => 4,
+                data => {
+                    processor  => 'STACK',
+                    source_col => 8,
+                    key_col => 0,
+                    depth => 30
+                },
+                presentation => {
+                    renderer   => 'SPARKLINE',
+                    line_color => '#484',
+                    spark_color => '#f00',
+                    line_width => 0.5,
+                    spark_radius => 1,
+                    single_scale => 1
+                }
+            },
+            { 
+                label    => 'MEM',
+                tooltip  => 'Memory Usage (RES)',
+                width    => 2,
+            },
+            { 
+                label    => 'TIME',
+                tooltip  => 'Total CPU Time' ,
+                width    => 3,
+            },
+            { 
+                label    => 'COMMAND',
+                tooltip  => 'Command Line',                  
+                width    => 4,
+            }
+        ],
+        titel => "Top Processes on ".hostname(),
+        interval => int($params->{interval})*1000,
+    }
 }
 
 

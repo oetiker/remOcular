@@ -15,13 +15,13 @@ qx.Class.define("remocular.ui.Task",{
     construct : function(task,id){
         this.__windowName = id;
         this.__plugin = task.plugin;
-        this.base(arguments,task.title);
+        this.base(arguments,task.config.title);
         this.setLayout(new qx.ui.layout.VBox(0,null));
         var winCount = this.self(arguments).__winCount++;
         if (winCount > 10){
             this.self(arguments).__winCount = 0;
         }
-        this.moveTo(140+20*winCount,5+10*winCount);
+        this.moveTo(30+20*winCount,10+10*winCount);
         this.set({
             allowMinimize: false,
             showMinimize: false,
@@ -34,47 +34,55 @@ qx.Class.define("remocular.ui.Task",{
         var toolbar = this.__makeToolbar();
         this.add(toolbar);
         this.__infoBar = new remocular.ui.InfoBar();
-        this.__dataProcessor = new remocular.util.DataProcessor(task.table);
+        this.__data = [];            
+
+
         this.add(this.__infoBar);
-        var table = this.__makeTable();
-        if (task.form && task.form_type){
-            this.__form = new remocular.ui.Form(task.form);
+
+        this.__tableContainer = new qx.ui.container.Composite(new qx.ui.layout.VBox(0,'middle'));
+        this.__tableContainer.add(
+            new remocular.ui.TaskLogo(task.config.title,task.config.byline,task.config.about,task.config.link)
+        );
+                
+        if (task.config.form){
+            this.__form = new remocular.ui.Form(task.config.form);
             this.__formModel = this.__form.getModel();
-            if (task.form_type == 'left'){
-                var pane = new qx.ui.splitpane.Pane("horizontal");
+            if (task.config.form_type == 'top'){
+                this.__wigForm =  new remocular.ui.form.renderer.Top(this.__form).set({
+                    marginLeft: 5
+                });
+                this.__tableContainer.setDecorator('splitpane');
+                var part = new qx.ui.toolbar.Part();                
+                part.add(this.__wigForm);
+                toolbar.add(part);                                       
+                this.add(this.__tableContainer,{flex: 1}); 
+            } else { /* if (task.config.form_type == 'left'){ -- default */
+                var pane = new qx.ui.splitpane.Pane('horizontal');
                 this.add(pane,{flex: 1});
                 this.__wigForm = new remocular.ui.form.renderer.Left(this.__form);
                 this.__wigForm.getLayout().setColumnFlex(1,1);
                 pane.add(this.__wigForm,0);
-                pane.add(table,1);
+                pane.add(this.__tableContainer,1);
             }
-            else if (task.form_type == 'top'){
-                this.__wigForm =  new remocular.ui.form.renderer.Top(this.__form).set({
-                    marginLeft: 5
-                });
-                table.setDecorator('splitpane');
-                var part = new qx.ui.toolbar.Part();                
-                part.add(this.__wigForm);
-                toolbar.add(part);                                       
-                this.add(table,{flex: 1}); 
-            }
-            var image = new qx.ui.basic.Image("remocular/loader.gif").set({
-                alignY : 'middle',
-                paddingRight: 8,
-                visibility: 'hidden'
-            });
-            toolbar.addSpacer();
-            toolbar.add(image);
-            this.__btStop.addListener('changeEnabled',function(d){
-                var enabled = d.getData();
-                image.setVisibility(enabled ? 'visible' : 'hidden')
-            });
         }
         else {
-            table.setDecorator('splitpane');
-            this.add(table,{flex: 1});
+            this.__tableContainer.setDecorator('splitpane');
+            this.add(this.__tableContainer,{flex: 1});
         }
-        this.__data = [];            
+
+        /* busy indicator on toolbar while stop button is active */
+        var image = new qx.ui.basic.Image("remocular/loader.gif").set({
+            alignY : 'middle',
+            paddingRight: 8,
+            visibility: 'hidden'
+        });
+        toolbar.addSpacer();
+        toolbar.add(image);
+        this.__btStop.addListener('changeEnabled',function(d){
+            var enabled = d.getData();
+            image.setVisibility(enabled ? 'visible' : 'hidden')
+        });
+
         this.addListenerOnce('close',function(){
             this.stop();
             this.addListenerOnce('stopped',function(){
@@ -94,6 +102,7 @@ qx.Class.define("remocular.ui.Task",{
         __windowName: null,
         __tableModel: null,
         __tableColumnCount: null,
+        __tableContainer: null,
         __form:null,
         __formModel: null,
         __formWidget: null,
@@ -123,14 +132,14 @@ qx.Class.define("remocular.ui.Task",{
             }
             this.__btRun.setEnabled(false);            
             this.__infoBar.fade();
-            this.__dataProcessor.resetCounters();
+            this.__tableContainer.removeAll();
             var history = qx.bom.History.getInstance();
             var ignoreCounter = remocular.util.HistoryIgnoreCounter.getInstance();
             if (this.__form){
                 var data =  this.__modelToMap(this.__formModel);
                 if (this.__form.validate()) {
                     remocular.util.Server.getInstance().callAsync(
-                        qx.lang.Function.bind(this.__subscribeBus, this),
+                        qx.lang.Function.bind(this.__startPlugin, this),
                         'start',
                         {
                             plugin: this.__plugin,
@@ -145,7 +154,7 @@ qx.Class.define("remocular.ui.Task",{
             }
             else {
                 remocular.util.Server.getInstance().callAsync(
-                    qx.lang.Function.bind(this.__subscribeBus, this),
+                    qx.lang.Function.bind(this.__startPlugin, this),
                     'start',
                     {plugin: this.__plugin,
                      args:   {} 
@@ -208,14 +217,18 @@ qx.Class.define("remocular.ui.Task",{
             }
             return data;
         },
-        __subscribeBus: function(ret,exc,id){
+        __startPlugin: function(ret,exc,id){
             if (exc == null) {                
                 this.__handle = ret.handle;                
-                this.setCaption(ret.caption);
+                this.__dataProcessor = new remocular.util.DataProcessor(ret.cfg.table);
+                this.__data = [];            
+                var table = this.__makeTable();
+                this.__tableContainer.add(table,{flex: 1});
+                this.setCaption(ret.cfg.title);
                 var bus =  qx.event.message.Bus.getInstance();
                 bus.subscribe(ret.handle, this.__updateTable, this);
-                remocular.util.Poller.getInstance().addHandle(ret.handle,ret.interval);
-//                this.__setSortable(false);
+                remocular.util.Poller.getInstance().addHandle(ret.handle,ret.cfg.interval);
+                
                 this.__btStop.setEnabled(true);                
                 if (this.__wigForm){
                     this.__wigForm.setEnabled(false);
@@ -294,9 +307,6 @@ qx.Class.define("remocular.ui.Task",{
             var tableOpts = {
                 tableColumnModel : function(obj) {
                     return new qx.ui.table.columnmodel.Resize(obj);
-                },
-                tablePane: function(obj) {
-                    return new remocular.ui.table.pane.Pane(obj);
                 }
             };
             var t = new  remocular.ui.table.Table(this.__tableModel,tableOpts).set({

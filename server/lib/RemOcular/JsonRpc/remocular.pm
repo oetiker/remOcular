@@ -6,24 +6,7 @@ use Fcntl ':flock'; # import LOCK_* constants
 use RemOcular::PluginHelper;
 use Time::HiRes qw(usleep);
 
-###############################################################
-#use RemOcular::Plugin::Top;
-use RemOcular::Plugin::Df;
-use RemOcular::Plugin::TraceRoute;
-use RemOcular::Plugin::IoStat;
-#use RemOcular::Plugin::Top;
-use RemOcular::Plugin::MpStat;
-
-my %plug = (
-#    Top=>RemOcular::Plugin::Top->new(),
-    IoStat=>RemOcular::Plugin::IoStat->new(),
-    TraceRoute=>RemOcular::Plugin::TraceRoute->new(),
-    Df=>RemOcular::Plugin::Df->new(),
-    MpStat=>RemOcular::Plugin::MpStat->new()
-);
-
-my @plug = qw(TraceRoute MpStat Df IoStat);
- my $user = (getpwuid($<))[0];
+my $user = (getpwuid($<))[0];
 my $tmp_prefix = "/tmp/remocular_session_${user}/data.";
 ###############################################################
 
@@ -54,9 +37,40 @@ sub GetAccessibility {
      my $method = shift;
      my $access = shift;
      my $session = shift;
+     my $cfg = $session->param('cfg');
+     load_plugins($cfg);
      return 'public';
 }
 
+
+=head2 load_plugins(cfg)
+
+Load and instanciate the plugins listed in the config file
+
+=cut
+
+my @PLUGIN_LIST;
+my %PLUGIN_HAND;
+
+sub load_plugins {
+    my $cfg = shift;
+    my $plug_hash = $cfg->{Plugin};
+    for my $plug (sort {$plug_hash->{$a}{_order} <=> $plug_hash->{$b}{_order}} keys %$plug_hash){
+        next if exists $PLUGIN_HAND{$plug};
+        eval 'require '.$plug.';';
+        if ($@){
+            warn "Could not load $plug. Skipping it. ($@)\n";
+            next;
+        }
+        my $hand = eval "${plug}->new()";
+        if ($@){
+            warn "Could not instanciate $plug. Skipping it. ($@)\n";
+            next;
+        }
+        $PLUGIN_HAND{$plug} = $hand;
+        push @PLUGIN_LIST,$plug;
+    }
+}
 
 =head2 method_getConfig(error)
 
@@ -67,11 +81,16 @@ Returns a complex data structure describing the available plugins.
 sub method_config {
     my $error = shift;
     my $session = $error->{session};
-    my @cfg;
-    for my $p (@plug){
-        push @cfg, $plug{$p}->get_config();
+    my $cfg = $session->param('cfg');
+    my @plugs;
+    for my $p (@PLUGIN_LIST){
+        push @plugs, { plugin => $p, config => $PLUGIN_HAND{$p}->get_config() };
     }
-    return \@cfg;
+    return {
+        plugins => \@plugs,
+        admin_name => $cfg->{General}{admin_name},
+        admin_link => $cfg->{General}{admin_link}
+    };
 }
 
 
@@ -87,9 +106,13 @@ sub method_start {
     my $par = shift;
     my $plugin = $par->{plugin};
     my $args = $par->{args};
-    my ($caption,$interval,$err) = $plug{$plugin}->check_params($args);
-    if ($err){
-        $error->set_error(110, $err);
+    if (not $PLUGIN_HAND{$plugin}){
+        $error->set_error(111, "Plugin $plugin is not available");
+        return $error;
+    }
+    my $run_conf = $PLUGIN_HAND{$plugin}->check_params($args);
+    if (ref $run_conf ne 'HASH'){
+        $error->set_error(110, $run_conf);
         return $error;
     }        
     print STDERR "Starting Plugin $plugin\n";
@@ -102,17 +125,21 @@ sub method_start {
         $session->{_STATUS} = CGI::Session::STATUS_UNSET;
         $session = undef;
         # behave like a daemon
-        chdir '/'               or die "Can't chdir to /: $!";
+        chdir '/' or die "Can't chdir to /: $!";
         setsid;
+
         # no more magic error handling
         local $SIG{__WARN__};
         local $SIG{__DIE__};
-#       map { $SIG{$_} = undef} keys %SIG;
+
         # since fcgi ties the standard io handles
         # we have to untie them first
-        untie *STDOUT if tied (*STDOUT);
-        untie *STDIN if tied (*STDIN);
-        untie *STDERR if tied (*STDERR);
+        do {
+            no warnings;
+            untie *STDOUT if tied (*STDOUT);
+            untie *STDIN if tied (*STDIN);
+            untie *STDERR if tied (*STDERR);
+        };
         # shut down the connections to the rest of the world
         open STDIN, '</dev/null' or die "Can't read /dev/null: $!";
         open STDOUT, '>/dev/null' or die "Can't write to /dev/null: $!";
@@ -123,7 +150,7 @@ sub method_start {
         $sigset->fillset();
         sigprocmask(&POSIX::SIG_UNBLOCK,$sigset,undef);
         # ready to start the plugin
-        $plug{$plugin}->start_instance($tmp_prefix.$handle,$args);
+        $PLUGIN_HAND{$plugin}->start_instance($tmp_prefix.$handle,$args);
         exit 0;
     } else {
         $session->param($handle,$pid); 
@@ -132,9 +159,7 @@ sub method_start {
         RemOcular::PluginHelper::save($tmp_prefix.$handle,"#CLEAR\n");
         # warn "Save Params '$handle' '$pid'\n".$session->dump();
         return { handle => $handle,
-                 interval => $interval,
-                 caption => $caption,
-        }
+                 cfg => $run_conf };
     }
 }
 

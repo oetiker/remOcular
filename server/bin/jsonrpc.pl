@@ -5,6 +5,7 @@ use lib "$FindBin::Bin/../lib";
 use CGI::Fast;
 use CGI::Session;
 use Qooxdoo::JSONRPC;
+use RemOcular::Config;
 
 $Qooxdoo::JSONRPC::debug=1;
 $Qooxdoo::JSONRPC::service_path='RemOcular::JsonRpc';
@@ -16,22 +17,29 @@ my $Revision = $1;
 my %opt;
 
 sub main {
-#    my $cfg_file = shift @ARGV;
-#    my $cfg_parser = new O2h::Config(file=>$cfg_file);
-#    my $cfg;
-#    my $cfg_mod = 0;
+    my $cfg_file = shift @ARGV;
+    if (not $cfg_file or not -r $cfg_file){
+        die "usage: jsonrpc.pl path/to/remocular.cfg\n";
+    }
+    my $cfg_parser = new RemOcular::Config(file=>$cfg_file);
+    my $cfg;
+    my $cfg_mod = 0;
     my $user = (getpwuid($<))[0];
     my $tmp = $ENV{TEMP} || $ENV{TMP} || "/tmp";
     my $session_dir = $tmp."/remocular_session_$user";
     mkdir $session_dir if not -d $session_dir;
     my $count = 0;
+    my $PATH = $ENV{PATH};
     while (my $cgi = new CGI::Fast){
+        # it seems fastcgi can change the path ...
+        # not what we want really.
+        $ENV{PATH} = $PATH;
         my $session = new CGI::Session("driver:File", $cgi, {Directory=>$session_dir});
-#    	my $cfg_mod_new = -M $cfg_file;
-#    	if (not defined $cfg or $cfg_mod_new < $cfg_mod){
-#	        $cfg = $cfg_parser->parse_config();
-#    	    $cfg_mod = $cfg_mod_new;
-#	    }
+    	my $cfg_mod_new = -M $cfg_file;
+    	if (not defined $cfg or $cfg_mod_new < $cfg_mod){
+	        $cfg = $cfg_parser->parse_config();
+    	    $cfg_mod = $cfg_mod_new;
+	    }
         if ( $count++ > 50 ){
             my $min_age = time() - 3600;
             for my $file (glob($session_dir.'/*')){
@@ -41,7 +49,7 @@ sub main {
             }
             $count = 0;
         }
-#       $session->param('cfg',$cfg);
+        $session->param('cfg',$cfg);
         Qooxdoo::JSONRPC::handle_request ($cgi, $session, ['remocular']);
     }
 }

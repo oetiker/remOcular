@@ -35,7 +35,7 @@ qx.Class.define("remocular.ui.table.cellrenderer.Canvas",{
                             col: cellInfo.col,
                             rowData: cellInfo.rowData }
             });
-            return "<canvas id='"+id+"'></canvas>";
+            return '<canvas id="'+id+'"></canvas>';
         },
 
         __attach: function(table){
@@ -55,24 +55,29 @@ qx.Class.define("remocular.ui.table.cellrenderer.Canvas",{
                 if (el){
                     if (elCache[entry.id]){
                         qx.dom.Element.replaceChild(elCache[entry.id].el,el);
+                        continue;
                     } 
-                    else {
-                        if (w == undefined){
-                            var par = qx.dom.Element.getParentElement(el);
-                            var size = qx.bom.element.Dimension.getContentSize(par);
-                            w = size.width;
-                            h = size.height;
-                        }
-                        el.width = w;
-                        el.height = h;
-                        if (el.getContext){
-                            var ctx = el.getContext('2d');
-                            if (ctx){
-                                if (this.__plotter.plot(ctx,entry.cellInfo,w,h)){
-                                    this.__redraw();
-                                }
-                                elCache[entry.id] = { el: el, cellInfo: entry.cellInfo, w: w, h: h }; 
+                    /* with IE and excanvas, we have to
+                       add the missing method to the canvas
+                       element first since the initial loading
+                       only catches elements from the original html */
+                    if (! el.getContext && window.G_vmlCanvasManager){
+                        window.G_vmlCanvasManager.initElement(el);
+                    }
+                    /* do we have a canvas context now ? */
+                    if (el.getContext){
+                       var ctx = el.getContext('2d');
+                       if (ctx){
+                            if (w == undefined){
+                                var par = qx.dom.Element.getParentElement(el);
+                                var size = qx.bom.element.Dimension.getContentSize(par);
+                                w = size.width;
+                                h = size.height;
                             }
+                            if (this.__plotter.plot(ctx,entry.cellInfo,w,h)){
+                                this.__redraw();
+                            }
+                            elCache[entry.id] = { el: el, cellInfo: entry.cellInfo, w: w, h: h }; 
                         }
                     }
                 }

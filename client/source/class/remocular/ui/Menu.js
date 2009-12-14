@@ -4,62 +4,171 @@
    Authors: Tobi Oetiker <tobi@oetiker.ch>
 ************************************************************************ */
 
+/*
+#asset(remocular/start.png)
+#asset(remocular/mini-logo.png)
+#asset(qx/icon/${qx.icontheme}/22/mimetypes/executable.png)
+*/
+
 qx.Class.define("remocular.ui.Menu",{
-    extend : qx.ui.window.Window,
+    extend : qx.ui.popup.Popup,
     construct : function(){
-        this.base(arguments,this.tr('Task Selector'));
-        this.moveTo(5,5);
+        this.base(arguments,new qx.ui.layout.VBox(0));
+        this.add(new qx.ui.basic.Image("remocular/start.png"));        
+
         this.set({
-            allowClose: false,
-            showClose: false,
-            allowMaximize: false,
-            showMaximize: false,
-            allowMinimize: false,
-            showMinimize: false,
-            resizable: false,
-            useMoveFrame: true,
-            contentPadding: [3,3,3,3]
+            decorator: null,
+            shadow: null,
+            backgroundColor: null,
+            visibility: 'visible',
+            autoHide: false,
+            cursor: 'pointer'
         });
-        this.setLayout(new qx.ui.layout.VBox(3));
+        
+        this.moveTo(-30,-50);
+
+        var mP = this.__menuPopup = new qx.ui.popup.Popup(new qx.ui.layout.VBox(0));
+        mP.moveTo(5,5);
+        mP.set({
+            padding: [0,0,0,0]
+        });
+        var miniLogo = new qx.ui.basic.Image("remocular/mini-logo.png").set({
+            padding: [5,7,5,7],
+            cursor: 'pointer'
+        });
+
+        mP.add(miniLogo);
+        miniLogo.addListener('click',function(){
+            qx.bom.Window.open('http://www.remocular.org/v/VERSION', 'remocular.org');
+        },this)
+                       
+        this.addListener('click',function(e){
+            mP.setVisibility('visible');
+        },this);
+
         remocular.util.Server.getInstance().callAsync(
             qx.lang.Function.bind(this.__fillMenu,this),
             'config'
         );
+
         this.__history = qx.bom.History.getInstance();
         this.__taskList = {};
         this.__pluginList = {};
+
+        
         this.addListenerOnce('appear',function(e){
-            this.__handleRequest(e);
-            this.__history.addListener('request',this.__handleRequest,this);
+            var startEl = this.getContainerElement().getDomElement();
+
+            var show = new qx.fx.effect.core.Move(startEl).set({
+                mode: 'absolute',
+                x: 5,
+                y: 5,
+                duration: 0.8,
+                transition: 'spring'
+            });
+
+            var hide = new qx.fx.effect.core.Move(startEl).set({
+                mode: 'absolute',
+                x: -30,
+                y: -50,
+                duration: 0.8,
+                transition: 'spring'
+            });
+
+            var active = false;
+            var visible = false;
+            var mouseOver = false;
+
+            show.addListener('setup',function(){
+                active  = true;
+                visible = true;
+            },this);
+
+            show.addListener('finish',function(){
+                active = false;
+                if (!mouseOver && visible){
+                    hide.start()
+                };
+            },this);
+
+            hide.addListener('setup',function(){
+                active = true;
+                visible = false;
+            },this);
+
+            hide.addListener('finish',function(){
+                active = false;
+                if (mouseOver && !visible){
+                    show.start()
+                };
+            },this);
+
+
+            this.addListener('mouseover', function(e) {
+                mouseOver = true;
+                if (!visible && !active){
+                    show.start();
+                }
+            },this);
+
+            this.addListener('mouseout', function(e) {  
+                mouseOver = false;
+                if (visible && !active){
+                    hide.start();
+                }
+            },this);
         },this);
     },
     members : {
         __taskList: null,
+        __menuPopup: null,
         __pluginList: null,
         __history: null,
         __fillMenu : function(ret,exc,id){
             if (exc == null) {
-                for (var i=0,m=ret.length;i<m;i++){
-                    this.__addButton(ret[i]);
+                var menu = new qx.ui.container.Composite(new qx.ui.layout.VBox(2)).set({
+                    decorator: new qx.ui.decoration.Single().set({
+                        color: [ '#000', null, '#000'],
+                        width: [ 1,0,1 ],
+                        style: [ 'solid', null, 'solid']
+                    }),
+                    padding: [5,5,5,5]
+                });
+                for (var i=0,m=ret.plugins.length;i<m;i++){
+                    menu.add(this.__makeButton(ret.plugins[i]));
                 }
-                this.open();
+                this.__menuPopup.setVisibility('visible');
+                this.__handleRequest();
+                this.__history.addListener('request',this.__handleRequest,this);
+                this.__menuPopup.add(menu);
+                this.__menuPopup.add(this.__makeVersion());
             }
             else {
                 var msg = remocular.ui.MsgBox.getInstance();
                 msg.error(this.tr('Error'), exc['message'] + ' (' + exc['code'] + ')');
             };
         },
-        __addButton : function (item){
-            var button = new qx.ui.form.Button(item['menu']);
+        __makeVersion: function(){
+            var v = new qx.ui.container.Composite(new qx.ui.layout.VBox(2)).set({
+                 padding: [2,5,2,5]
+            });
+            v.add(new qx.ui.basic.Label(this.tr('by Tobi Oetiker')).set({
+                alignX: 'right'                
+            }));
+            return v
+        },
+        __makeButton : function (item){
+            var button = new qx.ui.toolbar.Button(item.config.menu,'icon/22/mimetypes/executable.png');
             button.set({
-                width: 120
+                width: 100
             });
             button.addListener('execute',function(){
-                var task = new remocular.ui.Task(item['task']);
-                task.open();
+                var task = new remocular.ui.Task(item);
+                task.open();                
+                this.__menuPopup.setVisibility('excluded');
             },this);
-            this.__pluginList[item['task'].plugin] = item['task'];
-            this.add(button);
+            this.__pluginList[item.plugin] = item;
+            return button;
         },
         __handleRequest : function(e){            
             var input = this.__history.getState();
@@ -70,9 +179,11 @@ qx.Class.define("remocular.ui.Menu",{
             var msg = remocular.ui.MsgBox.getInstance();
             var ignoreCounter = remocular.util.HistoryIgnoreCounter.getInstance();
             if (ignoreCounter.isIgnorable()){
+                this.info('ignoring '+input);
                 return;
             }
             var task;
+            this.info('handdling '+input);
             if (data.ID){
                 if (this.__taskList[data.ID]){
                     task = this.__taskList[data.ID];
@@ -85,6 +196,7 @@ qx.Class.define("remocular.ui.Menu",{
                     if (this.__pluginList[data.PLG]){
                         task = new remocular.ui.Task(this.__pluginList[data.PLG],data.ID);
                         task.open();
+                        this.__menuPopup.setVisibility('excluded');
                     }
                     else {
                         msg.error(this.tr('Invalid Plugin'),this.tr('Plugin %1 is not known',data.PLG));
@@ -127,6 +239,7 @@ qx.Class.define("remocular.ui.Menu",{
                 }                               
             }                            
         },
+
         __decodeRequest : function(request){
             var list = request.split(';');
             var data = {};
@@ -135,6 +248,10 @@ qx.Class.define("remocular.ui.Menu",{
                 data[key_val[0]] = key_val[1];
             };
             return data;
+        },
+
+        exclude: function(){
+            /* without this the popup manager might decide to hide us */
         }
     }
 

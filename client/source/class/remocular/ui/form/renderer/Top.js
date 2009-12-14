@@ -14,7 +14,7 @@ qx.Class.define("remocular.ui.form.renderer.Top",{
     members : {
         addItems: function(items,names,title){
             for (var i = 0; i < items.length; i++) {
-                var label =  new qx.ui.basic.Label(names[i]).set({alignY: 'middle'});
+                var label =  new qx.ui.basic.Label(names[i]).set({alignY: 'middle', paddingRight: 2});
                 this._add(label);
                 var item = items[i];
                 label.setBuddy(item);

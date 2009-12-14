@@ -29,4 +29,5 @@ perlmodule FCGI
 perlmodule CGI::Fast
 perlmodule CGI::Session
 perlmodule JSON
+perlmodule Config::Grammar
 perlmodule IPC::Run
