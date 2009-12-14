@@ -20,7 +20,7 @@ Run the top process monitor
 
 use Carp;
 use vars qw($VERSION);
-'$Revision: 275 $ ' =~ /Revision: (\S*)/;
+'$Revision$ ' =~ /Revision: (\S*)/;
 my $VERSION = "0.$1";
 
 

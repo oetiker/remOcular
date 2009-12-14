@@ -20,7 +20,7 @@ Run the df disk free reporter.
 
 use Carp;
 use vars qw($VERSION);
-'$Revision: 337 $ ' =~ /Revision: (\S*)/;
+'$Revision$ ' =~ /Revision: (\S*)/;
 my $VERSION = "0.$1";
 
 sub get_config {
