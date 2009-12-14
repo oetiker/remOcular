@@ -1,5 +1,5 @@
 ### helper library for building software packages
-### $Id: INSTALL.lib 243 2006-05-09 06:45:07Z oetiker $
+### $Id$
 ###
 ### * this is part of SEPP
 ### * it looks like bourn shell but it is BASH !

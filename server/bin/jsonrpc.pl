@@ -11,7 +11,7 @@ $Qooxdoo::JSONRPC::debug=1;
 $Qooxdoo::JSONRPC::service_path='RemOcular::JsonRpc';
 
 
-'$Revision$ ' =~ /Revision: (\S*)/;
+'$Revision: 337 $ ' =~ /Revision: (\S*)/;
 my $Revision = $1;
 
 my %opt;

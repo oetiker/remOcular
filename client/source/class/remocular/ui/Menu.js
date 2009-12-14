@@ -25,7 +25,7 @@ qx.Class.define("remocular.ui.Menu",{
             cursor: 'pointer'
         });
         
-        this.moveTo(-30,-50);
+        this.moveTo(-33,-50);
 
         var mP = this.__menuPopup = new qx.ui.popup.Popup(new qx.ui.layout.VBox(0));
         mP.moveTo(5,5);
@@ -69,7 +69,7 @@ qx.Class.define("remocular.ui.Menu",{
 
             var hide = new qx.fx.effect.core.Move(startEl).set({
                 mode: 'absolute',
-                x: -30,
+                x: -33,
                 y: -50,
                 duration: 0.8,
                 transition: 'spring'
@@ -141,20 +141,28 @@ qx.Class.define("remocular.ui.Menu",{
                 this.__handleRequest();
                 this.__history.addListener('request',this.__handleRequest,this);
                 this.__menuPopup.add(menu);
-                this.__menuPopup.add(this.__makeVersion());
+                this.__menuPopup.add(this.__makeAdmin(ret.admin_name,ret.admin_link));
             }
             else {
                 var msg = remocular.ui.MsgBox.getInstance();
                 msg.error(this.tr('Error'), exc['message'] + ' (' + exc['code'] + ')');
             };
         },
-        __makeVersion: function(){
+        __makeAdmin: function(name,link){
             var v = new qx.ui.container.Composite(new qx.ui.layout.VBox(2)).set({
                  padding: [2,5,2,5]
             });
-            v.add(new qx.ui.basic.Label(this.tr('by Tobi Oetiker')).set({
-                alignX: 'right'                
-            }));
+            var l = new qx.ui.basic.Label(name).set({
+                alignX: 'right',
+                cursor: 'pointer'
+            });
+
+            if (link){
+                l.addListener('click',function(){
+                    qx.bom.Window.open(link, name);
+                },this)
+            }
+            v.add(l);
             return v
         },
         __makeButton : function (item){

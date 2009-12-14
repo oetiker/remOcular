@@ -21,7 +21,7 @@ Run the iostat disk free reporter.
 
 use Carp;
 use vars qw($VERSION);
-'$Revision$ ' =~ /Revision: (\S*)/;
+'$Revision: 337 $ ' =~ /Revision: (\S*)/;
 my $VERSION = "0.$1";
 
 
