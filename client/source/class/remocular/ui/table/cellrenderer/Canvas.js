@@ -20,6 +20,7 @@ qx.Class.define("remocular.ui.table.cellrenderer.Canvas",{
         __plotter: null,
         __elCache: null,
         __attachPending: true,
+        __pane: null,
 
         _getContentHtml : function(cellInfo) {
             if (this.__attachPending){
@@ -39,7 +40,7 @@ qx.Class.define("remocular.ui.table.cellrenderer.Canvas",{
         },
 
         __attach: function(table){
-            var pane = table.getPaneScroller(0).getTablePane();
+            var pane = this.__pane = table.getPaneScroller(0).getTablePane();
             pane.addListener("paneUpdated",this.__update,this);
         },
 
@@ -100,6 +101,11 @@ qx.Class.define("remocular.ui.table.cellrenderer.Canvas",{
             this.__plotter.reset();
             this.__elCache = {};
         }    
+    },
+
+    destruct : function() {
+        // Remove event handlers
+        this.__pane.addListener("paneUpdated",this.__update,this);
     }
 });
  
