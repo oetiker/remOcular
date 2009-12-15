@@ -8,7 +8,7 @@
  * Relaxed encoding of argument make them more readable
  */
 
-qx.Mixin.define("remocular.patch.HistoryEncoder",{
+qx.Mixin.define("remocular.util.MHistoryEncoder",{
     members: {
         _encode : function (value){
             if (qx.lang.Type.isString(value)) {

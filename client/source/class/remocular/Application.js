@@ -22,7 +22,9 @@ qx.Class.define("remocular.Application", {
         main : function() {
             // Call super class
             this.base(arguments);
-            qx.Class.patch(qx.bom.History,remocular.patch.HistoryEncoder);
+            qx.Class.patch(qx.bom.History,remocular.util.MHistoryEncoder);
+            // add the hover mixin            
+            qx.Class.include(qx.ui.core.Widget,remocular.ui.MHoverFx);
             // Enable logging in debug variant
             if (qx.core.Variant.isSet("qx.debug", "on")){
                 // support native logging capabilities, e.g. Firebug for Firefox
@@ -51,8 +53,8 @@ qx.Class.define("remocular.Application", {
 
            logo.add(new qx.ui.basic.Image("remocular/logo.png"));
 
-           logo.addListener('click', function(e) {
-                qx.bom.Window.open('http://www.remocular.org/v/VERSION', 'remocular.org');
+           logo.addListener('click', function() {
+                qx.bom.Window.open('http://www.remocular.org/v/VERSION', '_blank');
            });
 
            logo.addListenerOnce('appear',function(){
@@ -66,15 +68,8 @@ qx.Class.define("remocular.Application", {
                     from: 1,
                     to: 0.5
                 });
-            
-                logo.addListener('mouseover', function(e) {
-                    fadein.start();
-                }, logo);
-
-                logo.addListener('mouseout', function(e) {
-                    fadeout.start();
-                }, logo);
-            });
+                this.addHoverFx(fadein,fadeout);
+            },logo);
 
             root.add(logo,{
                 edge: 'center'
@@ -85,7 +80,7 @@ qx.Class.define("remocular.Application", {
                 alignX: 'right'
             });
             copy.addListener('click', function(){
-                qx.bom.Window.open('http://www.remocular.org/v/VERSION', 'remocular.org');
+                qx.bom.Window.open('http://www.remocular.org/v/VERSION', '_blank');
             });
             root.add(copy,{
                 edge: 'south'

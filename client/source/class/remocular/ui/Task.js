@@ -36,7 +36,6 @@ qx.Class.define("remocular.ui.Task",{
         this.__infoBar = new remocular.ui.InfoBar();
         this.__data = [];            
 
-
         this.add(this.__infoBar);
 
         this.__tableContainer = new qx.ui.container.Composite(new qx.ui.layout.VBox(0,'middle'));
@@ -200,6 +199,12 @@ qx.Class.define("remocular.ui.Task",{
                 this.tr("Run"), "icon/16/actions/media-playback-start.png");
             part.add(this.__btRun);
             this.__btRun.addListener('execute',this.__runHandler,this);
+
+            this.addListener('keydown', function(e) {
+                if (e.getKeyIdentifier() == 'Enter') {
+                    this.__btRun.execute();
+                }
+            },this);
 
             this.__btStop = new qx.ui.toolbar.Button(
                 this.tr("Stop"), "icon/16/actions/media-playback-stop.png").set({

@@ -30,7 +30,7 @@ qx.Class.define("remocular.ui.TaskLogo", {
         if (link){
             this.setCursor('pointer');
             this.addListener('click', function(e) {
-                qx.bom.Window.open(link, 'plugin_link');
+                qx.bom.Window.open(link, '_blank');
             });
         }
 

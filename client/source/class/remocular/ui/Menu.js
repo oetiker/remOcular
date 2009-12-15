@@ -30,7 +30,8 @@ qx.Class.define("remocular.ui.Menu",{
         var mP = this.__menuPopup = new qx.ui.popup.Popup(new qx.ui.layout.VBox(0));
         mP.moveTo(5,5);
         mP.set({
-            padding: [0,0,0,0]
+            padding: [0,0,0,0],
+            width: 140
         });
         var miniLogo = new qx.ui.basic.Image("remocular/mini-logo.png").set({
             padding: [5,7,5,7],
@@ -39,7 +40,7 @@ qx.Class.define("remocular.ui.Menu",{
 
         mP.add(miniLogo);
         miniLogo.addListener('click',function(){
-            qx.bom.Window.open('http://www.remocular.org/v/VERSION', 'remocular.org');
+            qx.bom.Window.open('http://www.remocular.org/v/VERSION', '_blank');
         },this)
                        
         this.addListener('click',function(e){
@@ -74,51 +75,10 @@ qx.Class.define("remocular.ui.Menu",{
                 duration: 0.8,
                 transition: 'spring'
             });
-
-            var active = false;
-            var visible = false;
-            var mouseOver = false;
-
-            show.addListener('setup',function(){
-                active  = true;
-                visible = true;
-            },this);
-
-            show.addListener('finish',function(){
-                active = false;
-                if (!mouseOver && visible){
-                    hide.start()
-                };
-            },this);
-
-            hide.addListener('setup',function(){
-                active = true;
-                visible = false;
-            },this);
-
-            hide.addListener('finish',function(){
-                active = false;
-                if (mouseOver && !visible){
-                    show.start()
-                };
-            },this);
-
-
-            this.addListener('mouseover', function(e) {
-                mouseOver = true;
-                if (!visible && !active){
-                    show.start();
-                }
-            },this);
-
-            this.addListener('mouseout', function(e) {  
-                mouseOver = false;
-                if (visible && !active){
-                    hide.start();
-                }
-            },this);
+            this.addHoverFx(show,hide);
         },this);
     },
+
     members : {
         __taskList: null,
         __menuPopup: null,
@@ -159,17 +119,14 @@ qx.Class.define("remocular.ui.Menu",{
 
             if (link){
                 l.addListener('click',function(){
-                    qx.bom.Window.open(link, name);
+                    qx.bom.Window.open(link, '_blank');
                 },this)
             }
             v.add(l);
             return v
         },
         __makeButton : function (item){
-            var button = new qx.ui.toolbar.Button(item.config.menu,'icon/22/mimetypes/executable.png');
-            button.set({
-                width: 100
-            });
+            var button = new qx.ui.toolbar.Button(item.config.menu,'icon/22/mimetypes/executable.png').set({font: 'bold'});
             button.addListener('execute',function(){
                 var task = new remocular.ui.Task(item);
                 task.open();                
