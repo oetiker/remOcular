@@ -16,14 +16,29 @@ qx.Class.define('remocular.util.HistoryIgnoreCounter', {
     },
 
     members : {
-        __counter: 0,
-        ignoreNext: function() {
+        __counter : 0,
+
+
+        /**
+         * TODOC
+         *
+         * @return {void} 
+         */
+        ignoreNext : function() {
             this.__counter++;
         },
-        isIgnorable: function(){
-            if (this.__counter == 0){
+
+
+        /**
+         * TODOC
+         *
+         * @return {boolean} TODOC
+         */
+        isIgnorable : function() {
+            if (this.__counter == 0) {
                 return false;
             }
+
             this.__counter--;
             return true;
         }

@@ -1,21 +1,16 @@
 /* ************************************************************************
-
-   Copyright:
-
-   License:
-
-   Authors:
-
+   Copyright: 2009 OETIKER+PARTNER AG
+   License:   GPL
+   Authors:   Tobi Oetiker <tobi@oetiker.ch>
+   Utf8Check: הצü
 ************************************************************************ */
 
-qx.Theme.define("remocular.theme.Theme",
-{
-  meta :
-  {
-    color : remocular.theme.Color,
-    decoration : remocular.theme.Decoration,
-    font : remocular.theme.Font,
-    icon : qx.theme.icon.Tango,
-    appearance : remocular.theme.Appearance
-  }
+qx.Theme.define("remocular.theme.Theme", {
+    meta : {
+        color      : remocular.theme.Color,
+        decoration : remocular.theme.Decoration,
+        font       : remocular.theme.Font,
+        icon       : qx.theme.icon.Tango,
+        appearance : remocular.theme.Appearance
+    }
 });

@@ -9,10 +9,10 @@ qx.Class.define("remocular.ui.table.model.ToolTip", {
 
 
     /*
-            *****************************************************************************
-                CONSTRUCTOR
-            *****************************************************************************
-            */
+                *****************************************************************************
+                    CONSTRUCTOR
+                *****************************************************************************
+                */
 
     construct : function() {
         // Call the superclass constructor
@@ -24,10 +24,10 @@ qx.Class.define("remocular.ui.table.model.ToolTip", {
 
 
     /*
-            *****************************************************************************
-                MEMBERS
-            *****************************************************************************
-            */
+                *****************************************************************************
+                    MEMBERS
+                *****************************************************************************
+                */
 
     members : {
         __columnToolTipArr : null,
@@ -70,7 +70,16 @@ qx.Class.define("remocular.ui.table.model.ToolTip", {
                 }
             }
         },
-        setColumnToolTip : function(index,tip) {
+
+
+        /**
+         * TODOC
+         *
+         * @param index {var} TODOC
+         * @param tip {var} TODOC
+         * @return {void} 
+         */
+        setColumnToolTip : function(index, tip) {
             this.__columnToolTipArr[index] = tip;
         }
     }

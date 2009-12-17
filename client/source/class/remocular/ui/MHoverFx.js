@@ -5,50 +5,66 @@
 ************************************************************************ */
 
 qx.Mixin.define("remocular.ui.MHoverFx", {
-    members: {
-        addHoverFx: function(overFx,outFx) {
+    members : {
+        /**
+         * TODOC
+         *
+         * @param overFx {var} TODOC
+         * @param outFx {var} TODOC
+         * @return {void} 
+         */
+        addHoverFx : function(overFx, outFx) {
             var active = false;
             var visible = false;
             var mouseOver = false;
 
-            overFx.addListener('setup',function(){
-                active  = true; 
-                visible = true;   
-            },this);
+            overFx.addListener('setup', function() {
+                active = true;
+                visible = true;
+            },
+            this);
 
-            overFx.addListener('finish',function(){
-                active = false;   
-                if (!mouseOver && visible){
-                    outFx.start()
-                };
-            },this);
-    
-            outFx.addListener('setup',function(){
+            overFx.addListener('finish', function() {
+                active = false;
+
+                if (!mouseOver && visible) {
+                    outFx.start();
+                }
+            },
+            this);
+
+            outFx.addListener('setup', function() {
                 active = true;
                 visible = false;
-            },this);
+            },
+            this);
 
-            outFx.addListener('finish',function(){
-                active = false; 
-                if (mouseOver && !visible){
-                    overFx.start()
-                };
-            },this);
+            outFx.addListener('finish', function() {
+                active = false;
 
+                if (mouseOver && !visible) {
+                    overFx.start();
+                }
+            },
+            this);
 
             this.addListener('mouseover', function(e) {
                 mouseOver = true;
-                if (!visible && !active){
+
+                if (!visible && !active) {
                     overFx.start();
                 }
-            },this);
-    
+            },
+            this);
+
             this.addListener('mouseout', function(e) {
-                 mouseOver = false;
-                 if (visible && !active){
-                     outFx.start();
-                 }
-            },this);
+                mouseOver = false;
+
+                if (visible && !active) {
+                    outFx.start();
+                }
+            },
+            this);
         }
     }
 });

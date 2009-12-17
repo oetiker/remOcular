@@ -8,16 +8,24 @@
  * Call the server for updates and dispatch the answers
  */
 qx.Class.define('remocular.util.aggregator.Counter', {
-    extend: remocular.util.aggregator.Abstract,
+    extend : remocular.util.aggregator.Abstract,
 
-    members : {        
-        process: function(row){
+    members : {
+        /**
+         * TODOC
+         *
+         * @param row {var} TODOC
+         * @return {var} TODOC
+         */
+        process : function(row) {
             var cfg = this._getCfg();
             var sto = this._getStore();
             var key = row[cfg.key_col];
-            if ( sto[key] == undefined){
+
+            if (sto[key] == undefined) {
                 sto[key] = 0;
             }
+
             sto[key]++;
             return sto[key];
         }

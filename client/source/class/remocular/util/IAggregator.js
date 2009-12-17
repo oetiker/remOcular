@@ -1,9 +1,21 @@
-qx.Interface.define("remocular.util.IAggregator",{
+qx.Interface.define("remocular.util.IAggregator", {
     members : {
-        process: function(rowArray){
+        /**
+         * TODOC
+         *
+         * @param rowArray {var} TODOC
+         * @return {boolean} TODOC
+         */
+        process : function(rowArray) {
             return true;
         },
-        reset: function(){
-        }
+
+
+        /**
+         * TODOC
+         *
+         * @return {void} 
+         */
+        reset : function() {}
     }
 });

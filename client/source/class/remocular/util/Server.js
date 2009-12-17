@@ -36,7 +36,8 @@ qx.Class.define('remocular.util.Server', {
                     url         : local_url + 'jsonrpc.cgi',
                     crossDomain : true
                 });
-                this.info("running in local mode with url: "+this.getUrl());
+
+                this.info("running in local mode with url: " + this.getUrl());
             }
         }
     }
