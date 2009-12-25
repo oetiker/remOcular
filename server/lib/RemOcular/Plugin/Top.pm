@@ -144,7 +144,7 @@ sub check_params {
                 width    => 4,
             }
         ],
-        titel => "Top Processes on ".hostname(),
+        title => "Top Processes on ".hostname(),
         interval => int($params->{interval})*1000,
     }
 }
