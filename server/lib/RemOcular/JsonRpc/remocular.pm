@@ -37,7 +37,7 @@ sub GetAccessibility {
      my $method = shift;
      my $access = shift;
      my $session = shift;
-     my $cfg = $session->param('cfg');
+     my $cfg = $session->{__cfg};
      load_plugins($cfg);
      return 'public';
 }
@@ -81,7 +81,7 @@ Returns a complex data structure describing the available plugins.
 sub method_config {
     my $error = shift;
     my $session = $error->{session};
-    my $cfg = $session->param('cfg');
+    my $cfg = $session->{__cfg};
     my @plugs;
     for my $p (@PLUGIN_LIST){
         push @plugs, { plugin => $p, config => $PLUGIN_HAND{$p}->get_config() };
@@ -122,7 +122,6 @@ sub method_start {
         # avoid a race condition regarding
         # session saving ... 
         # the kid thinks the session is unset
-        $session->{_STATUS} = CGI::Session::STATUS_UNSET;
         $session = undef;
         # behave like a daemon
         chdir '/' or die "Can't chdir to /: $!";
@@ -154,7 +153,6 @@ sub method_start {
         exit 0;
     } else {
         $session->param($handle,$pid); 
-        $session->flush();       
         # start by clearing the table
         RemOcular::PluginHelper::save($tmp_prefix.$handle,"#CLEAR\n");
         # warn "Save Params '$handle' '$pid'\n".$session->dump();
@@ -184,7 +182,6 @@ sub method_stop {
         }
         unlink $tmp_prefix.$handle;
         $session->clear([$handle]);
-        $session->flush();
         if ($running > 0){
             $error->set_error(113, "Process $pid did not die within the 4 seconds I waited.");
             return $error;

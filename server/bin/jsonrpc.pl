@@ -3,7 +3,7 @@ use strict;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use CGI::Fast;
-use CGI::Session;
+use Qooxdoo::SessionLite;
 use Qooxdoo::JSONRPC;
 use RemOcular::Config;
 
@@ -27,35 +27,26 @@ sub main {
     my $user = (getpwuid($<))[0];
     my $tmp = $ENV{TEMP} || $ENV{TMP} || "/tmp";
     my $session_dir = $tmp."/remocular_session_$user";
-    mkdir $session_dir if not -d $session_dir;
     my $count = 0;
     my $PATH = $ENV{PATH};
     while (my $cgi = new CGI::Fast){
         # it seems fastcgi can change the path ...
         # not what we want really.
         $ENV{PATH} = $PATH;
-        my $session = new CGI::Session("driver:File", $cgi, {Directory=>$session_dir});
+        my $session = new Qooxdoo::SessionLite($cgi, $session_dir, 3600);
     	my $cfg_mod_new = -M $cfg_file;
     	if (not defined $cfg or $cfg_mod_new < $cfg_mod){
 	        $cfg = $cfg_parser->parse_config();
     	    $cfg_mod = $cfg_mod_new;
 	    }
-        if ( $count++ > 50 ){
-            my $min_age = time() - 3600;
-            for my $file (glob($session_dir.'/*')){
-                if ((stat $file)[8] < $min_age){
-                    unlink $file;
-                }
-            }
-            $count = 0;
-        }
-        $session->param('cfg',$cfg);
+        $session->{__cfg} = $cfg;
         Qooxdoo::JSONRPC::handle_request ($cgi, $session, ['remocular']);
     }
 }
 
-main;
-1
+main();
+
+1;
 
 
 __END__
