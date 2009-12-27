@@ -13,6 +13,9 @@
 qx.Class.define("remocular.ui.form.renderer.Top", {
     extend : qx.ui.form.renderer.AbstractRenderer,
 
+    /**
+     * @param form {Object} form handle
+     */                
     construct : function(form) {
         var layout = new qx.ui.layout.HBox(2);
         this._setLayout(layout);

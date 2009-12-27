@@ -4,7 +4,9 @@
    Authors:   Tobi Oetiker <tobi@oetiker.ch>
    Utf8Check: öï
 ************************************************************************ */
-
+/**
+ * Two custom fonts for remocular. <code>hugeTitle</code> and <code>smallTitle</code>.
+ */
 qx.Theme.define("remocular.theme.Font", {
     extend : qx.theme.modern.Font,
 

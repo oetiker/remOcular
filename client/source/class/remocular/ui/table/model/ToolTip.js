@@ -4,32 +4,17 @@
    Utf8Check: äöü
 ************************************************************************ */
 
+/**
+ * Variant of the simple table model with the ability to store a
+ * tooltip for each cell and the column headers.
+ */
 qx.Class.define("remocular.ui.table.model.ToolTip", {
     extend : qx.ui.table.model.Simple,
 
-
-
-
-    /*
-                        *****************************************************************************
-                            CONSTRUCTOR
-                        *****************************************************************************
-                        */
-
     construct : function() {
-        // Call the superclass constructor
         this.base(arguments);
         this.__columnToolTipArr = [];
     },
-
-
-
-
-    /*
-                        *****************************************************************************
-                            MEMBERS
-                        *****************************************************************************
-                        */
 
     members : {
         __columnToolTipArr : null,
@@ -75,10 +60,10 @@ qx.Class.define("remocular.ui.table.model.ToolTip", {
 
 
         /**
-         * TODOC
+         * set the tooltip for column header
          *
-         * @param index {var} TODOC
-         * @param tip {var} TODOC
+         * @param index {var} column
+         * @param tip {var} tooltip text
          * @return {void} 
          */
         setColumnToolTip : function(index, tip) {

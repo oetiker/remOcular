@@ -33,7 +33,7 @@
     "APPLICATION"  : "remocular",
     "QOOXDOO_PATH" : "qooxdoo",
     "QXTHEME"      : "remocular.theme.Theme",
-    "API_EXCLUDE"  : ["qx.test.*"],
+    "API_EXCLUDE"  : ["qx.*"],
     "LOCALES"      : [ "en" ],
     "CACHE"        : "/home/oetiker/scratch/qooxdoo-oetiker",
     "ROOT"         : "."

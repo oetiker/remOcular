@@ -10,11 +10,16 @@
 qx.Class.define("remocular.ui.table.Table", {
     extend : qx.ui.table.Table,
 
+    /**
+     * Create a table object with tooltips.
+     *
+     * @param tabelModel {Object} the associated table model provides access to the data.
+     * @param custom {Map} optionally set aditional custom configuraitons.
+     * @return {void} 
+     */
     construct : function(tableModel, custom) {
-        // Call the superclass constructor
         this.base(arguments, tableModel, custom);
 
-        // Register event listeners/handlers
         this.addListener("cellOver", this._onCellOver, this);
         this.addListener("headerOver", this._onHeaderOver, this);
         this.addListener("mousemove", this._onMouseMove, this);

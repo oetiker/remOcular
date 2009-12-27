@@ -8,7 +8,7 @@
 /**
  * initialize us an Rpc object which accesses a local cgi server when called from
  * the source version of the application 
- /
+ */
 qx.Class.define('remocular.util.Server', {
     extend : qx.io.remote.Rpc,
     type : "singleton",

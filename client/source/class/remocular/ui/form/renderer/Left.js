@@ -11,7 +11,9 @@
  */
 qx.Class.define("remocular.ui.form.renderer.Left", {
     extend : qx.ui.form.renderer.Single,
-
+    /**
+     * @param form {Object} form handle
+     */ 
     construct : function(form) {
         this.base(arguments, form);
         this.set({ padding : [ 7, 7, 7, 7 ] });

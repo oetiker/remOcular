@@ -46,13 +46,13 @@ qx.Class.define("remocular.ui.table.cellplotter.TwoBar", {
 
 
         /**
-         * TODOC
+         * Do the actual plotting.
          *
-         * @param c {var} TODOC
-         * @param cellInfo {var} TODOC
-         * @param w {var} TODOC
-         * @param h {Map} TODOC
-         * @return {boolean | var} TODOC
+         * @param c {var} context
+         * @param cellInfo {var} cellinfo
+         * @param w {var} width
+         * @param h {Map} height
+         * @return {boolean} should the row be re-drawn?
          */
         plot : function(c, cellInfo, w, h) {
             var d = cellInfo.value;
@@ -95,7 +95,7 @@ qx.Class.define("remocular.ui.table.cellplotter.TwoBar", {
 
 
         /**
-         * TODOC
+         * clear the scaling information.
          *
          * @return {void} 
          */

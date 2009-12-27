@@ -4,7 +4,9 @@
    Authors:   Tobi Oetiker <tobi@oetiker.ch>
    Utf8Check: äüö
 ************************************************************************ */
-
+/**
+ * Theme overrides for remoclar.
+ */
 qx.Theme.define("remocular.theme.Theme", {
     meta : {
         color      : remocular.theme.Color,
