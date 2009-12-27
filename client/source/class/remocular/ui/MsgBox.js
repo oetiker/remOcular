@@ -1,9 +1,9 @@
 /* ************************************************************************
-   Copyright: 2008, OETIKER+PARTNER AG
-   License: GPL
-   Authors: Tobias Oetiker
+   Copyright: 2009 OETIKER+PARTNER AG
+   License:   GPLv3 or later
+   Authors:   Tobi Oetiker <tobi@oetiker.ch>
+   Utf8Check: äöü
 ************************************************************************ */
-
 /* ************************************************************************
 #asset(qx/icon/${qx.icontheme}/32/status/dialog-error.png)
 #asset(qx/icon/${qx.icontheme}/32/status/dialog-information.png)
@@ -17,8 +17,13 @@
 ************************************************************************ */
 
 /**
- * An Error Popup Window that shows messages
- * sent to to 'error' message bus.
+ * A status window singelton. There is only one instance, several calls to
+ * open will just change the windows content on the fly.
+ *
+ * <pre code='javascript'>
+ * var msg = remocular.ui.MsgBox.getInstance();
+ * msg.error('Title','Message');
+ * </pre>
  */
 qx.Class.define("remocular.ui.MsgBox", {
     extend : qx.ui.window.Window,
@@ -100,10 +105,10 @@ qx.Class.define("remocular.ui.MsgBox", {
 
 
         /**
-         * TODOC
+         * Open the message box
          *
-         * @param titel {var} TODOC
-         * @param text {var} TODOC
+         * @param titel {String} window title
+         * @param text {String} contents
          * @return {void} 
          */
         __open : function(titel, text) {
@@ -115,11 +120,11 @@ qx.Class.define("remocular.ui.MsgBox", {
 
 
         /**
-         * TODOC
+         * Create a button which is at least 40 pixel wide
          *
-         * @param lab {var} TODOC
-         * @param ico {var} TODOC
-         * @return {var} TODOC
+         * @param lab {String} label
+         * @param ico {Icon} icon
+         * @return {Button} button widget
          */
         __mk_btn : function(lab, ico) {
             var btn = new qx.ui.form.Button(lab, ico).set({ minWidth : 40 });
@@ -128,10 +133,10 @@ qx.Class.define("remocular.ui.MsgBox", {
 
 
         /**
-         * TODOC
+         * Open the Error popup
          *
-         * @param titel {var} TODOC
-         * @param text {var} TODOC
+         * @param titel {String} title
+         * @param text {String} body
          * @return {void} 
          */
         error : function(titel, text) {
@@ -146,10 +151,10 @@ qx.Class.define("remocular.ui.MsgBox", {
 
 
         /**
-         * TODOC
+         * Open the Info popup
          *
-         * @param titel {var} TODOC
-         * @param text {var} TODOC
+         * @param titel {String} title
+         * @param text {String} body
          * @return {void} 
          */
         info : function(titel, text) {
@@ -164,11 +169,10 @@ qx.Class.define("remocular.ui.MsgBox", {
 
 
         /**
-         * TODOC
+         * Open the Warning popup
          *
-         * @param titel {var} TODOC
-         * @param text {var} TODOC
-         * @param exec_action {var} TODOC
+         * @param titel {String} title
+         * @param text {String} body
          * @return {void} 
          */
         warn : function(titel, text, exec_action) {

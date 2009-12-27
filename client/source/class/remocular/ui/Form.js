@@ -1,7 +1,8 @@
 /* ************************************************************************
    Copyright: 2009 OETIKER+PARTNER AG
-   License: GPL
-   Authors: Tobi Oetiker <tobi@oetiker.ch>
+   License:   GPLv3 or later
+   Authors:   Tobi Oetiker <tobi@oetiker.ch>
+   Utf8Check: äöü
 ************************************************************************ */
 
 /* ************************************************************************
@@ -13,15 +14,44 @@
 qx.Class.define("remocular.ui.Form", {
     extend : qx.ui.form.Form,
 
-    construct : function(form) {
+    /**
+     * @param formDesc {Array} Form description array.
+     *
+     * The form description is an {Array} of field descriptions.  Each field
+     * is a {Map}. Each entry has at least the following keys: <code>type,
+     * label, name</code>, the other keys depend on the type of wideget.
+     * 
+     * <pre class='javascript'>
+     * { type:    "GroupHeader", 
+     *   label:   "Name" }
+     * { type:    "TextField",
+     *   label:   "Label",
+     *   name:    "key",
+     *   initial: "default value" }
+     * { type:    "CheckBox",
+     *   label:   "Label",
+     *   name:    "key",
+     *   initial: true }
+     * { type:    "Spinner",
+     *   label:   "Label",
+     *   name:    "key",
+     *   initial: 23,
+     *   min:     1,
+     *   max:     40 }
+     * { type:    "SelectBox",
+     *   label:   "Label",
+     *   name:    "key",
+     *   initial: "Peter",
+     *   data:    ['Peter', 'Karl', 'Max'] }
+     * </pre> 
+     */
+    construct : function(formDesc) {
         this.base(arguments);
-        this.__form = form;
-
-        for (var i=0, l=form.length; i<l; i++) {
-            var el = form[i];
+        var fl = formDesc.length;
+        for (var i=0; i<fl; i++) {
+            var el = formDesc[i];
             var widget = null;
 
-            //          this.info(el.type+', '+el.label+', '+el.name);
             switch(el.type)
             {
                 case "GroupHeader":
@@ -67,37 +97,29 @@ qx.Class.define("remocular.ui.Form", {
 
                 this.add(widget, el.label, null, el.name || null);
             }
+        };
+
+        var controller = new qx.data.controller.Form(null, this);
+        var data = {};
+        for (var i=0; i<fl; i++) {
+            var el = formDesc[i];
+            if (el.name) {
+                data[el.name] = el.initial || null;
+            }
         }
+        this.__model = qx.data.marshal.Json.createModel(data, true);
+        controller.setModel(this.__model);        
     },
 
     members : {
-        __form : null,
-
-
+        __model : null,
         /**
-         * TODOC
+         * Return the form model.
          *
-         * @return {var} TODOC
+         * @return {var} 
          */
         getModel : function() {
-            var form = this.__form;
-            var controller = new qx.data.controller.Form(null, this);
-            var data = {};
-            var l = form.length;
-
-            for (var i=0; i<l; i++) {
-                var el = form[i];
-
-                if (el.name) {
-                    data[el.name] = el.initial || null;
-                }
-            }
-
-            var model = qx.data.marshal.Json.createModel(data, true);
-
-            //         this.info(qx.util.Serializer.toJson(model));
-            controller.setModel(model);
-            return model;
+            return this.__model;
         }
     }
 });

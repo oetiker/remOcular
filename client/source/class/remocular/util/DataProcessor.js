@@ -1,15 +1,22 @@
 /* ************************************************************************
-   Copyright: 2009, OETIKER+PARTNER AG
-   License: GPL
-   Authors: Tobias Oetiker
+   Copyright: 2009 OETIKER+PARTNER AG
+   License:   GPLv3 or later
+   Authors:   Tobi Oetiker <tobi@oetiker.ch>
+   Utf8Check: äöü
 ************************************************************************ */
 
 /**
- * Call the server for updates and dispatch the answers
+ * The hears of remoculars data processing abilities. The DataProcessor gets data from the
+ * server and then massages it to make it ready for inclusion in the table. 
  */
 qx.Class.define('remocular.util.DataProcessor', {
     extend : qx.core.Object,
 
+    /**
+     * Create a new data processor based on the table configuration coming from the server.
+     *
+     * @param cfg {Map} table data definition
+     */
     construct : function(cfg) {
         this.base(arguments);
         this.__cfg = cfg;
@@ -42,10 +49,10 @@ qx.Class.define('remocular.util.DataProcessor', {
 
 
         /**
-         * TODOC
+         * Create the MAP data aggregator. This is a spacial case since it sort of sits above the normal plugin data aggregators.
          *
-         * @param dataCfg {var} TODOC
-         * @return {var} TODOC
+         * @param dataCfg {Map} aggregator configuration
+         * @return {Object} MAP data aggregator object
          */
         __makeMap : function(dataCfg) {
             var processor = {
@@ -77,10 +84,11 @@ qx.Class.define('remocular.util.DataProcessor', {
 
 
         /**
-         * TODOC
+         * Creat one of the normal data aggregator. The actual aggregator code is in the coresponding aggregator objects.
          *
-         * @param dataCfg {var} TODOC
-         * @return {var} TODOC
+         * @param dataCfg {var} aggregator configuration 
+         * @return {Object} aggregator object.
+         *
          */
         __getProcessor : function(dataCfg) {
             var name = dataCfg.processor;
@@ -127,10 +135,10 @@ qx.Class.define('remocular.util.DataProcessor', {
 
 
         /**
-         * TODOC
+         * takes a row from the table, processes it and returns a new row according to the specifications.
          *
-         * @param row {var} TODOC
-         * @return {var} TODOC
+         * @param row {Array} input row
+         * @return {Array} output row
          */
         process : function(row) {
             var cols = this.__cfg.length;
@@ -146,7 +154,7 @@ qx.Class.define('remocular.util.DataProcessor', {
 
 
         /**
-         * TODOC
+         * Reset any internal counters of the aggregators.
          *
          * @return {void} 
          */
@@ -165,9 +173,9 @@ qx.Class.define('remocular.util.DataProcessor', {
 
 
         /**
-         * TODOC
+         * Get column names
          *
-         * @return {var} TODOC
+         * @return {Array} array with names.
          */
         getColumnNames : function() {
             var cfg = this.__cfg;
@@ -183,10 +191,10 @@ qx.Class.define('remocular.util.DataProcessor', {
 
 
         /**
-         * TODOC
+         * Get tooltip for a particular column
          *
-         * @param column {var} TODOC
-         * @return {var} TODOC
+         * @param column {Number} which tool tip are we lookint tool.
+         * @return {String} tooltip text.
          */
         getColumnTip : function(column) {
             return this.__cfg[column].tooltip;
@@ -194,9 +202,9 @@ qx.Class.define('remocular.util.DataProcessor', {
 
 
         /**
-         * TODOC
+         * How many columns in the table
          *
-         * @return {var} TODOC
+         * @return {Number} column count
          */
         getColumnCount : function() {
             return this.__cfg.length;
@@ -204,10 +212,10 @@ qx.Class.define('remocular.util.DataProcessor', {
 
 
         /**
-         * TODOC
+         * Get relative coulumn width
          *
-         * @param column {var} TODOC
-         * @return {var} TODOC
+         * @param column {Number} column number
+         * @return {var} values of the c
          */
         getColumnWidth : function(column) {
             return this.__cfg[column].width;
@@ -215,10 +223,10 @@ qx.Class.define('remocular.util.DataProcessor', {
 
 
         /**
-         * TODOC
+         * create the cellrenderer based on the configuration supplied.
          *
-         * @param column {var} TODOC
-         * @return {var} TODOC
+         * @param column {Number} column number
+         * @return {Object} cellrenderer
          */
         makeDataCellRenderer : function(column) {
             var cfg = this.__cfg[column];

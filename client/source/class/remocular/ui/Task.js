@@ -1,7 +1,8 @@
 /* ************************************************************************
    Copyright: 2009 OETIKER+PARTNER AG
-   License: GPL
-   Authors: Tobi Oetiker <tobi@oetiker.ch>
+   License:   GPLv3 or later
+   Authors:   Tobi Oetiker <tobi@oetiker.ch>
+   Utf8Check: äöü
 ************************************************************************ */
 
 /* ************************************************************************
@@ -11,9 +12,20 @@
 #asset(remocular/loader.gif)
 ************************************************************************ */
 
+
+/**
+ * The window for the browser side representation of a plugin instance.
+ */
 qx.Class.define("remocular.ui.Task", {
     extend : qx.ui.window.Window,
 
+    /**
+     * Create a new task window. 
+     *
+     * @param task {Map} describing the window content
+     * @param id {String} window id
+     * @return {void} 
+     */
     construct : function(task, id) {
         this.__windowName = id;
         this.__plugin = task.plugin;
@@ -59,7 +71,10 @@ qx.Class.define("remocular.ui.Task", {
                 toolbar.add(part);
                 this.add(this.__tableContainer, { flex : 1 });
             }
-            else {* /* if (task.config.form_type == 'left'){ -- default */
+            else {
+
+                /* if (task.config.form_type == 'left'){ -- default */
+
                 var pane = new qx.ui.splitpane.Pane('horizontal');
                 this.add(pane, { flex : 1 });
                 this.__wigForm = new remocular.ui.form.renderer.Left(this.__form);
@@ -120,27 +135,10 @@ qx.Class.define("remocular.ui.Task", {
         __data : null,
         __infoBar : null,
         __dataProcessor : null,
-        __ignoreRequest : 0,
 
 
         /**
-         * TODOC
-         *
-         * @return {boolean} TODOC
-         */
-        isRequestIgnorable : function() {
-            if (this.__ignoreRequest > 0) {
-                this.__ignoreRequest--;
-                return true;
-            }
-            else {
-                return false;
-            }
-        },
-
-
-        /**
-         * TODOC
+         * gets called when the Run button or 'Enter' is pressed
          *
          * @return {void} 
          */
@@ -152,42 +150,39 @@ qx.Class.define("remocular.ui.Task", {
             this.__btRun.setEnabled(false);
             this.__infoBar.fade();
             this.__tableContainer.removeAll();
-            var history = qx.bom.History.getInstance();
-            var ignoreCounter = remocular.util.HistoryIgnoreCounter.getInstance();
+            var history = qx.bom.History.getInstance(); 
 
             if (this.__form) {
                 var data = this.__modelToMap(this.__formModel);
 
                 if (this.__form.validate()) {
-                    remocular.util.Server.getInstance().callAsync(qx.lang.Function.bind(this.__startPlugin, this), 'start', {
+                    remocular.util.Server.getInstance().callAsync(qx.lang.Function.bind(this.__processPlugin, this), 'start', {
                         plugin : this.__plugin,
                         args   : data
                     });
 
-                    ignoreCounter.ignoreNext();
-                    history.addToHistory(this.__encodeForm(data));
+                    history.addToHistorySilent(this.__encodeForm(data));
                 }
                 else {
                     this.__btRun.setEnabled(true);
                 }
             }
             else {
-                remocular.util.Server.getInstance().callAsync(qx.lang.Function.bind(this.__startPlugin, this), 'start', {
+                remocular.util.Server.getInstance().callAsync(qx.lang.Function.bind(this.__processPlugin, this), 'start', {
                     plugin : this.__plugin,
                     args   : {}
                 });
 
-                ignoreCounter.ignoreNext();
-                history.addToHistory(this.__encodeForm({}));
+                history.addToHistorySilent(this.__encodeForm({}));
             }
         },
 
 
         /**
-         * TODOC
+         * Create a history request string matching the form content
          *
-         * @param data {var} TODOC
-         * @return {String} TODOC
+         * @param data {Map} form content map
+         * @return {String} history string
          */
         __encodeForm : function(data) {
             var str = 'ACT=RUN';
@@ -209,7 +204,7 @@ qx.Class.define("remocular.ui.Task", {
 
 
         /**
-         * TODOC
+         * gets called when the stop button is presse
          *
          * @return {void} 
          */
@@ -228,9 +223,9 @@ qx.Class.define("remocular.ui.Task", {
 
 
         /**
-         * TODOC
+         * create the window toolbar
          *
-         * @return {var} TODOC
+         * @return {Widget} toolbar widget
          */
         __makeToolbar : function() {
             var bar = new qx.ui.toolbar.ToolBar();
@@ -255,10 +250,10 @@ qx.Class.define("remocular.ui.Task", {
 
 
         /**
-         * TODOC
+         * get the data back out of the form model
          *
-         * @param model {var} TODOC
-         * @return {var} TODOC
+         * @param model {Model} form model
+         * @return {Map} data map
          */
         __modelToMap : function(model) {
             var properties = qx.util.PropertyUtil.getProperties(model.constructor);
@@ -273,21 +268,22 @@ qx.Class.define("remocular.ui.Task", {
 
 
         /**
-         * TODOC
+         * process the data return by the plugin start call
          *
-         * @param ret {var} TODOC
-         * @param exc {Exception} TODOC
-         * @param id {var} TODOC
+         * @param ret {Map} return data
+         * @param exc {Exception} is the plugin unhappy?
          * @return {void} 
          */
-        __startPlugin : function(ret, exc, id) {
+        __processPlugin : function(ret, exc) {
             if (exc == null) {
                 this.__handle = ret.handle;
                 this.__dataProcessor = new remocular.util.DataProcessor(ret.cfg.table);
                 this.__data = [];
                 var table = this.__makeTable();
                 this.__tableContainer.add(table, { flex : 1 });
-                this.setCaption(ret.cfg.title);
+                if (ret.cfg.title){
+                    this.setCaption(ret.cfg.title);
+                }
                 var bus = qx.event.message.Bus.getInstance();
                 bus.subscribe(ret.handle, this.__updateTable, this);
                 remocular.util.Poller.getInstance().addHandle(ret.handle, ret.cfg.interval);
@@ -306,16 +302,15 @@ qx.Class.define("remocular.ui.Task", {
 
 
         /**
-         * TODOC
+         * handle the data returned by the stop call
          *
-         * @param ret {var} TODOC
-         * @param exc {Exception} TODOC
+         * @param ret {void} no data is returned from the sop command
+         * @param exc {Exception} was there a problem
          * @param id {var} TODOC
          * @return {void} 
          */
         __confirmStop : function(ret, exc, id) {
             if (exc == null) {
-                //                this.__setSortable(true);
                 this.__btRun.setEnabled(true);
 
                 if (this.__wigForm) {
@@ -332,9 +327,10 @@ qx.Class.define("remocular.ui.Task", {
 
 
         /**
-         * TODOC
+         * update the table content according to the data lines returned by the
+         * regular plugin calls.
          *
-         * @param m {var} TODOC
+         * @param m {Array} data line
          * @return {void} 
          */
         __updateTable : function(m) {
@@ -396,9 +392,9 @@ qx.Class.define("remocular.ui.Task", {
 
 
         /**
-         * TODOC
+         * Create a table based on the table description map
          *
-         * @param table {var} TODOC
+         * @param table {Map} table description
          * @return {var} TODOC
          */
         __makeTable : function(table) {
@@ -435,24 +431,9 @@ qx.Class.define("remocular.ui.Task", {
 
 
         /**
-         * TODOC
+         * is the task running ?
          *
-         * @param sortable {var} TODOC
-         * @return {void} 
-         */
-        __setSortable : function(sortable) {
-            var t = this.__tableModel;
-
-            for (var c=0; c<this.__tableColumnCount; c++) {
-                t.setColumnSortable(c, sortable);
-            }
-        },
-
-
-        /**
-         * TODOC
-         *
-         * @return {var} TODOC
+         * @return {Bool} status
          */
         isRunning : function() {
             return (!this.__btRun.getEnabled());
@@ -460,7 +441,7 @@ qx.Class.define("remocular.ui.Task", {
 
 
         /**
-         * TODOC
+         * start the task
          *
          * @return {void} 
          */
@@ -470,7 +451,7 @@ qx.Class.define("remocular.ui.Task", {
 
 
         /**
-         * TODOC
+         * stop the task
          *
          * @return {void} 
          */
@@ -480,9 +461,9 @@ qx.Class.define("remocular.ui.Task", {
 
 
         /**
-         * TODOC
+         * configure the task. 
          *
-         * @param data {var} TODOC
+         * @param data {Map} key value pairs for the task form
          * @return {void} 
          */
         config : function(data) {

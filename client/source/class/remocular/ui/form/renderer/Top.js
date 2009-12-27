@@ -1,8 +1,14 @@
 /* ************************************************************************
    Copyright: 2009 OETIKER+PARTNER AG
-   License: GPL
-   Authors: Tobi Oetiker <tobi@oetiker.ch>
+   License:   GPLv3 or later
+   Authors:   Tobi Oetiker <tobi@oetiker.ch>
+   Utf8Check: äöü
 ************************************************************************ */
+
+/**
+ * A form renderer returning a result ready for integration into a 
+ * toolbar.
+ */
 
 qx.Class.define("remocular.ui.form.renderer.Top", {
     extend : qx.ui.form.renderer.AbstractRenderer,
@@ -15,11 +21,11 @@ qx.Class.define("remocular.ui.form.renderer.Top", {
 
     members : {
         /**
-         * TODOC
+         * Add items to the form
          *
-         * @param items {var} TODOC
-         * @param names {var} TODOC
-         * @param title {var} TODOC
+         * @param items {Array} items
+         * @param names {Array} names of items
+         * @param title {String} not used
          * @return {void} 
          */
         addItems : function(items, names, title) {
@@ -50,9 +56,9 @@ qx.Class.define("remocular.ui.form.renderer.Top", {
 
 
         /**
-         * TODOC
+         * Public Methos for adding a button
          *
-         * @param button {var} TODOC
+         * @param button {Widget} a button widget
          * @return {void} 
          */
         addButton : function(button) {
@@ -61,9 +67,9 @@ qx.Class.define("remocular.ui.form.renderer.Top", {
 
 
         /**
-         * TODOC
+         * public Method for getting the layout.
          *
-         * @return {var} TODOC
+         * @return {Layout} the layout
          */
         getLayout : function() {
             return this._getLayout();

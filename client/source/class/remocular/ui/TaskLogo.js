@@ -1,7 +1,8 @@
 /* ************************************************************************
-   Copyright: 2008, OETIKER+PARTNER AG
-   License: GPL
-   Authors: Tobias Oetiker
+   Copyright: 2009 OETIKER+PARTNER AG
+   License:   GPLv3 or later
+   Authors:   Tobi Oetiker <tobi@oetiker.ch>
+   Utf8Check: äöü
 ************************************************************************ */
 
 /**
@@ -10,6 +11,12 @@
 qx.Class.define("remocular.ui.TaskLogo", {
     extend : qx.ui.container.Composite,
 
+    /**
+     * @param title {String} title of the Logo
+     * @param byline {String} byline
+     * @param about {String} text about the plugin
+     * @param url {String} url to link to
+     */
     construct : function(title, byline, about, link) {
         this.base(arguments);
         this.setLayout(new qx.ui.layout.VBox(3));

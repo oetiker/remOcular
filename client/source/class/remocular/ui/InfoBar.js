@@ -1,7 +1,8 @@
 /* ************************************************************************
-   Copyright: 2008, OETIKER+PARTNER AG
-   License: GPL
-   Authors: Tobias Oetiker
+   Copyright: 2009 OETIKER+PARTNER AG
+   License:   GPLv3 or later
+   Authors:   Tobi Oetiker <tobi@oetiker.ch>
+   Utf8Check: äöü
 ************************************************************************ */
 
 /* ************************************************************************
@@ -12,12 +13,14 @@
 ************************************************************************ */
 
 /**
- * An Error Popup Window that shows messages
- * sent to to 'error' message bus.
+ * An Message showing below the toolbar of the remocular windows.
  */
 qx.Class.define("remocular.ui.InfoBar", {
     extend : qx.ui.container.Composite,
 
+    /**
+     * Create a Message Instance
+     */
     construct : function() {
         this.base(arguments);
 
@@ -63,9 +66,9 @@ qx.Class.define("remocular.ui.InfoBar", {
 
 
         /**
-         * TODOC
+         * Add the message and make the popup visible
          *
-         * @param text {var} TODOC
+         * @param text {var} the message
          * @return {void} 
          */
         __open : function(text) {
@@ -81,7 +84,7 @@ qx.Class.define("remocular.ui.InfoBar", {
 
 
         /**
-         * TODOC
+         * Start fade effect
          *
          * @return {void} 
          */
@@ -94,9 +97,9 @@ qx.Class.define("remocular.ui.InfoBar", {
 
 
         /**
-         * TODOC
+         * Show an error message
          *
-         * @param text {var} TODOC
+         * @param text {var} error message
          * @return {void} 
          */
         error : function(text) {
@@ -107,9 +110,9 @@ qx.Class.define("remocular.ui.InfoBar", {
 
 
         /**
-         * TODOC
+         * Show a warning message
          *
-         * @param text {var} TODOC
+         * @param text {var} warning message
          * @return {void} 
          */
         warn : function(text) {
@@ -120,9 +123,9 @@ qx.Class.define("remocular.ui.InfoBar", {
 
 
         /**
-         * TODOC
+         * Show an information message
          *
-         * @param text {var} TODOC
+         * @param text {var} information message
          * @return {void} 
          */
         info : function(text) {

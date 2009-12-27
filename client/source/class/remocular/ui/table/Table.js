@@ -1,3 +1,8 @@
+/* ************************************************************************
+   Author:    Unknown (Inspired by Qooxdoo Mailinglist)
+   License:   Same as QooxDoo
+   Utf8Check: äöü
+************************************************************************ */
 
 /**
  * Base class for tables with tooltips for cells.
@@ -16,42 +21,24 @@ qx.Class.define("remocular.ui.table.Table", {
         this._hideToolTip();
     },
 
-
-
-
-    /*
-                *****************************************************************************
-                   EVENTS
-                *****************************************************************************
-                */
-
     events : {
         /**
-                 * Dispatched when the mouse is over a cell.
-                 */
-        "cellOver"   : "qx.ui.table.pane.CellEvent",
+         * Dispatched when the mouse is over a cell.
+         */
+        "cellOver"   : "qx.event.type.Data",
 
 
         /**
-                 * Dispatched when the mouse is over a column header.
-                 */
-        "headerOver" : "qx.ui.table.pane.CellEvent"
+         * Dispatched when the mouse is over a column header.
+         */
+        "headerOver"   : "qx.event.type.Data"
     },
-
-
-
-
-    /*
-                *****************************************************************************
-                    PROPERTIES
-                *****************************************************************************
-                */
 
     properties : {
         /**
-                 * {Boolean}
-                 * Indicates whether cells tooltips should be shown.
-                 */
+         * {Boolean}
+         * Indicates whether cells tooltips should be shown.
+         */
         showCellToolTip : {
             init     : false,
             nullable : false,
@@ -61,9 +48,9 @@ qx.Class.define("remocular.ui.table.Table", {
 
 
         /**
-                 * {Boolean}
-                 * Indicates whether column headers tooltips should be shown.
-                 */
+         * {Boolean}
+         * Indicates whether column headers tooltips should be shown.
+         */
         showHeaderToolTip : {
             init     : false,
             nullable : false,
@@ -72,38 +59,25 @@ qx.Class.define("remocular.ui.table.Table", {
         }
     },
 
-
-
-
-    /*
-                *****************************************************************************
-                    MEMBERS
-                *****************************************************************************
-                */
-
     members : {
-        /*
-                                *****  PROTECTED MEMBERS  *****
-                                */
-
         /**
-                                 * {qx.ui.tooltip.ToolTip}
-                                 * Cell's tooltip.
-                                 */
+         * {qx.ui.tooltip.ToolTip}
+         * Cell's tooltip.
+         */
         __tableToolTip : null,
 
 
         /**
-                                 * {Integer}
-                                 * Index of column over which the mouse was previously.
-                                 */
+         * {Integer}
+         * Index of column over which the mouse was previously.
+         */
         __prevOverCol : -1,
 
 
         /**
-                                 * {Integer}
-                                 * Index of row over which the mouse was previously.
-                                 */
+         * {Integer}
+         * Index of row over which the mouse was previously.
+         */
         __prevOverRow : -1,
 
 
@@ -117,7 +91,8 @@ qx.Class.define("remocular.ui.table.Table", {
          */
         _applyShowCellToolTip : function(value, old) {
             if (value) {
-                this._setToolTip();* /* create initial tooltip */
+                /* create initial tooltip */
+                this._setToolTip();
             }
             else {
                 if (this.__tableToolTip && this.getToolTip() === this.__tableToolTip && !this.isShowHeaderToolTip()) {
@@ -137,7 +112,8 @@ qx.Class.define("remocular.ui.table.Table", {
          */
         _applyShowHeaderToolTip : function(value, old) {
             if (value) {
-                this._setToolTip();* /* create initial tooltip */
+                /* create initial tooltip */
+                this._setToolTip();
             }
             else {
                 if (this.__tableToolTip && this.getToolTip() === this.__tableToolTip && !this.isShowCellToolTip()) {
@@ -197,20 +173,14 @@ qx.Class.define("remocular.ui.table.Table", {
         },
 
 
-
-
-        /*
-                                *****  PUBLIC MEMBERS  *****
-                                */
-
         /**
          * Determines whether the specified cell exists.
          *
          * @param col {Integer} Cell column.
          * @param row {Integer} Cell row.
          * @return {Boolean} <code>true</code> if there is the cell at crossing
-         *            of <code>col</code> column and <code>row</code> row,
-         *            otherwise - <code>false</code>.
+         *                of <code>col</code> column and <code>row</code> row,
+         *                otherwise - <code>false</code>.
          */
         cellExists : function(col, row) {
             var dataModel = this.getTableModel();
@@ -254,8 +224,8 @@ qx.Class.define("remocular.ui.table.Table", {
 
 
         /*
-                                *****  EVENT HANDLERS  *****
-                                */
+                                                *****  EVENT HANDLERS  *****
+                                                */
 
         /**
          * The "cellOver" event handler.
@@ -351,15 +321,6 @@ qx.Class.define("remocular.ui.table.Table", {
             }
         }
     },
-
-
-
-
-    /*
-                *****************************************************************************
-                   DESTRUCTOR
-                *****************************************************************************
-                */
 
     destruct : function() {
         // Remove event handlers

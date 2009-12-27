@@ -1,11 +1,14 @@
 /* ************************************************************************
-   Copyright: 2009, OETIKER+PARTNER AG
-   License: GPL
-   Authors: Tobias Oetiker
+   Copyright: 2009 OETIKER+PARTNER AG 
+   License:   GPLv3 or later
+   Authors:   Tobi Oetiker <tobi@oetiker.ch>
+   Utf8Check: äöü
 ************************************************************************ */
 
 /**
- * Call the server for updates and dispatch the answers
+ * Since browsers can only do a limited number of parallel requests the centralized poller
+ * takes care of this for all tasks and dispatches the response via a message bus.
+ * 
  */
 qx.Class.define('remocular.util.Poller', {
     extend : qx.core.Object,
@@ -14,20 +17,24 @@ qx.Class.define('remocular.util.Poller', {
     construct : function() {
         this.base(arguments);
         this.__handleMap = {};
-        var timer = new qx.event.Timer(1000).set({ enabled : true });
+        var timer = new qx.event.Timer(250).set({ enabled : true });
         timer.addListener('interval', this.__pollServer, this);
     },
 
     members : {
         __handleMap : null,
+        /**
+         * make sure we do not dispatch to queries on top of each other.
+         */
         __waitingForServer : false,
 
 
         /**
-         * TODOC
+         * Each plugin instance on the server side is identified by a handle
+         * returned by the 'start' method.
          *
-         * @param handle {var} TODOC
-         * @param interval {var} TODOC
+         * @param handle {string} handle string 
+         * @param interval {number} at what interval to ask the server about the handle.
          * @return {void} 
          */
         addHandle : function(handle, interval) {
@@ -39,9 +46,9 @@ qx.Class.define('remocular.util.Poller', {
 
 
         /**
-         * TODOC
+         * Stop polling for said handle
          *
-         * @param handle {var} TODOC
+         * @param handle {string} handle string
          * @return {void} 
          */
         deleteHandle : function(handle) {
@@ -51,12 +58,10 @@ qx.Class.define('remocular.util.Poller', {
 
 
         /**
-         * TODOC
+         * Polling handler.
          *
-         * @param e {Event} TODOC
-         * @return {void} 
          */
-        __pollServer : function(e) {
+        __pollServer : function() {
             if (this.__waitingForServer) {
                 return;
             }
@@ -82,14 +87,13 @@ qx.Class.define('remocular.util.Poller', {
 
 
         /**
-         * TODOC
+         * Dispatch the data coming from the server to the task windows.
          *
-         * @param ret {var} TODOC
-         * @param exc {Exception} TODOC
-         * @param id {var} TODOC
+         * @param ret {Map} data from the server
+         * @param exc {Exception} server exception
          * @return {void} 
          */
-        __dispatchData : function(ret, exc, id) {
+        __dispatchData : function(ret, exc) {
             this.__waitingForServer = false;
 
             if (exc == null) {

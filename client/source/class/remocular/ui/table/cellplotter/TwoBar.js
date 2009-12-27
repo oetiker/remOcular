@@ -1,12 +1,32 @@
-/* **********************************************************************
+/* ************************************************************************
    Copyright: 2009 OETIKER+PARTNER AG
-   License: GPL
-   Authors: Tobi Oetiker <tobi@oetiker.ch>
+   License:   same as qooXdoo
+   Authors:   Tobi Oetiker <tobi@oetiker.ch>
+   Utf8Check: äöü
 ************************************************************************ */
 
+/**
+ * Plotter Plugin for the Canvas cellrenderer.
+ * Draw two bars where the second sits on the first
+ * and extends in both directions ... Ideal for average and standarddeviation.
+ */
 qx.Class.define("remocular.ui.table.cellplotter.TwoBar", {
     extend : qx.core.Object,
 
+    /**
+     * Instanciate the plotter
+     *
+     * @param cfg {Map} configuration map
+     * 
+     * <pre class='javascript'>
+     * cfg = {
+     *    mainbarFill:   '#color',
+     *    mainbarBorder: '#color',
+     *    stackbarFill:  '#color',
+     *    stackbarBorder:'#color'
+     * }; 
+     * </pre>
+     */
     construct : function(cfg) {
         this.base(arguments);
 

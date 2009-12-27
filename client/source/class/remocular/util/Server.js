@@ -1,12 +1,14 @@
 /* ************************************************************************
-   Copyright: 2008, OETIKER+PARTNER AG
-   License: GPL
-   Authors: Tobias Oetiker
+   Copyright: 2009 OETIKER+PARTNER AG 
+   License:   GPLv3 or later
+   Authors:   Tobi Oetiker <tobi@oetiker.ch>
+   Utf8Check: äöü
 ************************************************************************ */
 
 /**
- * A thd specific rpc call
- */
+ * initialize us an Rpc object which accesses a local cgi server when called from
+ * the source version of the application 
+ /
 qx.Class.define('remocular.util.Server', {
     extend : qx.io.remote.Rpc,
     type : "singleton",

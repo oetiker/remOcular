@@ -1,17 +1,49 @@
 /* ************************************************************************
    Copyright: 2009 OETIKER+PARTNER AG
-   License: GPL
-   Authors: Tobi Oetiker <tobi@oetiker.ch>
+   License:   GPLv3 or later
+   Authors:   Tobi Oetiker <tobi@oetiker.ch>
+   Utf8Check: äöü
 ************************************************************************ */
+
+/**
+ * Mixin to simplify the application of effects what should
+ * be active as long as the user hovers the mouse over an object.
+ */
 
 qx.Mixin.define("remocular.ui.MHoverFx", {
     members : {
         /**
-         * TODOC
+         * Add a hover and unhover effect.
          *
-         * @param overFx {var} TODOC
-         * @param outFx {var} TODOC
+         * @param overFx {qx.fx.effect...} Effect to show on mouse over
+         * @param outFx {qx.fx.effect...} Effect for mouse out
          * @return {void} 
+         *
+         *
+         * <pre class='javascript'>
+         * this.addListenerOnce('appear', function(e) {
+         *     var startEl = this.getContainerElement().getDomElement();
+         *
+         *     var show = new qx.fx.effect.core.Move(startEl).set({
+         *        mode       : 'absolute',
+         *        x          : 5,
+         *         y          : 5,
+         *         duration   : 0.8,
+         *         transition : 'spring'
+         *     });
+         *
+         *     var hide = new qx.fx.effect.core.Move(startEl).set({
+         *         mode       : 'absolute',
+         *         x          : -33,
+         *         y          : -50,
+         *         duration   : 0.8,
+         *         transition : 'spring'
+         *     });
+         *
+         *     this.addHoverFx(show, hide);
+         * },
+         * this);
+         * </pre>
          */
         addHoverFx : function(overFx, outFx) {
             var active = false;

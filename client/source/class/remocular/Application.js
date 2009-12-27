@@ -6,7 +6,7 @@
 ************************************************************************ */
 
 /* ************************************************************************
-#asset(remocular/*)
+#asset(remocular/logo.png)
 ************************************************************************ */
 
 qx.Class.define("remocular.Application", {
@@ -22,7 +22,7 @@ qx.Class.define("remocular.Application", {
             // Call super class
             var HOME = 'http://www.remocular.org/v/#VERSION#';
             this.base(arguments);
-            qx.Class.patch(qx.bom.History, remocular.util.MHistoryEncoder);
+            qx.Class.patch(qx.bom.History, remocular.util.MHistory);
 
             // add the hover mixin
             qx.Class.include(qx.ui.core.Widget, remocular.ui.MHoverFx);
@@ -31,7 +31,6 @@ qx.Class.define("remocular.Application", {
             if (qx.core.Variant.isSet("qx.debug", "on")) {
                 // support native logging capabilities, e.g. Firebug for Firefox
                 qx.log.appender.Native;
-
                 // support additional cross-browser console. Press F7 to toggle visibility
                 qx.log.appender.Console;
             }

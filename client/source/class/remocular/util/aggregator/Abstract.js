@@ -1,11 +1,13 @@
 /* ************************************************************************
-   Copyright: 2009, OETIKER+PARTNER AG
-   License: GPL
-   Authors: Tobias Oetiker
+   Copyright: 2009 OETIKER+PARTNER AG 
+   License:   GPLv3 or later
+   Authors:   Tobi Oetiker <tobi@oetiker.ch>
+   Utf8Check: äöü
 ************************************************************************ */
 
 /**
- * Call the server for updates and dispatch the answers
+ * remocular aggregators process data coming from the server
+ * into new data values. Aggregators can keep state internally.
  */
 qx.Class.define('remocular.util.aggregator.Abstract', {
     extend : qx.core.Object,
@@ -22,9 +24,9 @@ qx.Class.define('remocular.util.aggregator.Abstract', {
 
 
         /**
-         * TODOC
+         * get the aggregators configuration map
          *
-         * @return {var} TODOC
+         * @return {map} configuration map
          */
         _getCfg : function() {
             return this.__cfg;
@@ -32,9 +34,9 @@ qx.Class.define('remocular.util.aggregator.Abstract', {
 
 
         /**
-         * TODOC
+         * get the state store
          *
-         * @return {var} TODOC
+         * @return {var} state store
          */
         _getStore : function() {
             return this.__store;
@@ -42,7 +44,7 @@ qx.Class.define('remocular.util.aggregator.Abstract', {
 
 
         /**
-         * TODOC
+         * reset the sate 
          *
          * @return {void} 
          */
@@ -52,10 +54,10 @@ qx.Class.define('remocular.util.aggregator.Abstract', {
 
 
         /**
-         * TODOC
+         * process a row of data and return the result
          *
-         * @param row {var} TODOC
-         * @return {boolean} TODOC
+         * @param row {array} input row
+         * @return {var} procesed data
          */
         process : function(row) {
             return true;

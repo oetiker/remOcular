@@ -2,7 +2,7 @@
    Copyright: 2009 OETIKER+PARTNER AG
    License:   GPL
    Authors:   Tobi Oetiker <tobi@oetiker.ch>
-   Utf8Check: äöü
+   Utf8Check: Ã¶Ã¯
 ************************************************************************ */
 
 qx.Theme.define("remocular.theme.Font", {

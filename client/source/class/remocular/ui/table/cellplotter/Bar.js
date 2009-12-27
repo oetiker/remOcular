@@ -1,12 +1,30 @@
-/* **********************************************************************
+/* ************************************************************************
    Copyright: 2009 OETIKER+PARTNER AG
-   License: GPL
-   Authors: Tobi Oetiker <tobi@oetiker.ch>
+   License:   same as qooXdoo
+   Authors:   Tobi Oetiker <tobi@oetiker.ch>
+   Utf8Check: äöü
 ************************************************************************ */
+
+/**
+ * Plotter Plugin for the Canvas cellrenderer.
+ * This Plugin draws a bar based on the value of the cell.
+ */
 
 qx.Class.define("remocular.ui.table.cellplotter.Bar", {
     extend : qx.core.Object,
 
+    /**
+     * Instanciate the plotter
+     *
+     * @param cfg {Map} configuration map
+     * 
+     * <pre class='javascript'>
+     * cfg = {
+     *    fill:   '#color',
+     *    border: '#color' 
+     * };
+     * </pre>
+     */
     construct : function(cfg) {
         this.base(arguments);
         this.__cfg = cfg;
@@ -19,13 +37,13 @@ qx.Class.define("remocular.ui.table.cellplotter.Bar", {
 
 
         /**
-         * TODOC
+         * Plot the Bar
          *
-         * @param c {var} TODOC
-         * @param cellInfo {var} TODOC
-         * @param w {var} TODOC
-         * @param h {Map} TODOC
-         * @return {boolean | var} TODOC
+         * @param c {var} canvas drawing context
+         * @param cellInfo {var} cellInfo from cellrender
+         * @param w {var} canvas width
+         * @param h {Map} canvas height
+         * @return {boolean} should the other cells be redrawn because the scaling has changed?
          */
         plot : function(c, cellInfo, w, h) {
             var d = cellInfo.value;
@@ -53,9 +71,7 @@ qx.Class.define("remocular.ui.table.cellplotter.Bar", {
 
 
         /**
-         * TODOC
-         *
-         * @return {void} 
+         * reset any context data stored inside the plotter
          */
         reset : function() {
             this.__max = 0;

@@ -1,7 +1,8 @@
 /* ************************************************************************
    Copyright: 2009 OETIKER+PARTNER AG
-   License: GPL
-   Authors: Tobi Oetiker <tobi@oetiker.ch>
+   License:   GPLv3 or later
+   Authors:   Tobi Oetiker <tobi@oetiker.ch>
+   Utf8Check: äöü
 ************************************************************************ */
 
 /*
@@ -10,6 +11,10 @@
 #asset(qx/icon/${qx.icontheme}/22/mimetypes/executable.png)
 */
 
+/**
+ * The menu Popup. It populates automatically from the server by calling
+ * the <code>config</code> method on the server.
+ */
 qx.Class.define("remocular.ui.Menu", {
     extend : qx.ui.popup.Popup,
 
@@ -89,14 +94,13 @@ qx.Class.define("remocular.ui.Menu", {
 
 
         /**
-         * TODOC
+         * Fill the menu with data returned from the server.
          *
-         * @param ret {var} TODOC
-         * @param exc {Exception} TODOC
-         * @param id {var} TODOC
+         * @param ret {Array} plugins
+         * @param exc {Exception} was there a problem
          * @return {void} 
          */
-        __fillMenu : function(ret, exc, id) {
+        __fillMenu : function(ret, exc) {
             if (exc == null) {
                 var menu = new qx.ui.container.Composite(new qx.ui.layout.VBox(2)).set({
                     decorator : new qx.ui.decoration.Single().set({
@@ -113,8 +117,8 @@ qx.Class.define("remocular.ui.Menu", {
                 }
 
                 this.__menuPopup.setVisibility('visible');
-                this.__handleRequest();
-                this.__history.addListener('request', this.__handleRequest, this);
+                this.__historyHandler();
+                this.__history.addListener('request', this.__historyHandler, this);
                 this.__menuPopup.add(menu);
                 this.__menuPopup.add(this.__makeAdmin(ret.admin_name, ret.admin_link));
             }
@@ -126,11 +130,11 @@ qx.Class.define("remocular.ui.Menu", {
 
 
         /**
-         * TODOC
+         * Show the person responsible for this copy of remocular
          *
-         * @param name {var} TODOC
-         * @param link {var} TODOC
-         * @return {var} TODOC
+         * @param name {String} who is responsible
+         * @param link {String} url to get in touch
+         * @return {Widget} with the information
          */
         __makeAdmin : function(name, link) {
             var v = new qx.ui.container.Composite(new qx.ui.layout.VBox(2)).set({ padding : [ 2, 5, 2, 5 ] });
@@ -152,10 +156,10 @@ qx.Class.define("remocular.ui.Menu", {
 
 
         /**
-         * TODOC
+         * Create a button for the mennu
          *
-         * @param item {var} TODOC
-         * @return {var} TODOC
+         * @param item {Map} button description
+         * @return {Widget} the button widget
          */
         __makeButton : function(item) {
             var button = new qx.ui.toolbar.Button(item.config.menu, 'icon/22/mimetypes/executable.png').set({ font : 'bold' });
@@ -173,12 +177,16 @@ qx.Class.define("remocular.ui.Menu", {
 
 
         /**
-         * TODOC
+         * Take instructions received via the browser history.
          *
-         * @param e {Event} TODOC
+         * @param e {Event} history event
          * @return {void} 
+         * 
+         * Take the location string after the # mark and use it as a cgi like key/value list.
+         * See documentation for valid keys.
+         *
          */
-        __handleRequest : function(e) {
+        __historyHandler : function(e) {
             var input = this.__history.getState();
 
             if (!input) {
@@ -187,12 +195,6 @@ qx.Class.define("remocular.ui.Menu", {
 
             var data = this.__decodeRequest(input);
             var msg = remocular.ui.MsgBox.getInstance();
-            var ignoreCounter = remocular.util.HistoryIgnoreCounter.getInstance();
-
-            if (ignoreCounter.isIgnorable()) {
-                this.info('ignoring ' + input);
-                return;
-            }
 
             var task;
             this.info('handdling ' + input);
@@ -261,10 +263,10 @@ qx.Class.define("remocular.ui.Menu", {
 
 
         /**
-         * TODOC
+         * Convert a history request string into a Map
          *
-         * @param request {var} TODOC
-         * @return {var} TODOC
+         * @param request {String} request string
+         * @return {Map} key value pairs
          */
         __decodeRequest : function(request) {
             var list = request.split(';');
@@ -280,7 +282,9 @@ qx.Class.define("remocular.ui.Menu", {
 
 
         /**
-         * TODOC
+         * replace the exclude method with our NULL version so that the 
+         * menu never gets excluded and hidden as the popup manager tends
+         * to otherwhise.
          *
          * @return {void} 
          */
@@ -288,4 +292,3 @@ qx.Class.define("remocular.ui.Menu", {
     }
 });
 
-/* without this the popup manager might decide to hide us */

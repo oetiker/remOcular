@@ -1,19 +1,24 @@
 /* ************************************************************************
-   Copyright: 2009, OETIKER+PARTNER AG
-   License: GPL
-   Authors: Tobias Oetiker
+   Copyright: 2009 OETIKER+PARTNER AG 
+   License:   GPLv3 or later
+   Authors:   Tobi Oetiker <tobi@oetiker.ch>
+   Utf8Check: äöü
 ************************************************************************ */
 
+/**
+ * Return an array (stack) of the last values. Configuration map:
+ * <pre class="javascript">
+ * cfg = {
+ *    key_col: column with the key values
+ *    source_col: column with the input data for the average
+ *    depth: number of values to keep in the stack
+ * }
+ * </pre>
+ */
 qx.Class.define('remocular.util.aggregator.Stack', {
     extend : remocular.util.aggregator.Abstract,
 
     members : {
-        /**
-         * TODOC
-         *
-         * @param row {var} TODOC
-         * @return {String} TODOC
-         */
         process : function(row) {
             var cfg = this._getCfg();
             var sto = this._getStore();

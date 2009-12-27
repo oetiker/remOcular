@@ -1,12 +1,32 @@
-/* **********************************************************************
+/* ************************************************************************
    Copyright: 2009 OETIKER+PARTNER AG
-   License: GPL
-   Authors: Tobi Oetiker <tobi@oetiker.ch>
+   License:   same as qooXdoo
+   Authors:   Tobi Oetiker <tobi@oetiker.ch>
+   Utf8Check: äöü
 ************************************************************************ */
+
+/**
+ * Plotter Plugin for the Canvas cellrenderer.
+ * Draw a spark line
+ */
 
 qx.Class.define("remocular.ui.table.cellplotter.SparkLine", {
     extend : qx.core.Object,
 
+    /**
+     * Instanciate the plotter
+     *
+     * @param cfg {Map} configuration map
+     * 
+     * <pre class='javascript'>
+     * cfg = {
+     *    singleScale:  true,
+     *    width:        1,
+     *    lineColor:    '#color',
+     *    sparkColor:   '#color'
+     * }; 
+     * </pre>
+     */
     construct : function(cfg) {
         this.base(arguments);
         this.__cfg = cfg;
@@ -20,13 +40,17 @@ qx.Class.define("remocular.ui.table.cellplotter.SparkLine", {
 
 
         /**
-         * TODOC
+         * Plot Spark Line
          *
-         * @param c {var} TODOC
-         * @param cellInfo {var} TODOC
-         * @param w {var} TODOC
-         * @param h {Map} TODOC
-         * @return {boolean} TODOC
+         * @param c {var} canvas drawing context
+         * @param cellInfo {var} cellInfo from cellrender
+         * @param w {var} canvas width   
+         * @param h {Map} canvas height
+         * @return {boolean} should the other cells be redrawn because the scaling has changed?
+         *
+         * The data for the SparkLine must be stored in the cellInfo.value field.
+         * Note that the tablemodels do not care what you put into a cell. They just hand the data over to the renderer.
+         *
          */
         plot : function(c, cellInfo, w, h) {
             var stack = cellInfo.value;
@@ -101,9 +125,7 @@ qx.Class.define("remocular.ui.table.cellplotter.SparkLine", {
 
 
         /**
-         * TODOC
-         *
-         * @return {void} 
+         * reset plotter
          */
         reset : function() {
             this.__min = undefined;

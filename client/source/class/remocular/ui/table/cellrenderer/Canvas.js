@@ -1,12 +1,27 @@
-/* **********************************************************************
+/* ************************************************************************
    Copyright: 2009 OETIKER+PARTNER AG
-   License: GPL
-   Authors: Tobi Oetiker <tobi@oetiker.ch>
+   License:   same as qooXdoo
+   Authors:   Tobi Oetiker <tobi@oetiker.ch>
+   Utf8Check: äöü
 ************************************************************************ */
+
+/**
+ * The canvas cell renderer allows to put little little drawings into the
+ * cell.  the tricky bit about this is, that the cellrenderer does not
+ * actualy put stuff into the DOM, but just returns html fragments. The
+ * trick here is that we wait for a signal from the table model as to when it
+ * has stuck the html into the DOM. Then we go out, find the relevant DOM
+ * elements and apply the drawing operations.
+ */
 
 qx.Class.define("remocular.ui.table.cellrenderer.Canvas", {
     extend : qx.ui.table.cellrenderer.Abstract,
 
+    /**
+     * the Canvas renderer requires a plot object
+     * defining how to draw the content of the cell
+     * @param plotterObj {Plotter} instance of a plotter object    
+     */
     construct : function(plotterObj) {
         this.base(arguments);
         this.__queue = [];
@@ -23,12 +38,12 @@ qx.Class.define("remocular.ui.table.cellrenderer.Canvas", {
         __attachPending : true,
         __pane : null,
 
-
         /**
-         * TODOC
+         * the heart of the cell renderer. here it creates a bit of html
+         * to be stuck into the cell, rendering its content.
          *
-         * @param cellInfo {var} TODOC
-         * @return {var} TODOC
+         * @param cellInfo {Map} all about the cells content
+         * @return {String} the html
          */
         _getContentHtml : function(cellInfo) {
             if (this.__attachPending) {
@@ -55,9 +70,9 @@ qx.Class.define("remocular.ui.table.cellrenderer.Canvas", {
 
 
         /**
-         * TODOC
+         * attach to the table as soon as the first cell is renderd.
          *
-         * @param table {var} TODOC
+         * @param table {var} table
          * @return {void} 
          */
         __attach : function(table) {
@@ -67,7 +82,7 @@ qx.Class.define("remocular.ui.table.cellrenderer.Canvas", {
 
 
         /**
-         * TODOC
+         * Update the canvas elements
          *
          * @return {void} 
          */
@@ -89,9 +104,9 @@ qx.Class.define("remocular.ui.table.cellrenderer.Canvas", {
                     }
 
                     /* with IE and excanvas, we have to
-                                           add the missing method to the canvas
-                                           element first since the initial loading
-                                           only catches elements from the original html */
+                       add the missing method to the canvas
+                       element first since the initial loading
+                       only catches elements from the original html */
 
                     if (!el.getContext && window.G_vmlCanvasManager) {
                         window.G_vmlCanvasManager.initElement(el);
@@ -128,7 +143,7 @@ qx.Class.define("remocular.ui.table.cellrenderer.Canvas", {
 
 
         /**
-         * TODOC
+         * redraw canvas cells
          *
          * @return {void} 
          */
@@ -140,7 +155,7 @@ qx.Class.define("remocular.ui.table.cellrenderer.Canvas", {
                     var ctx = c.el.getContext('2d');
                     ctx.save();
                     ctx.globalCompositeOperation = 'destination-over';
-                    ctx.clearRect(0, 0, c.w, c.h);* // clear canvas
+                    ctx.clearRect(0, 0, c.w, c.h);
                     ctx.restore();
                     this.__plotter.plot(ctx, c.cellInfo, c.w, c.h);
                 }
@@ -149,7 +164,7 @@ qx.Class.define("remocular.ui.table.cellrenderer.Canvas", {
 
 
         /**
-         * TODOC
+         * reset the plotter
          *
          * @return {void} 
          */
