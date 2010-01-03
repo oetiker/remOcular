@@ -118,14 +118,6 @@ export LD_LIBRARY_PATH=$EPREFIX/lib
 
 [ -d $WORKDIR ] || mkdir -p $WORKDIR
 
-function debpatch () {
- cd $WORKDIR
-  echo "**** doing $2 ****"
-  [ -f $2 ] || wget   --tries=0 --random-wait --passive-ftp $1/$2
-  gunzip -c $2 > patch-deb
-  rm $2
-}
-
 function prepare () {
  cd $WORKDIR
  if [ ! -f $2.ok ]
@@ -206,120 +198,6 @@ function remove () {
     esac
 }
 
-function simplebuild (){    
- if prepare $1 $2
- then
-   shift
-   simpleprogram=$1;shift   
-   if [ ! -f configure ]; then
-        confdir=`ls */configure */*/configure| head -1`
-        upone=".."
-        if [ -f "$confdir" ]; then
-                cd `dirname $confdir`
-        else
-           confdir=`ls */*/configure | head -1`
-           upone="../.."
-           if [ -f "$confdir" ]; then
-               cd `dirname $confdir`  
-           else
-                echo "No configure script found in $simpleprogram"
-                exit 1
-           fi
-        fi
-   else
-      upone="."
-   fi
-   # make sure our libraries come first because only this guarantees propper operation of xrender
-   answer=N
-   if test -f config.log -a -f Makefile ; then
-     printf "Reconfigure? (y/N) "
-     read answer
-   fi
-   if test !  -f config.log  -o ! -f Makefile -o   "$answer" = y  -o  "$answer" = Y ; then
-     rm -f config.cache 
-     ./configure --exec-prefix=$EPREFIX --prefix=$PREFIX "$@"  2>&1 | tee -a $upone/../${simpleprogram}.output
-     [ ${PIPESTATUS[0]} = 0 ] || exit ${PIPESTATUS[0]}     
-     if [ -f $WORKDIR/patch.post ]; then
-	gpatch -p0 -l <$WORKDIR/patch.post 
-     fi
-   fi
-   gmake                                                       2>&1 | tee -a $upone/../${simpleprogram}.output
-   [ ${PIPESTATUS[0]} = 0 ] || exit ${PIPESTATUS[0]}     
-   gmake install                                               2>&1 | tee -a $upone/../${simpleprogram}.output
-   [ ${PIPESTATUS[0]} = 0 ] || exit ${PIPESTATUS[0]}     
-   cd $upone                                                   
-   remove 
-   touch ${simpleprogram}.ok                                   
- fi
- [ -f $WORKDIR/patch.post ] && rm $WORKDIR/patch.post
- cd $WORKDIR
-}
-
-function gbuild (){
- simpleprogram=`grep ^${1}- list | head -1 | awk '{print $1}'` 
- shift
- if prepare $GNOMEMIRROR ${simpleprogram}
-   then
-   if [ ! -f configure ]; then
-        confdir=`ls */configure | head -1`
-        upone=".."
-        if [ -f "$confdir" ]; then
-                cd `dirname $confdir`
-        else
-                echo "No configure script found in $simpleprogram"
-                exit 1
-        fi
-   else
-      upone="."
-   fi
-   rm -f config.cache
-   ./configure --exec-prefix=$EPREFIX --prefix=$PREFIX $GNOMECFG "$@"    2>&1 | tee -a $upone/../${simpleprogram}.output
-   [ ${PIPESTATUS[0]} = 0 ] || exit ${PIPESTATUS[0]}
-   if [ -f $WORKDIR/patch.post ]; then
-	gpatch -p0 -l <$WORKDIR/patch.post 
-   fi
-   gmake                                                       2>&1 | tee -a $upone/../${simpleprogram}.output
-   [ ${PIPESTATUS[0]} = 0 ] || exit ${PIPESTATUS[0]}
-   gmake install                                               2>&1 | tee -a $upone/../${simpleprogram}.output
-   [ ${PIPESTATUS[0]} = 0 ] || exit ${PIPESTATUS[0]}     
-   cd $upone                                                   
-   remove 
-   touch ${simpleprogram}.ok                                   
- fi
- [ -f $WORKDIR/patch.post ] && rm $WORKDIR/patch.post
- cd $WORKDIR
-}
- 	
-
-function kdemake (){    
- package=${1}.tar.bz2; shift
- if prepare $KDEMIRROR ${package}
- then
-   # make sure our libraries come first because only this guarantees propper operation of xrender
-   answer=N
-   if test -f config.log -a -f Makefile ; then
-     printf "Reconfigure ${package} ? (y/N) "
-     read answer
-   fi
-   if test !  -f config.log  -o ! -f Makefile -o   "$answer" = y  -o  "$answer" = Y ; then
-     perl -i~ -p -e 's/^all_libraries=".X_LDFLAGS"/all_libraries="\$LDFLAGS_FRONT \$X_LDFLAGS"/' configure
-     LDFLAGS=-L$EPREFIX/lib CPPFLAGS= ./configure --exec-prefix=$EPREFIX --prefix=$PREFIX $KDECFG "$@"  2>&1 | tee -a ../${package}.output
-     [ ${PIPESTATUS[0]} = 0 ] || exit ${PIPESTATUS[0]}     
-     if [ -f $WORKDIR/patch.post ]; then
-	gpatch -p0 -l <$WORKDIR/patch.post 
-     fi
-   fi
-   gmake  SHELL=bash                    2>&1 | tee -a ../${package}.output
-   [ ${PIPESTATUS[0]} = 0 ] || exit ${PIPESTATUS[0]}     
-   gmake install SHELL=bash             2>&1 | tee -a ../${package}.output
-   [ ${PIPESTATUS[0]} = 0 ] || exit ${PIPESTATUS[0]}     
-   remove 
-   touch ${package}.ok
- fi
- [ -f $WORKDIR/patch.post ] && rm $WORKDIR/patch.post
- cd $WORKDIR
-}
-
 
 function perlmodule (){
  path=$1;shift
@@ -372,27 +250,14 @@ function perlmodule (){
  cd $WORKDIR
 }
 
-function kde314_3rdparty () {
-  KDE=kde-3.1.4-to
-  KPFX=/usr/pack/$KDE
-
-  export QTDIR=${KPFX}/${ARCH}
-  export KDEDIRS=${PREFIX}:${KPFX}/${ARCH}
-  export KDEDIR=${KPFX}/${ARCH}
-  export PATH=/usr/pack/gcc-3.2.3-mo/$ARCH/bin:${KPFX}/${ARCH}/bin:$PATH
-  simplebuild $1 $2 --disable-debug --enable-final --with-pic \
-        --with-extra-libs=${EPREFIX}/lib:${KPFX}/${ARCH}/lib:$XLIB \
-        --with-extra-includes=${PREFIX}/include:${KPFX}/include:$XINC \
-        --with-qt-libraries=${KPFX}/${ARCH}/lib \
-        --with-qt-includes=${KPFX}/include $3 $4 $5 $6 $7 $8 $9
-  cat <<START >$PREFIX/SEPP/start.pl
-my %os = ( 'solaris' => 'sun4u-sun-solaris2.9',
-           'linux' => 'i686-debian-linux3.0' );
-PreENV 'PATH', "$KPFX/\$os{\$^O}/bin";
-SetENV 'KDEDIRS', "\$PackDir/$os{$^O}:\$PackDir:$KPFX/\$os{\$^O}";
-AppExec "\$PackDir/\$os{\$^O}/bin";
-START
-  chmod 755 $PREFIX/SEPP/start.pl
+function condperl () {
+ if perl -e "eval 'require $1'; exit (\$@ ? 1:0)"; then
+     echo "$path is already installed"
+     return 1;
+ else
+     perlmodule $1
+ fi
 }
+
 
 # vim: ft=sh

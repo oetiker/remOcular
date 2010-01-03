@@ -2,8 +2,8 @@
 use strict;
 use FindBin;
 use Data::Dumper;
-use lib '/scratch/smoketrace/lib/perl';
 use lib "$FindBin::Bin/../lib";
+use lib "$FindBin::Bin/../../support/lib";
 my $plugin = shift @ARGV or die "Usage $0 plugin\n";
 eval "require RemOcular::Plugin::${plugin};";
 if ($@){

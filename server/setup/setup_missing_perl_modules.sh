@@ -1,12 +1,12 @@
 #!/bin/bash
 PACKAGER=to
 VERSION=x
-PROD=CPV
+PROD=remocular
 
 
 if [ x$1 = 'x' ]; then
    echo "Missing destination directory."
-   echo " eg. $0 /opt/smoketrace/support"
+   echo " eg. $0 /opt/remocular/support"
    exit 1
 fi
 
@@ -25,9 +25,8 @@ function gmake () {
 }
 
 
-perlmodule FCGI
-perlmodule CGI::Fast
-perlmodule CGI::Session
-perlmodule JSON
-perlmodule Config::Grammar
-perlmodule IPC::Run
+condperl FCGI
+condperl CGI::Fast
+condperl JSON
+condperl Config::Grammar
+condperl IPC::Run
