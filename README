@@ -1,0 +1,64 @@
+                     _______             _            
+                    / _____ \           | |           
+ _ __ ___ _ __ ___ | |     | | ___ _   _| | __ _ _ __ 
+| '__/ _ \ '_ ` _ \| |     | |/ __| | | | |/ _` | '__|
+| | |  __/ | | | | | |_____| | (__| |_| | | (_| | |   
+|_|  \___|_| |_| |_|\_______/ \___|\__,_|_|\__,_|_|   
+......................................................
+remOcular -  your remote eyes in the cloud
+::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+Author:  Tobi Oetiker <tobi@oetiker.ch>
+Version: #VERSION#
+Date:    #DATE#
+
+
+remOcular is an AJAX GUI to command line information
+gathering tools.  remOcular comes with plugins for
+
+ * top - process list
+ * mpstat - processors related statistics
+ * traceroute - packets trace to network host
+ * df - disk free
+
+ ... and many more
+
+remOcular can be easily enhanced to support additional
+tools.  All it takes is an additional plugin module
+(written in perl) on the server side.
+
+See http://www.remocular.org for more information
+
+INSTALLATION
+------------
+
+Use the installer.sh script to setup remOcular
+
+ ./installer.sh /opt/remocular-#VERSION# /var/www/remocular
+
+To fully enjoy remOcular, make sure your webserver
+provides FastCGI support. Else the server part of
+remOcular will run in cgi mode and thus might be a bit
+on the slow side.
+
+Once the installer has completed its task it will show
+some additional hints to you.
+
+DEVELOPEMENT
+------------
+
+remOcular is written in Perl for the server side and
+JavaScript for the browser part.  The beautiful GUI is
+thanks to to wonderful qooxdoo toolkit.  See
+www.qooxdoo.org for more information.
+
+If you want to enhance remOcular with additional
+plugins, you only have to change the server side. No
+JavaScript programming is required. See the existing
+plugins for inspiration and add the new plugin to the
+remocular.cfg file. There is also a plugin testing
+tool in the bin directory to help you test plugins
+without going through the webserver.
+
+
+Tobi Oetiker <tobi@oetiker.ch>, #DATE#
