@@ -84,6 +84,7 @@ exec "$opt/bin/jsonrpc.pl" "$opt/etc/remocular.cfg"
 FCGI
 
 chmod 755 "$htdocs/service/index.fcgi"
+cp "$htdocs/service/index.fcgi" "$htdocs/service/index.cgi"
 
 echo "* adding .htaccess file to service dir"
 
