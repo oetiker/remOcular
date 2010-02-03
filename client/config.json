@@ -34,7 +34,7 @@
     "QOOXDOO_PATH" : "qooxdoo",
     "QXTHEME"      : "remocular.theme.Theme",
     "API_EXCLUDE"  : ["qx.*"],
-    "LOCALES"      : [ "en" ],
+    "LOCALES"      : [ "en", "de" ],
     "CACHE"        : "/home/oetiker/scratch/qooxdoo-oetiker",
     "ROOT"         : "."
   },
