@@ -8,6 +8,9 @@ D=`date "+%Y-%m-%d"`
 A=remocular
 ROOT=`dirname $0`
 url=`svn info $ROOT | grep URL | sed 's/.* //'`
+
+[ -d $A-$V ] && rm -r $A-$V
+
 svn export $url $A-$V
 cd $A-$V
 perl -i -p -e "s/#VERSION#/$V/g;s/#YEAR#/$Y/g;s/#DATE#/$D/g;" installer.sh client/Manifest.json README COPYRIGHT
