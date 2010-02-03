@@ -18,7 +18,7 @@ Base class for all remOcular Plugins.
 
 use Carp;
 use vars qw($VERSION);
-'$Revision$ ' =~ /Revision: (\S*)/;
+'$Revision: 363 $ ' =~ /Revision: (\S*)/;
 my $VERSION = "0.$1";
 
 =head1 METHODS

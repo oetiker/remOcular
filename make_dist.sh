@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id:$
+# $Id$
 # Distribution Maker
 set -e
 V=1.0.0

@@ -1,5 +1,5 @@
 #!/bin/bash
-# $Id:$
+# $Id$
 ## other decision structure
 set -o errexit
 # don't try to remember where things are
