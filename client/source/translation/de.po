@@ -1,3 +1,6 @@
+# 
+msgid ""
+msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: tobi@oetiker.ch\n"
 "POT-Creation-Date: 2010-02-03 15:01+0100\n"
