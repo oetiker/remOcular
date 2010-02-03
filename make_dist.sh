@@ -4,7 +4,7 @@
 set -e
 V=1.0.0
 Y=`date +%Y`
-D=`date "+%Y-%m-%d"
+D=`date "+%Y-%m-%d"`
 A=remocular
 ROOT=`dirname $0`
 url=`svn info $ROOT | grep URL | sed 's/.* //'`
@@ -15,8 +15,6 @@ perl -i -p -e "s/#VERSION#/$V/g;s/#YEAR#/$Y/g;s/#DATE#/$D/g;" installer.sh clien
 ./generate.py build
 perl -i -p -e "s/#VERSION#/$V/g;s/#YEAR#/$Y/g;" client/build/script/remocular.js
 rm qooxdoo
-cd ..
-
-cd ..
+cd ../..
 tar vzcf $A-$V.tar.gz $A-$V
 rm -rf $A-$V
