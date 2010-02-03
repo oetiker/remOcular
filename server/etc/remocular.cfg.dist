@@ -1,15 +1,15 @@
 *** General ***
-admin_name = admin: tobi oetiker
-admin_link = http://tobi.oetiker.ch
+admin_name = Local Support
+admin_link = mailto:support@local-site
 
 *** Plugin ***
 
-+RemOcular::Plugin::TraceRoute
++remOcular::Plugin::TraceRoute
 
-+RemOcular::Plugin::IoStat
++remOcular::Plugin::IoStat
 
-+RemOcular::Plugin::Df
++remOcular::Plugin::Df
 
-+RemOcular::Plugin::MpStat
++remOcular::Plugin::MpStat
 
-+RemOcular::Plugin::Top
++remOcular::Plugin::Top

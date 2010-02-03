@@ -1,16 +1,16 @@
-package RemOcular::Plugin::Df;
+package remOcular::Plugin::Df;
 use strict;
-use base 'RemOcular::Plugin';
-use RemOcular::PluginHelper;
+use base 'remOcular::Plugin';
+use remOcular::PluginHelper;
 use Sys::Hostname;
 
 =head1 NAME
 
-RemOcular::Plugin::Df - DiskFree Probe
+remOcular::Plugin::Df - DiskFree Probe
 
 =head1 SYNOPSIS
 
- use RemOcular::Plugin::Df
+ use remOcular::Plugin::Df
 
 =head1 DESCRIPTION
 
@@ -101,7 +101,7 @@ sub start_instance {
     my $params = shift;  
     my $data = '';
     open(my $fh,'-|','/bin/df','-k','-P') or do {
-       RemOcular::PluginHelper::save($outfile,"#ERROR\t$!\n");
+       remOcular::PluginHelper::save($outfile,"#ERROR\t$!\n");
        return;
     };
     my $ok = 0;
@@ -114,7 +114,7 @@ sub start_instance {
     }
     close $fh;
     $data .= "#STOP\n";
-    RemOcular::PluginHelper::save($outfile,$data);
+    remOcular::PluginHelper::save($outfile,$data);
 }
 
 1;

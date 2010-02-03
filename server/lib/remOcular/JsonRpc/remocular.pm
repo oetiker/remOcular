@@ -1,9 +1,9 @@
-package RemOcular::JsonRpc::remocular;
+package remOcular::JsonRpc::remocular;
 use strict;
 use POSIX qw(setsid sigprocmask);
 use Fcntl ':flock'; # import LOCK_* constants 
 
-use RemOcular::PluginHelper;
+use remOcular::PluginHelper;
 use Time::HiRes qw(usleep);
 
 my $user = (getpwuid($<))[0];
@@ -14,7 +14,7 @@ $SIG{CHLD} = 'IGNORE';
     
 =head1 NAME
 
-RemOcular::JsonRpc::remocular - RPC services for remocular
+remOcular::JsonRpc::remocular - RPC services for remocular
 
 =head1 SYNOPSIS
 
@@ -154,7 +154,7 @@ sub method_start {
     } else {
         $session->param($handle,$pid); 
         # start by clearing the table
-        RemOcular::PluginHelper::save($tmp_prefix.$handle,"#CLEAR\n");
+        remOcular::PluginHelper::save($tmp_prefix.$handle,"#CLEAR\n");
         # warn "Save Params '$handle' '$pid'\n".$session->dump();
         return { handle => $handle,
                  cfg => $run_conf };

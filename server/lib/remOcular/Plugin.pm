@@ -1,18 +1,18 @@
-package RemOcular::Plugin;
+package remOcular::Plugin;
 use strict;
 
 =head1 NAME
 
-RemOcular::Plugin - Base Class for implementing SmokeTrace Plugins
+remOcular::Plugin - Base Class for implementing SmokeTrace Plugins
 
 =head1 SYNOPSIS
 
- package RemOcular::Plugin::Traceroute;
- use base qw(RemOcular::Plugin);
+ package remOcular::Plugin::Traceroute;
+ use base qw(remOcular::Plugin);
 
 =head1 DESCRIPTION
 
-Base class for all RemOcular Plugins.
+Base class for all remOcular Plugins.
 
 =cut
 
@@ -25,7 +25,7 @@ my $VERSION = "0.$1";
 
 =over
 
-=item $x = RemOcular::Plugin::new();
+=item $x = remOcular::Plugin::new();
 
 Create an instnace of the plugin.
 

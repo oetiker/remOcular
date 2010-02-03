@@ -1,118 +1,13 @@
-### helper library for building software packages
-### $Id$
-###
-### * this is part of SEPP
-### * it looks like bourn shell but it is BASH !
-###
+EPREFIX=${EPREFIX:-$PREFIX}
+WORKDIR=${WORKDIR:-$PREFIX/src}
 
-## die whenever a program returns non 0 outside a if/while/until/repeat or
-## other decision structure
-set -o errexit
-# to disable use  set +o errexit
-
-# don't try to remember where things are
-set +o hashall
-
-## do not tollerate unset variables
-set -u
-
-SEPPDIR=`dirname $0`
-# If SEPPDIR has _NO_ leading / (--> Relative Path)
-if [ "$SEPPDIR" = "${SEPPDIR#/}" ] ; then
-  SEPPDIR=`pwd`/$SEPPDIR
-fi
-
-OS=`uname`
-
-if [ $OS = SunOS ]; then
-        ARCH=sun4u-sun-solaris2.10
-        R="-R"
-        XINC=/usr/openwin/include
-        XLIB=/usr/openwin/lib
-        GNUMAKE=gmake
-        # solaris-ld doesn't support this:
-        LDFLAG_AS_NEEDED=""
-        export GNUMAKE
-elif [ $OS = Darwin ]; then
-        ARCH=powerpc-apple-darwin7.4.1
-        # Mac doesn't know -R --> use another -L instead
-        R="-L"
-        XINC=/usr/X11R6/include
-        XLIB=/usr/X11R6/lib
-        LDFLAG_AS_NEEDED=""
-        function gcp () {
-             cp "$@"
-        }
-        function gpatch () {
-             patch "$@"
-        }
-        function gtar () {
-             tar "$@"
-        }
-        function gmake () {
-             make "$@"
-        }
-else
-        LDFLAG_AS_NEEDED="-Wl,--as-needed"
-        R="-Wl,-rpath -Wl,"
-        CPU=`uname -m`
-        if [ -f /etc/debian_version ]; then
-                DEBIAN=`cat /etc/debian_version`
-                if [ $CPU = x86_64 ]; then
-                        ARCH=amd64-debian-linux$DEBIAN
-                else
-                        ARCH=i686-debian-linux$DEBIAN
-                fi
-                XINC=/usr/X11R6/include
-                XLIB=/usr/X11R6/lib
-                if [ $DEBIAN = "3.0" ]; then
-                        LDFLAG_AS_NEEDED=""
-                fi
-        else 
-                ARCH=amd64-linux-rh5.2
-        fi
-
-        function gcp () {
-             cp "$@"
-        }
-        function gpatch () {
-             patch "$@"
-        }
-        function gtar () {
-             tar "$@"
-        }
-        function gmake () {
-             make "$@"
-        }
-fi
-
-PACK=${PROD}-${VERSION}-${PACKAGER}
-
-if [ x$PROD = x ]; then
- echo PROD not defined 
- exit 1
-fi
-
-if [ x$VERSION = x ]; then
- echo VERSION not defined 
- exit 1
-fi
-
-if [ x$PACKAGER = x ]; then
- echo PACKAGER not defined 
- exit 1
-fi
-
-PREFIX=${PREFIX:-/usr/pack/$PACK}
-EPREFIX=${EPREFIX:-$PREFIX/$ARCH}
-VPREFIX=${VPREFIX:-/usr/sepp/var/$PACK}
-WORKDIR=${WORKDIR:-/scratch/build/$PACK}
-
+# default
+KEEP=no
 
 # make sure we find anything we preinstall
 export PATH=$EPREFIX/bin:$PATH
 # tell pkg-config where to look for *.pc files
-export PKG_CONFIG_PATH=$EPREFIX/lib/pkgconfig:/usr/lib/pkgconfig
+export PKG_CONFIG_PATH=${PKG_CONFIG_PATH:-/usr/lib/pkgconfig}
 # just to make sure those who are not compiled propperly still work
 export LD_LIBRARY_PATH=$EPREFIX/lib
 
@@ -153,32 +48,12 @@ function prepare () {
 	echo $SRCDIR >$2.srcdir
    fi
    cd $SRCDIR
-   if [ -f $WORKDIR/patch ]; then
-	gpatch -p0 -l <$WORKDIR/patch 
-	rm $WORKDIR/patch
-   fi
-   if [ -f $WORKDIR/patch-deb ]; then
-   	gpatch -p1 -l <$WORKDIR/patch-deb 
-	if [ -d debian/patches ]; then
-		PATCHES=`cd debian/patches && ls`
-		for p in $PATCHES; do
-			[ "$p" = "00list" ] && continue
-			[ -e debian/patched/$p ] && continue
-			echo "### applying $p:"
-			gpatch -p1 <$p
-		done
-	fi
-	rm $WORKDIR/patch-deb
-   fi
  else
    echo "**** skipping $2 ****"
-   [ -f  $WORKDIR/patch ] && rm $WORKDIR/patch
    cd $WORKDIR
    return 1
  fi
 }
-# default
-KEEP=no
 
 function remove () {
     DIR=`pwd`    
@@ -198,19 +73,23 @@ function remove () {
     esac
 }
 
-
 function perlmodule (){
  path=$1;shift
+ PERL=${PERL:-/usr/bin/perl}
+ if $PERL -e "use $path" >/dev/null 2>&1; then
+     printf "permodule $path is already installed. skipping\n"
+     return
+ fi
  if [ "${path##*/}" = "${path}" ]; then
         cd $WORKDIR
-	wget --quiet --timestamping http://mirror.switch.ch/ftp/mirror/CPAN/modules/02packages.details.txt.gz 
+	wget --quiet --timestamping http://www.cpan.org/modules/02packages.details.txt.gz
 	if [ 02packages.details.txt.gz -nt 02packages.details.txt ]; then
 		gunzip -c 02packages.details.txt.gz > 02packages.details.txt
 	fi
 	temp=$(grep "^$path " 02packages.details.txt|head -1)
 	temp="${temp##* }"
 	pack="${temp##*/}"
-	path=http://mirror.switch.ch/ftp/mirror/CPAN/authors/id/"${temp%/*}"
+	path=http://www.cpan.org/authors/id/"${temp%/*}"
  else
         pack=${1:-""};shift
  fi
@@ -218,16 +97,15 @@ function perlmodule (){
  then
    simpleprogram=$pack
    rm -f config.cache 
-   PERL=${PERL:-/usr/bin/perl}
    PERL_VERSION=`$PERL -e 'printf "%vd\n", $^V;'`
    export PERL5LIB=$PREFIX/lib:${PERL5LIB:-}
    if [ -f Makefile.PL ]; then
      $PERL -I/$PREFIX/lib Makefile.PL \
         LIB=$PREFIX/lib/$PERL_VERSION PREFIX=$PREFIX "$@" 2>&1 | tee -a ../${simpleprogram}.output
      [ ${PIPESTATUS[0]} = 0 ] || exit ${PIPESTATUS[0]}     
-      gmake   2>&1 | tee -a ../${simpleprogram}.output
+     make   2>&1 | tee -a ../${simpleprogram}.output
      [ ${PIPESTATUS[0]} = 0 ] || exit ${PIPESTATUS[0]}     
-     gmake install 2>&1 | tee -a ../${simpleprogram}.output
+     make install 2>&1 | tee -a ../${simpleprogram}.output
      [ ${PIPESTATUS[0]} = 0 ] || exit ${PIPESTATUS[0]}     
   else        
       $PERL -I$PREFIX/lib Build.PL \
@@ -248,15 +126,6 @@ function perlmodule (){
    touch ${simpleprogram}.ok
  fi
  cd $WORKDIR
-}
-
-function condperl () {
- if perl -e "eval 'require $1'; exit (\$@ ? 1:0)"; then
-     echo "$path is already installed"
-     return 1;
- else
-     perlmodule $1
- fi
 }
 
 

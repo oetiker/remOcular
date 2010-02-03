@@ -1,17 +1,17 @@
-package RemOcular::Plugin::IoStat;
+package remOcular::Plugin::IoStat;
 use strict;
-use base 'RemOcular::Plugin';
-use RemOcular::PluginHelper;
+use base 'remOcular::Plugin';
+use remOcular::PluginHelper;
 use Sys::Hostname;
 use IPC::Run qw(run timeout new_chunker);
 
 =head1 NAME
 
-RemOcular::Plugin::IoStat - IoStat Probe
+remOcular::Plugin::IoStat - IoStat Probe
 
 =head1 SYNOPSIS
 
- use RemOcular::Plugin::IoStat
+ use remOcular::Plugin::IoStat
 
 =head1 DESCRIPTION
 
@@ -98,7 +98,7 @@ sub start_instance {
                 my @row = split(/\s+/,$_);
                 my $data = $row."\t".join("\t", @row)."\n";
                 $row++;
-                RemOcular::PluginHelper::save($outfile,$data);
+                remOcular::PluginHelper::save($outfile,$data);
             }
             elsif (/^Device:/){
                 $row = 0;
@@ -108,7 +108,7 @@ sub start_instance {
     my $err_handler = sub {
             local $_ = shift @_;
             chomp;
-            RemOcular::PluginHelper::save($outfile,'#ERROR'."\t"."Note:".$_."\n");                
+            remOcular::PluginHelper::save($outfile,'#ERROR'."\t"."Note:".$_."\n");                
     };
         
     eval {
@@ -117,9 +117,9 @@ sub start_instance {
     };
 
     if ($@){
-       RemOcular::PluginHelper::save($outfile,"#ERROR\tRunning iostat: $@\n");
+       remOcular::PluginHelper::save($outfile,"#ERROR\tRunning iostat: $@\n");
     };
-    RemOcular::PluginHelper::save($outfile,"#STOP\n");
+    remOcular::PluginHelper::save($outfile,"#STOP\n");
 }
 
 1;

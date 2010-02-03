@@ -6,10 +6,10 @@ use lib "$FindBin::Bin/../../support/lib";
 use CGI::Fast;
 use Qooxdoo::SessionLite;
 use Qooxdoo::JSONRPC;
-use RemOcular::Config;
+use remOcular::Config;
 
 $Qooxdoo::JSONRPC::debug=1;
-$Qooxdoo::JSONRPC::service_path='RemOcular::JsonRpc';
+$Qooxdoo::JSONRPC::service_path='remOcular::JsonRpc';
 
 
 '$Revision$ ' =~ /Revision: (\S*)/;
@@ -22,7 +22,7 @@ sub main {
     if (not $cfg_file or not -r $cfg_file){
         die "usage: jsonrpc.pl path/to/remocular.cfg\n";
     }
-    my $cfg_parser = new RemOcular::Config(file=>$cfg_file);
+    my $cfg_parser = new remOcular::Config(file=>$cfg_file);
     my $cfg;
     my $cfg_mod = 0;
     my $user = (getpwuid($<))[0];

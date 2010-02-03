@@ -1,17 +1,17 @@
-package RemOcular::Plugin::MpStat;
+package remOcular::Plugin::MpStat;
 use strict;
-use base 'RemOcular::Plugin';
-use RemOcular::PluginHelper;
+use base 'remOcular::Plugin';
+use remOcular::PluginHelper;
 use Sys::Hostname;
 use IPC::Run qw(run timeout new_chunker);
 
 =head1 NAME
 
-RemOcular::Plugin::MpStat - More Details on your CPU use than you ever wanted to know
+remOcular::Plugin::MpStat - More Details on your CPU use than you ever wanted to know
 
 =head1 SYNOPSIS
 
- use RemOcular::Plugin::Top
+ use remOcular::Plugin::Top
 
 =head1 DESCRIPTION
 
@@ -155,7 +155,7 @@ sub start_instance {
     my $bin =  '/usr/bin/mpstat';
     my $cpu_count = _cpu_count();
     if (not -x $bin){
-        RemOcular::PluginHelper::save($outfile,"#ERROR\t$bin not found\n");
+        remOcular::PluginHelper::save($outfile,"#ERROR\t$bin not found\n");
         return;
     }
     my @cmd = ( $bin,'-P','ALL',$params->{interval},$params->{rounds} );
@@ -188,14 +188,14 @@ sub start_instance {
                 $data .= "\n";
                 $row++;
             }
-            RemOcular::PluginHelper::save($outfile,$data);
+            remOcular::PluginHelper::save($outfile,$data);
         }
     };
 
     my $err_handler = sub {
         local $_ = shift @_;
         chomp;
-        RemOcular::PluginHelper::save($outfile,'#ERROR'."\t"."Note:".$_."\n");                
+        remOcular::PluginHelper::save($outfile,'#ERROR'."\t"."Note:".$_."\n");                
     };
         
     eval {
@@ -203,11 +203,11 @@ sub start_instance {
                  '2>',new_chunker,$err_handler)
     };
     if ($@){
-        RemOcular::PluginHelper::save($outfile,"#ERROR\tRunnig $bin: $@\n");
+        remOcular::PluginHelper::save($outfile,"#ERROR\tRunnig $bin: $@\n");
         last;
     };
 
-    RemOcular::PluginHelper::save($outfile,"#STOP\n");
+    remOcular::PluginHelper::save($outfile,"#STOP\n");
 }
 
 1;

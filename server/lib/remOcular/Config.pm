@@ -1,21 +1,21 @@
-package RemOcular::Config;
+package remOcular::Config;
 use strict;
 
 =head1 NAME
 
-RemOcular::Config - The Configuration File
+remOcular::Config - The Configuration File
 
 =head1 SYNOPSIS
 
- use RemOcular::Config;
+ use remOcular::Config;
 
- my $parser = new RemOcular::Config(file=>'/etc/SmokeTracessas/system.cfg');
+ my $parser = new remOcular::Config(file=>'/etc/SmokeTracessas/system.cfg');
  my $cfg = $parser->parse_config();
  my $pod = $parser->make_pod();
 
 =head1 DESCRIPTION
 
-Configuration reader for RemOcularssas.
+Configuration reader for remOcularssas.
 
 =cut
 
@@ -23,16 +23,16 @@ use vars qw($VERSION);
 $VERSION   = '0.01';
 use Carp;
 use Config::Grammar;
-use base qw(RemOcular::Base);
+use base qw(remOcular::Base);
 
 
 =head1 METHODS
 
-All methods inherited from L<RemOcular::Base>. As well as the following:
+All methods inherited from L<remOcular::Base>. As well as the following:
 
 =over
 
-=item my $cfg = RemOcular::Config->B<new>(file=>'/etc/remocular.cfg');
+=item my $cfg = remOcular::Config->B<new>(file=>'/etc/remocular.cfg');
 
 Parses a remocular configuration file.
 
@@ -120,7 +120,7 @@ sub _make_pod_header {
     return <<"HEADER";
 ${E}head1 NAME
 
-remocular.cfg - The RemOcular configuration file
+remocular.cfg - The remOcular configuration file
 
 ${E}head1 SYNOPSIS
 
@@ -130,12 +130,12 @@ ${E}head1 SYNOPSIS
  plugin_path = /var/lib/remocular/plugin
 
  *** Plugin ***
- +RemOcular::Plugin::TraceRoute
- +RemOcular::Plugin::IoStat
- +RemOcular::Plugin::Df
- +RemOcular::Plugin::IoStat
- +RemOcular::Plugin::MpStat
- +RemOcular::Plugin::Top
+ +remOcular::Plugin::TraceRoute
+ +remOcular::Plugin::IoStat
+ +remOcular::Plugin::Df
+ +remOcular::Plugin::IoStat
+ +remOcular::Plugin::MpStat
+ +remOcular::Plugin::Top
 
 ${E}head1 DESCRIPTION
 
@@ -172,7 +172,7 @@ sub _make_parser {
             '/\S+/' => {
                 _order => 1,
                 _doc => 'Plugin Name',
-                _example => 'RemOcular::Plugin::TraceRoute',
+                _example => 'remOcular::Plugin::TraceRoute',
                 _vars => [ '/\S+/' ],
                 '/\S+/' => {_doc => 'arbitrary plugin properties'},
             }

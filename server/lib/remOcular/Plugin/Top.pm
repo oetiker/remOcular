@@ -1,16 +1,16 @@
-package RemOcular::Plugin::Top;
+package remOcular::Plugin::Top;
 use strict;
-use base 'RemOcular::Plugin';
-use RemOcular::PluginHelper;
+use base 'remOcular::Plugin';
+use remOcular::PluginHelper;
 use Sys::Hostname;
 
 =head1 NAME
 
-RemOcular::Plugin::Top - Top the Process Monitor
+remOcular::Plugin::Top - Top the Process Monitor
 
 =head1 SYNOPSIS
 
- use RemOcular::Plugin::Top
+ use remOcular::Plugin::Top
 
 =head1 DESCRIPTION
 
@@ -156,7 +156,7 @@ sub start_instance {
     my $params = shift;  
     open(my $fh,'-|','/usr/bin/top','-b','-d',int($params->{interval}),
         ($params->{threads} ? '-H' : ())) or do {
-        RemOcular::PluginHelper::save($outfile,"#ERROR\t$!\n");
+        remOcular::PluginHelper::save($outfile,"#ERROR\t$!\n");
         return;
     };
     my $data = "#CLEAR\n";
@@ -170,7 +170,7 @@ sub start_instance {
             $data .= join("\t", "#PUSH", split(/\s+/,$_,12))."\n";
         }
         if ($ok and /^\s*$/){            
-            my $ratio = RemOcular::PluginHelper::save($outfile,$data);
+            my $ratio = remOcular::PluginHelper::save($outfile,$data);
             # it seems noone is reading us anymore, so stop;
             if ($ratio < 0.2){
                 unlink $outfile;
@@ -180,7 +180,7 @@ sub start_instance {
             $data = "#CLEAR\n";
         }
     }
-    RemOcular::PluginHelper::save($outfile,"#STOP\n");
+    remOcular::PluginHelper::save($outfile,"#STOP\n");
 }
 
 1;

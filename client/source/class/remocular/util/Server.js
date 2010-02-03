@@ -19,7 +19,7 @@ qx.Class.define('remocular.util.Server', {
         this.set({
             // 3 seconds max
             timeout     : 10000,
-            url         : '../jsonrpc.fcgi',
+            url         : 'service/',
             serviceName : 'remocular'
         });
     },

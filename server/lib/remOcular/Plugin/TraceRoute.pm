@@ -1,16 +1,16 @@
-package RemOcular::Plugin::TraceRoute;
+package remOcular::Plugin::TraceRoute;
 use strict;
-use base 'RemOcular::Plugin';
-use RemOcular::PluginHelper;
+use base 'remOcular::Plugin';
+use remOcular::PluginHelper;
 use IPC::Run qw(run timeout new_chunker);
 
 =head1 NAME
 
-RemOcular::Plugin::TraceRoute - TraceRoute Interface
+remOcular::Plugin::TraceRoute - TraceRoute Interface
 
 =head1 SYNOPSIS
 
- use RemOcular::Plugin::Top
+ use remOcular::Plugin::Top
 
 =head1 DESCRIPTION
 
@@ -221,7 +221,7 @@ sub start_instance {
     my $params = shift;  
     my $bin =  '/usr/sbin/traceroute';
     if (not -x $bin){
-        RemOcular::PluginHelper::save($outfile,"#ERROR\t$bin not found\n");
+        remOcular::PluginHelper::save($outfile,"#ERROR\t$bin not found\n");
         return;
     }
     for (my $r=0;$r<$params->{rounds};$r++){
@@ -247,14 +247,14 @@ sub start_instance {
                 unshift @row,$row[0];
                 $row[0]--;                
                 my $data = join("\t", @row)."\n";
-                my $ratio = RemOcular::PluginHelper::save($outfile,$data);
+                my $ratio = remOcular::PluginHelper::save($outfile,$data);
             }
         };
 
         my $err_handler = sub {
             local $_ = shift @_;
             chomp;
-            RemOcular::PluginHelper::save($outfile,'#ERROR'."\t"."Note:".$_."\n");                
+            remOcular::PluginHelper::save($outfile,'#ERROR'."\t"."Note:".$_."\n");                
         };
         
         eval {
@@ -263,7 +263,7 @@ sub start_instance {
         };
 
         if ($@){
-            RemOcular::PluginHelper::save($outfile,"#ERROR\tRunning traceroute: $@\n");
+            remOcular::PluginHelper::save($outfile,"#ERROR\tRunning traceroute: $@\n");
             last;
         };
 
@@ -272,7 +272,7 @@ sub start_instance {
         }
         sleep $params->{interval};
     }
-    RemOcular::PluginHelper::save($outfile,"#STOP\n");
+    remOcular::PluginHelper::save($outfile,"#STOP\n");
 }
 
 1;
