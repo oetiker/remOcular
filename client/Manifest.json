@@ -3,22 +3,22 @@
   {
     "name" : "remocular",
 
-    "summary" : "Custom Application",
-    "description" : "This is a skeleton for a custom application with qooxdoo.",
+    "summary" : "Remote Eyes in the Cloud",
+    "description" : "Generic Webinterface to Commandline information gathering tools.",
     
-    "homepage" : "http://some.homepage.url/",
+    "homepage" : "http://www.remocular.org/",
 
-    "license" : "SomeLicense",
+    "license" : "GPLv3",
     "authors" : 
     [
       {
-        "name" : "First Author (uid)",
-        "email" : "first.author@some.domain"
+        "name" : "Tobias Oetiker (oetiker)",
+        "email" : "tobi@oetiker.ch"
       }
     ],
 
-    "version" : "trunk",
-    "qooxdoo-versions": ["0.9-pre"]
+    "version" : "#VERSION#",
+    "qooxdoo-versions": ["1.0.1"]
   },
   
   "provides" : 
@@ -31,4 +31,3 @@
     "type"        : "application"
   }
 }
-
