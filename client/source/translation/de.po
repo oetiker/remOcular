@@ -1,0 +1,61 @@
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: tobi@oetiker.ch\n"
+"POT-Creation-Date: 2010-02-03 15:01+0100\n"
+"PO-Revision-Date: 2010-02-03 15:01+0100\n"
+"Last-Translator: Tobi Oetiker <tobi@oetiker.ch>\n"
+"Language-Team: Tobi Oetiker <tobi@oetiker.ch>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: remocular/Application.js:86
+msgid "remOcular %1, Copyright %2 by Tobias Oetiker, OETIKER+PARTNER AG, GPL Licensed"
+msgstr ""
+
+#: remocular/ui/Menu.js:127 remocular/util/Poller.js:110
+msgid "Error"
+msgstr "Fehler"
+
+#: remocular/ui/Menu.js:217
+msgid "Invalid Plugin"
+msgstr "Ungültiges Plugin"
+
+#: remocular/ui/Menu.js:217
+msgid "Plugin %1 is not known"
+msgstr "Plugin %1 ist unbekannt"
+
+#: remocular/ui/Menu.js:222
+msgid "No Plugin Defined"
+msgstr "Kein Plugin definiert"
+
+#: remocular/ui/Menu.js:222
+msgid "On a new task window you have to set the PLG parameter"
+msgstr "Bei einem neuen task Fenster muss der PLG parameter gesetzt sein"
+
+#: remocular/ui/Menu.js:258
+msgid "Invalid Action"
+msgstr "Ungültige Aktion"
+
+#: remocular/ui/Menu.js:258
+msgid "Sorry, can not handle action: %1"
+msgstr "Kann Aktion %1 nicht behandeln"
+
+#: remocular/ui/MsgBox.js:62
+msgid "Cancel"
+msgstr "Abbruch"
+
+#: remocular/ui/MsgBox.js:75
+msgid "Apply"
+msgstr "Anwenden"
+
+#: remocular/ui/MsgBox.js:84
+msgid "OK"
+msgstr "OK"
+
+#: remocular/ui/Task.js:234
+msgid "Run"
+msgstr "Start"
+
+#: remocular/ui/Task.js:245
+msgid "Stop"
+msgstr "Stop"
