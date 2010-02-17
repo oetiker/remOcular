@@ -237,6 +237,7 @@ qx.Class.define("remocular.ui.Task", {
 
             this.addListener('keydown', function(e) {
                 if (e.getKeyIdentifier() == 'Enter') {
+                    this.blur();
                     this.__btRun.execute();
                 }
             },
