@@ -51,7 +51,9 @@ qx.Mixin.define("remocular.util.MHistory", {
          */
         _onHistoryLoad : function(state) {
             this.setState(state);
-            if (this.__titles[state] != null) {
+            // not sure if we can actually access the __titles hash here
+            // or if it gets obfuscated at compilation time
+            if (this.__titles && this.__titles[state] != null) {
                 this.setTitle(this.__titles[state]);
             }
             if (this.__ignoreOne){
