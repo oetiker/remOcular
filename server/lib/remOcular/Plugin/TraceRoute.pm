@@ -92,6 +92,9 @@ sub check_params {
     elsif (int($params->{rounds}||1) > 30){
         return "Not more than 30 rounds allowed";
     }
+    elsif (not defined $params->{host}){
+        return "No Hostname defined";
+    }
     return {
         table => [
             { 
