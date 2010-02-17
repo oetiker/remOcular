@@ -83,7 +83,7 @@ sub _mkdirp {
 # remove old session files from the session directory
 sub _cleandir {
     my $self = shift;
-    my $path = shift;
+    my $path = $self->{_path};
     my $now = time();
     my $maxage = $self->{_maxage};
     for my $file (<$path/*.$SESSION_EXT>){
