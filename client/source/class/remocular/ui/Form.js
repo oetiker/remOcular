@@ -60,6 +60,7 @@ qx.Class.define("remocular.ui.Form", {
 
                 case "TextField":
                     widget = new qx.ui.form.TextField();
+                    widget.setLiveUpdate(true);
                     break;
 
                 case "CheckBox":
@@ -94,7 +95,6 @@ qx.Class.define("remocular.ui.Form", {
                 if (el.required) {
                     widget.setRequired(true);
                 }
-
                 this.add(widget, el.label, null, el.name || null);
             }
         };

@@ -99,6 +99,14 @@ qx.Class.define("remocular.ui.Task", {
         toolbar.addSpacer();
         toolbar.add(image);
 
+
+
+        this.addListener('keydown', function(e) {
+            if (e.getKeyIdentifier() == 'Enter') {
+                 this.run();
+            }
+        }, this);
+
         this.__btStop.addListener('changeEnabled', function(d) {
             var enabled = d.getData();
             image.setVisibility(enabled ? 'visible' : 'hidden');
@@ -234,15 +242,6 @@ qx.Class.define("remocular.ui.Task", {
             this.__btRun = new qx.ui.toolbar.Button(this.tr("Run"), "icon/16/actions/media-playback-start.png");
             part.add(this.__btRun);
             this.__btRun.addListener('execute', this.__runHandler, this);
-
-            this.addListener('keydown', function(e) {
-                if (e.getKeyIdentifier() == 'Enter') {
-                    this.blur();
-                    this.__btRun.execute();
-                }
-            },
-            this);
-
             this.__btStop = new qx.ui.toolbar.Button(this.tr("Stop"), "icon/16/actions/media-playback-stop.png").set({ enabled : false });
             part.add(this.__btStop);
             this.__btStop.addListener('execute', this.__stopHandler, this);
