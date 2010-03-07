@@ -5,16 +5,16 @@ remocular_install - Installing remOcular
 =head1 OVERVIEW
 
 RemOcumar consists of two main components, a JavaScript application running
-in the webbrowser and a CGI based web service. You need a web server for
+in the webbrowser and a (Fast)CGI based web service. You need a web server for
 delivering the JavaScript to the browser and for running the web service.
 The web service will work both as a CGI as well as a FastCGI. For
-performance reasons it is advisable to run the webservice as a FastCGI.
+performance reasons it is advisable to run the webservice in FastCGI mode.
 
 =head1 DESCRIPTION
 
 =head2 Installation Location
 
-Most webservers require you to put files and active content into particular
+The simplest way of settig-up remOcular is to use Most webservers require you to put files and active content into particular
 locations. Since we try to keep as much of remOcular in a regular
 installation directory, we are distingushin between client and server parts
 of the application.

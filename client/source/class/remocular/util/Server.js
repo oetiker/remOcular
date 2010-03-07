@@ -35,7 +35,7 @@ qx.Class.define('remocular.util.Server', {
         setLocalUrl : function(local_url) {
             if (document.location.host === '') {
                 this.set({
-                    url         : local_url + 'jsonrpc.cgi',
+                    url         : local_url,
                     crossDomain : true
                 });
 

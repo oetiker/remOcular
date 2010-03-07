@@ -35,7 +35,7 @@ qx.Class.define("remocular.Application", {
                 qx.log.appender.Console;
             }
 
-            remocular.util.Server.getInstance().setLocalUrl('http://johan.oetiker.ch/~oetiker/remocular/');
+            remocular.util.Server.getInstance().setLocalUrl('http://localhost/~oetiker/remo/service/');
 
             var root = new qx.ui.container.Composite(new qx.ui.layout.Dock()).set({
                 backgroundColor : '#fff',

@@ -13,8 +13,9 @@ Version: #VERSION#
 Date:    #DATE#
 
 
-remOcular is an AJAX GUI to command line information
-gathering tools.  remOcular comes with plugins for
+remOcular provides a AJAX web interface to Unix command line tools like
+traceroute, top, mpstat, ...  The tools are integrated via a plug-in
+interface.  remOcular comes with plugins for
 
  * top - process list
  * mpstat - processors related statistics
@@ -23,42 +24,50 @@ gathering tools.  remOcular comes with plugins for
 
  ... and many more
 
-remOcular can be easily enhanced to support additional
-tools.  All it takes is an additional plugin module
-(written in perl) on the server side.
+remOcular can be easily enhanced to support additional tools.  All it takes
+is a plugin module (written in perl) on the server side.
 
 See http://www.remocular.org for more information
 
 INSTALLATION
 ------------
 
-Use the installer.sh script to setup remOcular
+You can use the installer.sh script to setup remOcular
 
- ./installer.sh /opt/remocular-#VERSION# /var/www/remocular
+ ./installer.sh /opt/remocular /var/www/remocular
 
-To fully enjoy remOcular, make sure your webserver
-provides FastCGI support. Else the server part of
-remOcular will run in cgi mode and thus might be a bit
-on the slow side.
+This will place the server part of the installation into
+/opt/remocular and the web interface files into var/www/remocular. 
+Remocular requires a few extra perl modules to run: FCGI, CGI::Fast, JSON,
+Config::Grammar and IPC::Run.  The installer will check if the modules are
+present on your system.  If not it will download them and install a
+LOCAL-COPY into /opt/remocular
 
-Once the installer has completed its task it will show
-some additional hints to you.
+* The installer does NOT modify any files on your system. 
+* All installation happens in /opt/remocular and /var/www/remocular
+* The installer can be run as a normal user as long as it can write
+  into the installation directoreis.
+
+To fully enjoy remOcular, make sure your webserver provides FastCGI support. 
+Else the server part of remOcular will run in cgi mode and thus might be a
+bit on the slow side.
+
+Once the installer has completed its task it will show some additional
+installation information.
+to you.
 
 DEVELOPEMENT
 ------------
 
-remOcular is written in Perl for the server side and
-JavaScript for the browser part.  The beautiful GUI is
-thanks to to wonderful qooxdoo toolkit.  See
-www.qooxdoo.org for more information.
+remOcular is written in Perl for the server side and JavaScript for the
+browser part.  The beautiful GUI is thanks to to wonderful qooxdoo toolkit. 
+See www.qooxdoo.org for more information.
 
-If you want to enhance remOcular with additional
-plugins, you only have to change the server side. No
-JavaScript programming is required. See the existing
-plugins for inspiration and add the new plugin to the
-remocular.cfg file. There is also a plugin testing
-tool in the bin directory to help you test plugins
-without going through the webserver.
+If you want to enhance remOcular with additional plugins, you only have to
+change the server side.  No JavaScript programming is required.  See the
+existing plugins for inspiration and add the new plugin to the remocular.cfg
+file.  There is also a plugin testing tool in the bin directory to help you
+test plugins without going through the webserver.
 
 
 Tobi Oetiker <tobi@oetiker.ch>, #DATE#

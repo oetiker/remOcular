@@ -6,9 +6,8 @@ V=1.0.0
 Y=`date +%Y`
 D=`date "+%Y-%m-%d"`
 A=remocular
-ROOT=`dirname "$0"`
+ROOT=`dirname "$0"`/..
 url=`svn info "$ROOT" | grep URL | sed 's/.* //'`
-
 [ -d "$A-$V" ] && rm -r "$A-$V"
 svn export "$url" "$A-$V"
 
