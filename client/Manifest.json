@@ -1,0 +1,33 @@
+{
+  "info" : 
+  {
+    "name" : "remocular",
+
+    "summary" : "Remote Eyes in the Cloud",
+    "description" : "Generic Webinterface to Commandline information gathering tools.",
+    
+    "homepage" : "http://www.remocular.org/",
+
+    "license" : "GPLv3",
+    "authors" : 
+    [
+      {
+        "name" : "Tobias Oetiker (oetiker)",
+        "email" : "tobi@oetiker.ch"
+      }
+    ],
+
+    "version" : "#VERSION#",
+    "qooxdoo-versions": ["1.0.1"]
+  },
+  
+  "provides" : 
+  {
+    "namespace"   : "remocular",
+    "encoding"    : "utf-8",
+    "class"       : "source/class",
+    "resource"    : "source/resource",
+    "translation" : "source/translation",
+    "type"        : "application"
+  }
+}

@@ -1,0 +1,15 @@
+*** General ***
+admin_name = Local Support
+admin_link = mailto:support@local-site
+
+*** Plugin ***
+
++remOcular::Plugin::TraceRoute
+
++remOcular::Plugin::IoStat
+
++remOcular::Plugin::Df
+
++remOcular::Plugin::MpStat
+
++remOcular::Plugin::Top
