@@ -1,0 +1,60 @@
+Fri Nov 12 11:57:36 2010 debug Mojolicious:27 [22946]: Your secret passphrase needs to be changed!!!
+Fri Nov 12 11:57:36 2010 debug Mojolicious:187 [22946]: GET  (Anonymojo).
+Fri Nov 12 11:57:36 2010 debug Mojolicious::Plugin::RequestTimer:34 [22946]: 404 Not Found (0.014000s, 71.429/s).
+Fri Nov 12 11:59:16 2010 debug Mojolicious:27 [22951]: Your secret passphrase needs to be changed!!!
+Fri Nov 12 11:59:16 2010 debug Mojolicious:187 [22951]: GET  (Anonymojo).
+Fri Nov 12 11:59:16 2010 debug Mojolicious::Plugin::RequestTimer:34 [22951]: 404 Not Found (0.012265s, 81.533/s).
+Fri Nov 12 12:01:40 2010 debug Mojolicious:27 [23064]: Your secret passphrase needs to be changed!!!
+Fri Nov 12 12:01:40 2010 debug Mojolicious:187 [23064]: GET  (Anonymojo).
+Fri Nov 12 12:01:40 2010 debug Mojolicious::Plugin::RequestTimer:34 [23064]: 404 Not Found (0.012129s, 82.447/s).
+Fri Nov 12 12:03:16 2010 debug Mojolicious:27 [23071]: Your secret passphrase needs to be changed!!!
+Fri Nov 12 12:03:16 2010 debug Mojolicious:187 [23071]: GET  (Anonymojo).
+Fri Nov 12 12:03:16 2010 debug Mojolicious::Plugin::RequestTimer:34 [23071]: 404 Not Found (0.011792s, 84.803/s).
+Fri Nov 12 12:03:28 2010 debug Mojolicious:27 [23072]: Your secret passphrase needs to be changed!!!
+Fri Nov 12 12:03:28 2010 debug Mojolicious:187 [23072]: GET  (Anonymojo).
+Fri Nov 12 12:03:28 2010 debug Mojolicious::Plugin::RequestTimer:34 [23072]: 404 Not Found (0.011849s, 84.395/s).
+Fri Nov 12 12:03:35 2010 debug Mojolicious:27 [23073]: Your secret passphrase needs to be changed!!!
+Fri Nov 12 12:03:35 2010 debug Mojolicious:187 [23073]: GET  (Anonymojo).
+Fri Nov 12 12:03:35 2010 debug Mojolicious::Plugin::RequestTimer:34 [23073]: 404 Not Found (0.011880s, 84.175/s).
+Sat Nov 13 00:04:56 2010 debug Mojolicious:27 [26358]: Your secret passphrase needs to be changed!!!
+Sat Nov 13 00:04:56 2010 debug Mojolicious:187 [26358]: GET  (Anonymojo).
+Sat Nov 13 00:04:56 2010 debug Mojolicious::Plugin::RequestTimer:34 [26358]: 404 Not Found (0.012512s, 79.923/s).
+Sat Nov 13 00:05:40 2010 error Mojo::Server::FastCGI:72 [26363]: Can't accept FastCGI connection: Socket operation on non-socket
+Sat Nov 13 00:05:48 2010 debug Mojolicious:27 [26365]: Your secret passphrase needs to be changed!!!
+Sat Nov 13 00:05:48 2010 debug Mojolicious:187 [26365]: GET  (Anonymojo).
+Sat Nov 13 00:05:48 2010 debug Mojolicious::Plugin::RequestTimer:34 [26365]: 404 Not Found (0.011891s, 84.097/s).
+Sat Nov 13 00:06:28 2010 debug Mojolicious:27 [26367]: Your secret passphrase needs to be changed!!!
+Sat Nov 13 00:06:28 2010 debug Mojolicious:187 [26367]: GET / (Anonymojo).
+Sat Nov 13 00:06:28 2010 debug Mojolicious::Plugin::RequestTimer:34 [26367]: 404 Not Found (0.012376s, 80.802/s).
+Sat Nov 13 00:06:38 2010 debug Mojolicious:27 [26368]: Your secret passphrase needs to be changed!!!
+Sat Nov 13 00:06:38 2010 debug Mojolicious:187 [26368]: GET /jsonrpc (Anonymojo).
+Sat Nov 13 00:06:38 2010 debug Mojolicious::Routes:406 [26368]: Dispatching MojoX::Dispatcher::Qooxdoo::Jsonrpc->dispatch.
+Sat Nov 13 00:06:38 2010 debug Mojolicious::Plugin::RequestTimer:34 [26368]: 200 OK (0.002575s, 388.350/s).
+Sat Nov 13 00:14:40 2010 debug Mojolicious:27 [26389]: Your secret passphrase needs to be changed!!!
+Sat Nov 13 00:14:40 2010 debug Mojolicious:187 [26389]: GET /jsonrpc (Anonymojo).
+Sat Nov 13 00:14:40 2010 debug Mojolicious::Routes:406 [26389]: Dispatching MojoX::Dispatcher::Qooxdoo::Jsonrpc->dispatch.
+Sat Nov 13 00:14:40 2010 error Mojolicious::Routes:470 [26389]: Not a JsonRPC request. at /home/oetiker/checkouts/optools/remocular/backend/script/../lib/MojoX/Dispatcher/Qooxdoo/Jsonrpc.pm line 51.
+
+Sat Nov 13 00:14:40 2010 error Mojolicious::Controller:353 [26389]: Not a JsonRPC request. at /home/oetiker/checkouts/optools/remocular/backend/script/../lib/MojoX/Dispatcher/Qooxdoo/Jsonrpc.pm line 51.
+
+Sat Nov 13 00:14:40 2010 debug Mojolicious::Plugin::RequestTimer:34 [26389]: 500 Internal Server Error (0.019645s, 50.904/s).
+Sat Nov 13 00:15:44 2010 debug Mojolicious:27 [26396]: Your secret passphrase needs to be changed!!!
+Sat Nov 13 00:15:44 2010 debug Mojolicious:187 [26396]: GET /jsonrpc (Anonymojo).
+Sat Nov 13 00:15:44 2010 debug Mojolicious::Routes:406 [26396]: Dispatching MojoX::Dispatcher::Qooxdoo::Jsonrpc->dispatch.
+Sat Nov 13 00:15:44 2010 debug Mojolicious::Controller:409 [26396]: Resource "jsonrpc/dispatch.html.ep" not found.
+Sat Nov 13 00:15:45 2010 debug Mojolicious::Plugin::RequestTimer:34 [26396]: 404 Not Found (0.015162s, 65.954/s).
+Sat Nov 13 00:15:53 2010 debug Mojolicious:27 [26398]: Your secret passphrase needs to be changed!!!
+Sat Nov 13 00:15:53 2010 debug Mojolicious:187 [26398]: GET /jsonrpc (Anonymojo).
+Sat Nov 13 00:15:53 2010 debug Mojolicious::Routes:406 [26398]: Dispatching MojoX::Dispatcher::Qooxdoo::Jsonrpc->dispatch.
+Sat Nov 13 00:15:53 2010 debug Mojolicious::Controller:409 [26398]: Resource "jsonrpc/dispatch.html.ep" not found.
+Sat Nov 13 00:15:54 2010 debug Mojolicious::Plugin::RequestTimer:34 [26398]: 404 Not Found (0.015404s, 64.918/s).
+Sat Nov 13 00:16:36 2010 debug Mojolicious:27 [26403]: Your secret passphrase needs to be changed!!!
+Sat Nov 13 00:16:36 2010 debug Mojolicious:187 [26403]: GET /jsonrpc (Anonymojo).
+Sat Nov 13 00:16:36 2010 debug Mojolicious::Routes:406 [26403]: Dispatching MojoX::Dispatcher::Qooxdoo::Jsonrpc->dispatch.
+Sat Nov 13 00:16:36 2010 debug Mojolicious::Controller:409 [26403]: Resource "jsonrpc/dispatch.html.ep" not found.
+Sat Nov 13 00:16:36 2010 debug Mojolicious::Plugin::RequestTimer:34 [26403]: 404 Not Found (0.014499s, 68.970/s).
+Sat Nov 13 00:18:05 2010 debug Mojolicious:27 [26411]: Your secret passphrase needs to be changed!!!
+Sat Nov 13 00:18:05 2010 debug Mojolicious:187 [26411]: GET /jsonrpc (Anonymojo).
+Sat Nov 13 00:18:05 2010 debug Mojolicious::Routes:406 [26411]: Dispatching MojoX::Dispatcher::Qooxdoo::Jsonrpc->dispatch.
+Sat Nov 13 00:18:05 2010 debug Mojolicious::Controller:409 [26411]: Resource "jsonrpc/dispatch.html.ep" not found.
+Sat Nov 13 00:18:05 2010 debug Mojolicious::Plugin::RequestTimer:34 [26411]: 404 Not Found (0.014316s, 69.852/s).
