@@ -4,7 +4,7 @@
     "name" : "remocular",
 
     "summary" : "Remote Eyes in the Cloud",
-    "description" : "Generic Webinterface to Commandline information gathering tools.",
+    "description" : "Generic web interface to command line tools for information gathering.",
     
     "homepage" : "http://www.remocular.org/",
 
@@ -18,7 +18,7 @@
     ],
 
     "version" : "#VERSION#",
-    "qooxdoo-versions": ["1.0.1"]
+    "qooxdoo-versions": ["1.2.1"]
   },
   
   "provides" : 
