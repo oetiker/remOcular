@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 # Distribution Maker
 set -e
 if [ "x${QOOXDOO_PATH:=$1}" = x ]; then

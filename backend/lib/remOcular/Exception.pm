@@ -1,4 +1,3 @@
-# $Id: Exception.pm 79 2010-06-07 13:21:28Z oetiker $
 package remOcular::Exception;
 
 =head1 NAME
