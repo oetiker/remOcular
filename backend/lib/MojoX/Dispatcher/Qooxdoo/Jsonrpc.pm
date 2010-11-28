@@ -48,7 +48,7 @@ sub dispatch {
     }
         
     if (not defined $id){
-        print "Sorry, but this is not a JsonRPC request.";
+        $self->app->log->fatal("This is not a JsonRPC request.");
         return;
     }
 
@@ -108,14 +108,21 @@ sub dispatch {
     
     # invocation of method in class according to request 
     eval{
-        if ($services->{$package}->can('session')){
-            $services->{$package}->session($self->stash->{'mojo.session'});
+        if ($services->{$package}->can('_mojo_session')){
+            # initialize session if it does not exists yet
+            my $session = $self->stash->{'mojo.session'} ||= {};
+            $services->{$package}->_mojo_session($session);
         }
-        if ($services->{$package}->can('access_check')){
-            if ( not $services->{$package}->access_check($method) ){
+        if ($services->{$package}->can('_mojo_stash')){
+            # initialize session if it does not exists yet
+            $services->{$package}->_mojo_stash($self->stash);
+        }
+        if ($services->{$package}->can('_check_access')){
+            if ( not $services->{$package}->_check_access($method) ){
 	        die { 
+                 origin => 1, 
 	            message => "Permission denied. Access to method $method is denied.",
-                    code=> '1'
+                    code=> 1
                 }
             }
         }
@@ -245,15 +252,18 @@ Our "Test"-service could look like:
 
  use base qw(Mojo::Base);
 
- # if this attribute is created it will hold a pointer to the session hash
- # at runtime.
- __PACKAGE__->attr('session');
+ # if this attribute is created it will hold the mojo cookie session hash
+ __PACKAGE__->attr('_mojo_session');
+ # if this attribute exists it will provide access to the stash
+ __PACKAGE__->attr('_mojo_stash');
  
- # optional access_check method
- sub access_checck {
+ # optional access_check method the method is called right before the actual
+ # method is called but after the _mojo_session and _mojo_stash properties
+ # are assigned
+
+ sub _check_access {
     my $self = shift;
-    my $method = shift;      
-    
+    my $method = shift;          
     # check if we can access
     return 1; # if ok
  }

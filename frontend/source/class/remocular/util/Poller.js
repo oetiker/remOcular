@@ -56,7 +56,6 @@ qx.Class.define('remocular.util.Poller', {
             this.info('delete ' + handle);
         },
 
-
         /**
          * Polling handler.
          *
@@ -101,7 +100,7 @@ qx.Class.define('remocular.util.Poller', {
 
                 for (var hand in ret) {
                     if (this.__handleMap[hand]) {
-                        bus.dispatch(hand, ret[hand]);
+                        bus.dispatchByName(hand, ret[hand]);
                     }
                 }
             }

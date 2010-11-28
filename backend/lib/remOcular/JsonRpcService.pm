@@ -3,21 +3,24 @@ use strict;
 use POSIX qw(setsid sigprocmask);
 use Fcntl ':flock'; # import LOCK_* constants 
 use remOcular::Plugin;
+use remOcular::Exception qw(mkerror);
+
 use Time::HiRes qw(usleep);
-use remOcular::Exception qw(error);
 
 use base qw(Mojo::Base);
 
 my $user = (getpwuid($<))[0];
-my $tmp_prefix = "/tmp/remocular_session_${user}/data.";
+my $tmp_prefix = "/tmp/remocular_runtime_${user}/data.";
+mkdir "/tmp/remocular_runtime_${user}";
+
 ###############################################################
 
 $SIG{CHLD} = 'IGNORE';
 
 __PACKAGE__->attr('cfg');
-__PACKAGE__->attr('session');
 __PACKAGE__->attr('plugin_hand');
 __PACKAGE__->attr('plugin_list');
+__PACKAGE__->attr('_mojo_stash');
 
 =head1 NAME
 
@@ -63,12 +66,12 @@ sub _load_plugins {
         $plug_file =~ s|::|/|g;
         eval { require $plug_file.'.pm' };
         if ($@){
-            warn "Could not load $plug. Skipping it. ($@)\n";
+            warn("Could not load $plug. Skipping it. ($@)");
             next;
         }
         my $hand = eval { ${plug}->new() };
         if ($@){
-            warn "Could not instanciate $plug. Skipping it. ($@)\n";
+            warn("Could not instanciate $plug. Skipping it. ($@)");
             next;
         }
         $plugin_hand{$plug} = $hand;
@@ -110,21 +113,21 @@ sub start {
     my $plugin = $par->{plugin};
     my $args = $par->{args};
     if (not $self->plugin_hand->{$plugin}){
-        die error(111, "Plugin $plugin is not available");
+        die mkerror(111, "Plugin $plugin is not available");
     }
     my $run_conf = $self->plugin_hand->{$plugin}->check_params($args);
     if (ref $run_conf ne 'HASH'){
-        die error(112, $run_conf);
+        die mkerror(112, $run_conf);
     }        
     print STDERR "Starting Plugin $plugin\n";
     my $handle = sprintf("h%.0f",rand(1e6-1));
-    defined(my $pid = fork()) or die error(384,"Can't fork: $!");
+    defined(my $pid = fork()) or die mkerror(384,"Can't fork: $!");
     if ( $pid == 0 ){ # child
         # behave like a daemon
         chdir '/' or die "Can't chdir to /: $!";
         setsid;
 
-        # no more magic error handling
+        # no more magic mkerror handling
         local $SIG{__WARN__};
         local $SIG{__DIE__};
 
@@ -149,7 +152,7 @@ sub start {
         $self->plugin_hand->{$plugin}->start_instance($tmp_prefix.$handle,$args);
         exit 0;
     } else {
-        $self->session->{$handle} = $pid;
+        $self->_mojo_stash->{'rr.session'}->param($handle,$pid);
         # start by clearing the table
         remOcular::Plugin->append_data($tmp_prefix.$handle,"#CLEAR\n");
         return { handle => $handle,
@@ -157,17 +160,17 @@ sub start {
     }
 }
 
-=head2 method_stop(error,handle)
+=head2 stop(handle)
 
 Pull details about a participant based on his part_id.
 returns a hash/map
 
 =cut  
 
-sub method_stop {
+sub stop {
     my $self = shift;
     my $handle = shift;
-    my $pid =  $self->session->{$handle};
+    my $pid = $self->_mojo_stash->{'rr.session'}->param($handle);
     if ($pid){ 
         my $running = 0;
         for (my $i = 0; $i < 40; $i++){
@@ -176,31 +179,30 @@ sub method_stop {
             usleep 100000;
         }
         unlink $tmp_prefix.$handle;
-        delete $self->session->{$handle};
+        $self->_mojo_stash->{'rr.session'}->delete($handle);
         if ($running > 0){
-            die error(113, "Process $pid did not die within the 4 seconds I waited.");
+            die mkerror(113, "Process $pid did not die within the 4 seconds I waited.");
         }        
     } else {
-        die error(114, "Handle $handle is not under my control");
+        die mkerror(114, "Handle $handle is not under my control");
     }        
 }
 
-=head2 method_poll(error,handles);
+=head2 poll(handles);
 
 fetch all the callers data and ship it.
 
 =cut  
 
-sub method_poll {
+sub poll {
     my $self = shift;
-#   warn "Session Status: ".$session->dump();
     my $handles = shift;
     my %data;
     for my $handle (@$handles){
-        my $pid = $self->session->{$handle};
+        my $pid = $self->_mojo_stash->{'rr.session'}->param($handle);
         if (not $pid){
             # no data from this source ...
-            push @{$data{$handle}},['#ERROR',"Handle $handle not registerd in this session"];
+            push @{$data{$handle}},['#error',"Handle $handle not registerd in this session"];
         }
         elsif (not open(my $fh,"$tmp_prefix$handle")){
             # no data from this source ...

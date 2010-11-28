@@ -22,24 +22,29 @@ An error object to be used in remOcular code.
 
 =cut
 
+use strict;
+use warnings;
 
-use base qw(Mojo::Base);
-
-__PACKAGE__->attr('code');
-__PACKAGE__->attr('message');
-
-use Exporter;
-@EXPORT_OK = qw(error);
+use Exporter 'import';
+use vars qw(@EXPORT_OK);
+@EXPORT_OK = qw(mkerror);
 
 use overload ('""' => 'stringify');
 
-=item B<error>(I<code>,I<message>)
+
+use base qw(Mojo::Base);
+__PACKAGE__->attr('code');
+__PACKAGE__->attr('message');
+
+
+
+=item B<mkerror>(I<code>,I<message>)
 
 Create an nq::Exception object, setting code and message properties in the process.
 
 =cut
 
-sub error {
+sub mkerror {
     my $code = shift;
     my $message = shift;
     return (__PACKAGE__->new(code=>$code,message=>$message));

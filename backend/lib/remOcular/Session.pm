@@ -65,7 +65,7 @@ sub new {
     _mkdirp($self->path);
     my $clean_check = $self->path.'/LAST_SESSSION_CLEAN';
     my $last_clean = time - ((stat $clean_check)[9] || 0);
-    if ( $last_clean > $cleanInterval ){
+    if ( $last_clean > $self->clean_interval ){
         open (my $x, ">", $clean_check );
         $self->_cleandir();
     }

@@ -1,8 +1,12 @@
 #!/bin/sh
 # Distribution Maker
 set -e
-if [ "x${QOOXDOO_PATH:=$1}" = x ]; then
-   echo usage: $0 qooxdoo-sdk-path
+if [ -d "$1/tool/bin" ]; then
+   QOOXDOO_PATH=$1
+   shift
+fi
+if [ x$QOOXDOO_PATH = x ]; then
+   echo usage: $0 [qooxdoo-sdk-path] operation
    echo    or set QOOXDOO_PATH
    exit 1
 fi

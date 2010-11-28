@@ -1,8 +1,8 @@
-#!/usr/sepp/bin/perl-5.12.1 -w
+#!/usr/bin/perl -w
 
 use strict;
 use warnings;
-use 5.12.0;
+use v5.8;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
 use lib "$FindBin::Bin/../../thirdparty/lib";
