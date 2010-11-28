@@ -93,8 +93,7 @@ function perlmodule (){
  else
         pack=${1:-""};shift
  fi
- if prepare "$path" "$pack"
- then
+ if prepare "$path" "$pack"; then
    simpleprogram=$pack
    rm -f config.cache 
    PERL_VERSION=`$PERL -e 'printf "%vd\n", $^V;'`
@@ -123,7 +122,6 @@ function perlmodule (){
          [ ${PIPESTATUS[0]} = 0 ] || exit ${PIPESTATUS[0]} 
    fi
    remove 
-   touch ${simpleprogram}.ok
  fi
  cd $WORKDIR
 }

@@ -6,7 +6,7 @@ if [ "x${QOOXDOO_PATH:=$1}" = x ]; then
    echo    or set QOOXDOO_PATH
    exit 1
 fi
-V=1.0.0
+V=v0.1
 Y=`date +%Y`
 D=`date "+%Y-%m-%d"`
 A=remocular
