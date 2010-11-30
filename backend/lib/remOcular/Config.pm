@@ -117,7 +117,8 @@ ${E}head1 SYNOPSIS
  admin_link = http://tobi.oetiker.ch
  plugin_path = /var/lib/remocular/plugin
  secret = MyCookieSecret
-
+ log_file = /tmp/remocular.log
+ 
  *** Plugin ***
  +remOcular::Plugin::TraceRoute
  +remOcular::Plugin::IoStat
@@ -150,12 +151,13 @@ sub _make_parser {
         _mandatory => [qw(General Plugin)],
         General => {
             _doc => 'Global configuration settings for remOcular',
-            _vars => [ qw(admin_name admin_link plugin_path secret) ],
+            _vars => [ qw(admin_name admin_link plugin_path secret log_file) ],
             _mandatory => [ qw(admin_name admin_link secret) ],
             admin_name => { _doc => 'who is running this service' },
             admin_link => { _doc => 'link for service admin' },
             secret => { _doc => 'secret for signing cookies' },
-            plugin_path => { _doc => 'remocular plugins are perlmodules and they get found in the same way as perl modules. If you have extra locations to look for them. Set them here.' }
+            plugin_path => { _doc => 'remocular plugins are perlmodules and they get found in the same way as perl modules. If you have extra locations to look for them. Set them here.' },
+            log_file => { _dor => 'write a log file to this location'},
         },
         Plugin => {
             _doc => 'Select the Plugins to run in your setup',

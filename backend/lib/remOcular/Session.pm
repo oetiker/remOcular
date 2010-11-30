@@ -41,7 +41,7 @@ my $user = (getpwuid($<))[0];
 __PACKAGE__->attr('path','/tmp/remocular_session_'.$user);
 __PACKAGE__->attr('clean_interval',600);
 __PACKAGE__->attr('lock_timeout',1.5);
-__PACKAGE__->attr('session_timeout',1.5);
+__PACKAGE__->attr('session_timeout',300);
 
 
 =head1 METHODS

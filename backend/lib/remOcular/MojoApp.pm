@@ -18,6 +18,9 @@ sub startup {
 
     my $cfg = $conf->parse_config();
 
+
+    $self->log($cfg->{general}{log_file}) if $cfg->{general}{log_file};
+
     $self->app->hook(before_dispatch => sub {
         my $self = shift;
         $self->stash->{'mojo.session'} ||= {};
@@ -32,6 +35,7 @@ sub startup {
     # log level 
     # $self->log->level('error');
     $self->static->root($self->home->rel_dir('../frontend'));
+
 
     my $services = {
         remocular => new remOcular::JsonRpcService(
