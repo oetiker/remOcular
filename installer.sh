@@ -6,7 +6,7 @@ set +o hashall
 ## do not tollerate unset variables
 set -u 
 
-if [ ${2:-no} = no ]; then
+if [ ${1:-no} = no ]; then
 cat <<HELP
 usage: $0 <INSTALLDIR>
 
