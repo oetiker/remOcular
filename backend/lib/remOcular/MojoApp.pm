@@ -74,7 +74,7 @@ sub startup {
             }    
         );
     } else {
-        $r->get('/' => sub { shift->render_static('index.html') });    
+        $r->get( '/' => sub { shift->render_static('index.html') });
     }
 }
 

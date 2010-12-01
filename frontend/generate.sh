@@ -10,4 +10,4 @@ if [ x$QOOXDOO_PATH = x ]; then
    echo    or set QOOXDOO_PATH
    exit 1
 fi
-$QOOXDOO_PATH/tool/bin/generator.py -m QOOXDOO_PATH:$QOOXDOO_PATH -m CACHE:${TMP:-/tmp}/${USER}_QX_CACHE $1
+$QOOXDOO_PATH/tool/bin/generator.py -m QOOXDOO_PATH:$QOOXDOO_PATH -m CACHE:${TMP:-/tmp}/${USER}_QX_CACHE -m BUILD_PATH:../backend/public $1

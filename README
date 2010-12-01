@@ -53,20 +53,21 @@ can run standalone.
 
 Once the installer has completed its task it will show some additional
 installation information.
-to you.
+
 
 DEVELOPEMENT
 ------------
 
-remOcular is written in Perl for the server side and JavaScript for the
-browser part.  The beautiful GUI is thanks to to wonderful qooxdoo toolkit. 
-See www.qooxdoo.org for more information.
+remOcular is written in Perl using Sebastian Riedels excellent Mojolicious
+framework. See http://www.mojolicious.org for more information.
+
+The beautiful GUI is based on the wonderful qooxdoo toolkit.  
+See http://www.qooxdoo.org for more information.
 
 If you want to enhance remOcular with additional plugins, you only have to
 change the server side.  No JavaScript programming is required.  See the
 existing plugins for inspiration and add the new plugin to the remocular.cfg
 file.  There is also a plugin testing tool in the bin directory to help you
 test plugins without going through the webserver.
-
 
 Tobi Oetiker <tobi@oetiker.ch>, #DATE#

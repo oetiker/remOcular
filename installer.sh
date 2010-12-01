@@ -8,11 +8,10 @@ set -u
 
 if [ ${2:-no} = no ]; then
 cat <<HELP
-usage: $0  <Server-Prefix> <Web-Prefix>
+usage: $0 <INSTALLDIR>
 
-The remOcular installer will place the server and client part of the
-application into their appropriate localtions and it will download and
-compile any missing perl modules.
+The remOcular installer will install the remocular server
+in <INSTALLDIR> and adjust the required path names accordingly.
 
 If any perl modules have to be built, the script will access the
 internet to get the required files.
@@ -24,7 +23,7 @@ an appropriate web server configuration.
 
 Example:
 
-  $0 /opt/remocular-#VERSION# /var/www/remocular-#VERSION#
+  $0 /opt/remocular-#VERSION#
 
 see the README for more information
 
@@ -41,7 +40,6 @@ cat <<START
 Installing remOcular
 --------------------
 Server Directory:          $opt
-Web Application Directory: $htdocs
 
 START
 
@@ -51,64 +49,40 @@ if [ -d "$opt" ]; then
 fi
 mkdir -p "$opt"
 
-if [ -d "$htdocs" ]; then
-   echo "ERROR: the $htdocs directory already exists"
-   exit 1
-fi
-
-mkdir -p "$htdocs"
-
 echo "* Building Missing Perl Modules ..."
 
 "$root/install/build_missing_perlmodules.sh" "$opt"
 
 echo "* Copy Server Software ..."
 
-cp -rp "$root/server/"* "$opt"
+cp -rp "$root/backend/"* "$opt"
 
 if [ ! -f "$opt/etc/remocular.cfg" ]; then
    cp "$opt/etc/remocular.cfg.dist" "$opt/etc/remocular.cfg"
 fi
 
-echo "* Copy Web Application ..."
-
-cp -rp "$root/client/build/"* "$htdocs"
-
-echo "* Create Service FCGI ..."
-mkdir -p "$htdocs/service"
-
-cat <<FCGI >"$htdocs/service/index.fcgi"
+cat <<FCGI >"$opt/bin/remocular.fcgi"
 #!/bin/sh
-exec "$opt/bin/jsonrpc.pl" "$opt/etc/remocular.cfg"
+exec "$opt/bin/remocular.pl" fastcgi
 FCGI
-
-chmod 755 "$htdocs/service/index.fcgi"
-cp "$htdocs/service/index.fcgi" "$htdocs/service/index.cgi"
-
-echo "* adding .htaccess file to service dir"
-
-cat <<HTACCESS >"$htdocs/service/.htaccess"
-AddHandler cgi-script cgi
-DirectoryIndex index.cgi
-# If we got FCGID enable fcgi variant
-<IfModule mod_fcgid.c>
-AddHandler fcgid-script fcgi
-DirectoryIndex index.fcgi 
-</IfModule>
-HTACCESS
+chmod 755 "$opt/bin/remocular.fcgi"
 
 cat <<DONE
 ==========================================================================
 
-Setup is complete. I have put a .htaccess file into 
+Setup is complete.
 
-  $htdocs/service/
-  
-make sure your webserver if happy with this.
+To get going quickly try running remOcular with its built-in webserver
 
-If at all possible activate FastCGI support in your webserver since this
-will help *massively* with performance.  In apache this means that you
-should get the mod_fcgid activated.
+ $opt/bin/remocular.pl daemon
+
+Or if you have a webserver with fastcgi support, try putting
+
+ $opt/bin/remocular.fcgi
+
+into your web tree and access 
+
+ http://site/path/remocular.fcgi/
 
 Also since remOcular executes binaries on your webserver, you may want to
 activate SuEXEC on the remOcular server.
