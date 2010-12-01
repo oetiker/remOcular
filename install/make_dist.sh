@@ -6,7 +6,7 @@ if [ "x${QOOXDOO_PATH:=$1}" = x ]; then
    echo    or set QOOXDOO_PATH
    exit 1
 fi
-V=v0.1
+V=v0.8
 Y=`date +%Y`
 D=`date "+%Y-%m-%d"`
 A=remocular
@@ -19,6 +19,6 @@ perl -i -p -e "s/#VERSION#/$V/g;s/#YEAR#/$Y/g;s/#DATE#/$D/g;" installer.sh front
 cd frontend
 $QOOXDOO_PATH/tool/bin/generator.py -m QOOXDOO_PATH:$QOOXDOO_PATH -m CACHE:${TMP:-/tmp}/${USER}_QX_CACHE build
 perl -i -p -e "s/#VERSION#/$V/g;s/#YEAR#/$Y/g;" build/script/remocular.js
-cd ../..
+cd $BUILD/..
 tar vzcf "$ROOT/$A-$V".tar.gz  --exclude "*~" --exclude .git "$A-$V"
 rm -r $BUILD

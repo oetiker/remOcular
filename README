@@ -34,23 +34,22 @@ INSTALLATION
 
 You can use the installer.sh script to setup remOcular
 
- ./installer.sh /opt/remocular /var/www/remocular
+ ./installer.sh /opt/remocular
 
 This will place the server part of the installation into
-/opt/remocular and the web interface files into var/www/remocular. 
-Remocular requires a few extra perl modules to run: FCGI, CGI::Fast, JSON,
-Config::Grammar and IPC::Run.  The installer will check if the modules are
-present on your system.  If not it will download them and install a
-LOCAL-COPY into /opt/remocular
+/opt/remocular. Remocular requires a few extra perl modules to run:
+Mojlicious, Config::Grammar and IPC::Run.  The installer will check if the
+modules are present on your system.  If not, it will download them and
+install a LOCAL-COPY into /opt/remocular
 
 * The installer does NOT modify any files on your system. 
-* All installation happens in /opt/remocular and /var/www/remocular
+* All installation happens in /opt/remocular
 * The installer can be run as a normal user as long as it can write
   into the installation directoreis.
 
-To fully enjoy remOcular, make sure your webserver provides FastCGI support. 
-Else the server part of remOcular will run in cgi mode and thus might be a
-bit on the slow side.
+The remOcular backend server can run in a wide variety of ways: FastCGI,
+mod_perl, psgi and CGI.  RemOcular also has a built in webserver so that it
+can run standalone.
 
 Once the installer has completed its task it will show some additional
 installation information.
