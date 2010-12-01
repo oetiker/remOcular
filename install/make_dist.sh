@@ -6,14 +6,14 @@ if [ "x${QOOXDOO_PATH:=$1}" = x ]; then
    echo    or set QOOXDOO_PATH
    exit 1
 fi
-V=v0.8
+V=0.8
 Y=`date +%Y`
 D=`date "+%Y-%m-%d"`
 A=remocular
 ROOT=`dirname "$0"`/..
 BUILD=/tmp/${USER}_QX_BUILD/${A}-${V}
 mkdir -p $BUILD
-cp -rp $ROOT/* $BUILD
+git archive --format=tar $V | tar xvf - -C $BUILD
 cd $BUILD
 perl -i -p -e "s/#VERSION#/$V/g;s/#YEAR#/$Y/g;s/#DATE#/$D/g;" installer.sh frontend/Manifest.json README COPYRIGHT
 cd frontend
