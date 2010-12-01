@@ -1,5 +1,6 @@
 #!/bin/sh
 # Distribution Maker
+set -x
 set -e
 if [ "x${QOOXDOO_PATH:=$1}" = x ]; then
    echo usage: $0 qooxdoo-sdk-path
@@ -10,7 +11,8 @@ V=0.8
 Y=`date +%Y`
 D=`date "+%Y-%m-%d"`
 A=remocular
-ROOT=`dirname "$0"`/..
+R=`dirname "$0"`/..
+ROOT=`cd $R;pwd`
 BUILD=/tmp/${USER}_QX_BUILD/${A}-${V}
 mkdir -p $BUILD
 git archive --format=tar $V | tar xvf - -C $BUILD
