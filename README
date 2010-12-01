@@ -12,6 +12,7 @@ Author:  Tobi Oetiker <tobi@oetiker.ch>
 Version: #VERSION#
 Date:    #DATE#
 
+ http://www.remocular.org
 
 remOcular provides a AJAX web interface to Unix command line tools like
 traceroute, top, mpstat, ...  The tools are integrated via a plug-in
@@ -69,5 +70,7 @@ change the server side.  No JavaScript programming is required.  See the
 existing plugins for inspiration and add the new plugin to the remocular.cfg
 file.  There is also a plugin testing tool in the bin directory to help you
 test plugins without going through the webserver.
+
+Get the source on https://github.com/oetiker/remOcular
 
 Tobi Oetiker <tobi@oetiker.ch>, #DATE#
