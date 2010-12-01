@@ -32,7 +32,6 @@ exit 1
 fi
 
 opt=${1}
-htdocs=${2}
 
 root=`dirname $0`
 
@@ -94,6 +93,7 @@ Finally go to
 and modify it according to your wishes.
 
 enjoy!
+
 tobi oetiker
 http://tobi.oetiker.ch
 ============================================================================
