@@ -177,7 +177,7 @@ sub param {
 
 =item $sess->clear([$key1,$key2]) or $sess->clear($key)
 
-Clear one or several people work for you.
+Clear one or several properties from the session.
 
 =cut
 

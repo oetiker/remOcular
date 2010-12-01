@@ -119,7 +119,7 @@ sub start {
     if (ref $run_conf ne 'HASH'){
         die mkerror(112, $run_conf);
     }        
-    print STDERR "Starting Plugin $plugin\n";
+    warn "Starting Plugin $plugin\n";
     my $handle = sprintf("h%.0f",rand(1e6-1));
     defined(my $pid = fork()) or die mkerror(384,"Can't fork: $!");
     if ( $pid == 0 ){ # child
@@ -179,7 +179,7 @@ sub stop {
             usleep 100000;
         }
         unlink $tmp_prefix.$handle;
-        $self->_mojo_stash->{'rr.session'}->delete($handle);
+        $self->_mojo_stash->{'rr.session'}->clear($handle);
         if ($running > 0){
             die mkerror(113, "Process $pid did not die within the 4 seconds I waited.");
         }        

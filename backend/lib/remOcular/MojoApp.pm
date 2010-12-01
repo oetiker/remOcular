@@ -8,18 +8,23 @@ use remOcular::Session;
 
 use base 'Mojolicious';
 
-sub startup {
+__PACKAGE__->attr(cfg => sub {
     my $self = shift;
-    my $r = $self->routes;
-
     my $conf = remOcular::Config->new( 
         file=> $ENV{REMOCULAR_CONF} || $self->home->rel_file('etc/remocular.cfg')
     );
+    return $conf->parse_config();
+});
 
-    my $cfg = $conf->parse_config();
+sub startup {
+    my $self = shift;
 
+    $self->log->path($self->cfg->{General}{log_file})
+	if $self->cfg->{General}{log_file};
+     
+    $self->secret($self->cfg->{General}{secret});
 
-    $self->log($cfg->{general}{log_file}) if $cfg->{general}{log_file};
+    my $r = $self->routes;
 
     $self->app->hook(before_dispatch => sub {
         my $self = shift;
@@ -31,15 +36,10 @@ sub startup {
         $self->stash('rr.session',$session);
     });
 
-    $self->secret($cfg->{General}{secret});
-    # log level 
-    # $self->log->level('error');
-    $self->static->root($self->home->rel_dir('../frontend'));
-
 
     my $services = {
         remocular => new remOcular::JsonRpcService(
-            cfg       => $cfg,   
+            cfg       => $self->cfg,   
         ),
     };
             
@@ -51,23 +51,31 @@ sub startup {
         services    => $services,        
         debug       => 0,        
     );
+    
+    $SIG{__WARN__} = sub {
+        local $SIG{__WARN__};
+        $self->log->info(shift);
+    };
 
-    $r->get('/' => sub { shift->redirect_to('/source/index.html') });
+    if ($ENV{REMOCULAR_SOURCE}){
+        $self->static->root($self->home->rel_dir('../frontend'));
+        $r->get('/' => sub { shift->redirect_to('/source/') });
+        $r->get('/source/' => sub { shift->render_static('/source/index.html') });
 
-    my $qx_static = Mojolicious::Static->new();
+        my $qx_static = Mojolicious::Static->new();
 
-    $r->route('(*qx_root)/framework/source/(*qx_file)')->to(
-        cb => sub {
-            my $self = shift;
-            my $qx_root = $self->stash('qx_root');
-            my $qx_file = $self->stash('qx_file');
-            $qx_static->root('/'.$qx_root);
-            $qx_static->prefix('/'.$qx_root);
-            return $qx_static->dispatch($self);
-        }    
-    );
-
-
+        $r->route('(*qx_root)/framework/source/(*more)')->to(
+            cb => sub {
+                my $self = shift;
+                my $qx_root = $self->stash('qx_root');
+                $qx_static->root('/'.$qx_root);
+                $qx_static->prefix('/'.$qx_root);
+                return $qx_static->dispatch($self);
+            }    
+        );
+    } else {
+        $r->get('/' => sub { shift->render_static('index.html') });    
+    }
 }
 
 1;
