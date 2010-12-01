@@ -19,7 +19,7 @@ git archive --format=tar $V | tar xvf - -C $BUILD
 cd $BUILD
 perl -i -p -e "s/#VERSION#/$V/g;s/#YEAR#/$Y/g;s/#DATE#/$D/g;" installer.sh frontend/Manifest.json README COPYRIGHT
 cd frontend
-./generator.sh $QOOXDOO_PATH build
+./generate.sh $QOOXDOO_PATH build
 perl -i -p -e "s/#VERSION#/$V/g;s/#YEAR#/$Y/g;" build/script/remocular.js
 cd $BUILD/..
 tar vzcf "$ROOT/$A-$V".tar.gz  --exclude "*~" --exclude .git "$A-$V"
