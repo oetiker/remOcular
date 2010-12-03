@@ -62,7 +62,7 @@ DEVELOPEMENT
 remOcular is written in Perl using Sebastian Riedels excellent Mojolicious
 framework. See http://www.mojolicious.org for more information.
 
-The beautiful GUI is based on the wonderful qooxdoo toolkit.  
+The GUI is written in pure javascript using the qooxdoo toolkit.  
 See http://www.qooxdoo.org for more information.
 
 If you want to enhance remOcular with additional plugins, you only have to
