@@ -79,12 +79,24 @@ Or if you have a webserver with fastcgi support, try putting
 
  $opt/bin/remocular.fcgi
 
-into your web tree and access 
+Up somewhere on your webserver. You can acccess it with
 
- http://site/path/remocular.fcgi/
+ http://site/somepath/remocular.fcgi
 
-Also since remOcular executes binaries on your webserver, you may want to
+Since remOcular executes binaries on your webserver, you should
 activate SuEXEC on the remOcular server.
+
+If you have mod_rewrite active, you can additionally add
+a .htaccess file:
+
+ RewriteEngine On
+ RewriteBase /somepath
+ RewriteCond %{REQUEST_FILENAME} !-f
+ RewriteRule (.*) remocular.fcgi/$1  
+
+which allows to access the site with
+
+ http://site/somepath/
 
 Finally go to 
 
