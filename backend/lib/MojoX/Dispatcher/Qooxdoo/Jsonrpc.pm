@@ -108,6 +108,10 @@ sub dispatch {
     
     # invocation of method in class according to request 
     eval{
+        # make sure there are not foreign signal handlers
+        # messing with our problems
+        local $SIG{__DIE__};
+        local $SIG{__WARN__};
         if ($services->{$package}->can('_mojo_session')){
             # initialize session if it does not exists yet
             my $session = $self->stash->{'mojo.session'} ||= {};
