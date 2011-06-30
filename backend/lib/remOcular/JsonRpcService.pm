@@ -7,7 +7,7 @@ use remOcular::Exception qw(mkerror);
 
 use Time::HiRes qw(usleep);
 
-use base qw(Mojo::Base);
+use Mojo::Base -base;
 
 my $user = (getpwuid($<))[0];
 my $tmp_prefix = "/tmp/remocular_runtime_${user}/data.";
@@ -17,10 +17,9 @@ mkdir "/tmp/remocular_runtime_${user}";
 
 $SIG{CHLD} = 'IGNORE';
 
-__PACKAGE__->attr('cfg');
-__PACKAGE__->attr('plugin_hand');
-__PACKAGE__->attr('plugin_list');
-__PACKAGE__->attr('_mojo_stash');
+has 'plugin_hand';
+has 'plugin_list';
+has 'controller';
 
 =head1 NAME
 
@@ -34,51 +33,24 @@ This module gets instanciated by L<remOcular::MojoApp>.
 
 All methods on this class can get called remotely as long as their name does not start with an underscore.
 
-=head2 new(cfg=>$cfg)
+=head2 allow_access
 
-The functions is called for every method call. It determines if the method should run or not.
-
-=cut 
-
-
-sub new {
-    my $self = shift->SUPER::new(@_);
-    $self->_load_plugins();
-    return $self;
-}
-
-
-=head2 _load_plugins()
-
-Load and instanciate the plugins listed in the config file
+which methods to offer
 
 =cut
 
-sub _load_plugins {
-    my $self = shift;       
-    my %plugin_hand;
-    my @plugin_list;
-    my $cfg = $self->cfg;
-    my $plug_hash = $cfg->{Plugin};
-    for my $plug (sort {$plug_hash->{$a}{_order} <=> $plug_hash->{$b}{_order}} keys %$plug_hash){
-        next if exists $plugin_hand{$plug};
-        my $plug_file = $plug;
-        $plug_file =~ s|::|/|g;
-        eval { require $plug_file.'.pm' };
-        if ($@){
-            warn("Could not load $plug. Skipping it. ($@)");
-            next;
-        }
-        my $hand = eval { ${plug}->new() };
-        if ($@){
-            warn("Could not instanciate $plug. Skipping it. ($@)");
-            next;
-        }
-        $plugin_hand{$plug} = $hand;
-        push @plugin_list,$plug;
-    }
-    $self->plugin_hand(\%plugin_hand);
-    $self->plugin_list(\@plugin_list);
+our %allow = (
+    config => 1,
+    start => 1,
+    stop => 1,
+    poll => 1,
+    load => 1,
+);
+
+sub allow_rpc_access {
+    my $self = shift;
+    my $method = shift;
+    return $allow{$method};
 }
 
 =head2 config()
@@ -93,10 +65,11 @@ sub config {
     for my $p (@{$self->plugin_list}){
         push @plugs, { plugin => $p, config => $self->plugin_hand->{$p}->get_config() };
     }
+    my $gcfg = $self->controller->app->cfg->{General};
     return {
         plugins => \@plugs,
-        admin_name => $self->cfg->{General}{admin_name},
-        admin_link => $self->cfg->{General}{admin_link}
+        admin_name => $gcfg->{admin_name},
+        admin_link => $gcfg->{admin_link}
     };
 }
 
@@ -152,7 +125,7 @@ sub start {
         $self->plugin_hand->{$plugin}->start_instance($tmp_prefix.$handle,$args);
         exit 0;
     } else {
-        $self->_mojo_stash->{'rr.session'}->param($handle,$pid);
+        $self->controller->stash('rr.session')->param($handle,$pid);
         # start by clearing the table
         remOcular::Plugin->append_data($tmp_prefix.$handle,"#CLEAR\n");
         return { handle => $handle,
@@ -170,7 +143,7 @@ returns a hash/map
 sub stop {
     my $self = shift;
     my $handle = shift;
-    my $pid = $self->_mojo_stash->{'rr.session'}->param($handle);
+    my $pid = $self->controller->stash('rr.session')->param($handle);
     if ($pid){ 
         my $running = 0;
         for (my $i = 0; $i < 40; $i++){
@@ -179,7 +152,7 @@ sub stop {
             usleep 100000;
         }
         unlink $tmp_prefix.$handle;
-        $self->_mojo_stash->{'rr.session'}->clear($handle);
+        $self->controller->stash('rr.session')->clear($handle);
         if ($running > 0){
             die mkerror(113, "Process $pid did not die within the 4 seconds I waited.");
         }        
@@ -199,7 +172,7 @@ sub poll {
     my $handles = shift;
     my %data;
     for my $handle (@$handles){
-        my $pid = $self->_mojo_stash->{'rr.session'}->param($handle);
+        my $pid = $self->controller->stash('rr.session')->param($handle);
         if (not $pid){
             # no data from this source ...
             push @{$data{$handle}},['#error',"Handle $handle not registerd in this session"];

@@ -30,25 +30,29 @@ uses L<Storable> as its on-disk format.
 
 =cut
 
-our $VERSION   = '0.2';
+our $VERSION   = '0.3';
 
-use base qw(Mojo::Base);
-
+use Mojo::Base -base;
 use Carp;
 
-__PACKAGE__->attr('id');
 my $user = (getpwuid($<))[0];
-__PACKAGE__->attr('path','/tmp/remocular_session_'.$user);
-__PACKAGE__->attr('clean_interval',600);
-__PACKAGE__->attr('lock_timeout',1.5);
-__PACKAGE__->attr('session_timeout',300);
+
+has 'id' => sub {
+  my $md5 = new Digest::MD5();
+  $md5->add(rand());
+  return $md5->hexdigest();         
+};
+
+has 'path' => '/tmp/remocular_session_'.$user;
+has 'clean_interval' => 600;
+has 'lock_timeout' => 1.5;
+has 'session_timeout' => 300;
 
 
 =head1 METHODS
 
-=over
 
-=item my $sess = remOcular::Session->new(id=>?)
+=head2 my $sess = remOcular::Session->new(id=>?)
 
 The 'new' method expects the session id as input. If no id is provided, a new id gets created.
 
@@ -56,11 +60,6 @@ The 'new' method expects the session id as input. If no id is provided, a new id
 
 sub new {
     my $self = shift->SUPER::new(@_);
-    if (not defined $self->id){
-        my $md5 = new Digest::MD5();
-        $md5->add(rand());
-        $self->id($md5->hexdigest());
-    }
     $self->{_file} = $self->path.'/'.$self->id.'.session';
     _mkdirp($self->path);
     my $clean_check = $self->path.'/LAST_SESSSION_CLEAN';
@@ -147,7 +146,7 @@ sub _exclusive_data_op {
     }
 }
 
-=item my $value = $sess->param($key); $sess->param($key,$value)
+=head2 my $value = $sess->param($key); $sess->param($key,$value)
 
 Set and get a session parameter. This command acts on the disk copy of the
 session. Locking makes this race-save in contrast to CGI::Session.
@@ -175,7 +174,7 @@ sub param {
     return $self->{_data}{$key};
 }
 
-=item $sess->clear([$key1,$key2]) or $sess->clear($key)
+=head2 $sess->clear([$key1,$key2]) or $sess->clear($key)
 
 Clear one or several properties from the session.
 
@@ -198,7 +197,7 @@ sub clear {
     },1);
 }
 
-=item $sess->delete();
+=head2 $sess->delete();
 
 Delete the session completely.
 
@@ -209,7 +208,7 @@ sub delete {
     unlink $self->{_file};
 }
 
-=item $sess->id();
+=head2 $sess->id();
 
 Return the id.
 
@@ -223,8 +222,6 @@ sub id {
 1;
 
 __END__
-
-=back
 
 =head1 COPYRIGHT
 

@@ -32,10 +32,9 @@ qx.Class.define("remocular.ui.Menu", {
         });
 
         this.moveTo(-33, -50);
-
+          
         var mP = this.__menuPopup = new qx.ui.popup.Popup(new qx.ui.layout.VBox(0));
         mP.moveTo(5, 5);
-
         mP.set({
             padding : [ 0, 0, 0, 0 ],
             width   : 140
@@ -53,7 +52,7 @@ qx.Class.define("remocular.ui.Menu", {
         }, this);
 
         this.addListener('click', function(e) {
-            mP.setVisibility('visible');
+            mP.show();
         }, this);
 
         remocular.util.Server.getInstance().callAsync(qx.lang.Function.bind(this.__fillMenu, this), 'config');
@@ -63,6 +62,7 @@ qx.Class.define("remocular.ui.Menu", {
         this.__pluginList = {};
 
         this.addListenerOnce('appear', function(e) {
+            this.debug('got the button');
             var startEl = this.getContainerElement().getDomElement();
 
             var show = new qx.fx.effect.core.Move(startEl).set({

@@ -1,11 +1,10 @@
-#!/usr/bin/perl -w
+#!/usr/bin/env perl
 
 use strict;
 use warnings;
-use v5.8;
 use FindBin;
 use lib "$FindBin::Bin/../lib";
-use lib "$FindBin::Bin/../../thirdparty/lib";
+use lib "$FindBin::Bin/../../thirdparty/lib/perl5";
 use Mojolicious::Commands;
 use remOcular::MojoApp;
 

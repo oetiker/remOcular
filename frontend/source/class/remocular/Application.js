@@ -95,7 +95,8 @@ qx.Class.define("remocular.Application", {
             });
 
             root.add(copy, { edge : 'south' });
-            new remocular.ui.Menu();
+            var menu = new remocular.ui.Menu();
+            menu.show();
         }
     }
 });
