@@ -5,6 +5,7 @@
 
 for module in \
     MojoX::Dispatcher::Qooxdoo::Jsonrpc \
+    Mojo::Server::FastCGI \
     Config::Grammar \
     IPC::Run \
 ; do
