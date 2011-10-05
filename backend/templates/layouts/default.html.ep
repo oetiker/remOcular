@@ -1,4 +1,0 @@
-<!doctype html><html>
-    <head><title>Welcome</title></head>
-    <body><%== content %></body>
-</html>

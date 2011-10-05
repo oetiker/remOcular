@@ -1,4 +1,4 @@
-package remOcular::JsonRpcService;
+package remOcular::Service;
 use strict;
 use POSIX qw(setsid sigprocmask);
 use Fcntl ':flock'; # import LOCK_* constants 

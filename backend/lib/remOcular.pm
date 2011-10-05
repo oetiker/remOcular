@@ -1,8 +1,8 @@
-package remOcular::MojoApp;
+package remOcular;
 use strict;
 use warnings;
 
-use remOcular::JsonRpcService;
+use remOcular::Service;
 use remOcular::Config;
 use remOcular::Session;
 
@@ -46,7 +46,7 @@ sub startup {
     my ($plugin_hand,$plugin_list) = $self->load_plugins();
 
     my $services = {
-        remocular => new remOcular::JsonRpcService(
+        remocular => new remOcular::Service(
             plugin_hand => $plugin_hand,
             plugin_list => $plugin_list,
         )

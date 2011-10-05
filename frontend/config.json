@@ -32,7 +32,6 @@
   "let" :
   {
     "APPLICATION"  : "remocular",
-//    "QOOXDOO_PATH" : "qooxdoo",
     "QXTHEME"      : "remocular.theme.Theme",
     "API_EXCLUDE"  : ["qx.*"],
     "LOCALES"      : [ "en", "de" ],
@@ -51,6 +50,13 @@
           "files" : [ "resource/excanvas.js" ]
        }
      },
+   "libraries" : {
+       "library" : [
+       {
+         "manifest"   : "contrib://CanvasCell/trunk/Manifest.json"
+       }]
+     },
+
      "pretty" :
      {
         "pretty-print" : 

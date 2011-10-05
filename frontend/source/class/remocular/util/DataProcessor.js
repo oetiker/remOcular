@@ -261,29 +261,29 @@ qx.Class.define('remocular.util.DataProcessor', {
                         break;
 
                     case 'TWOBARPLOT':
-                        var plotter = new remocular.ui.table.cellplotter.TwoBar({
+                        var plotter = new canvascell.plotter.TwoBar({
                             mainbarFill    : p.mainbar.fill,
                             mainbarBorder  : p.mainbar.border,
                             stackbarFill   : p.stackbar.fill,
                             stackbarBorder : p.stackbar.border
                         });
 
-                        r = new remocular.ui.table.cellrenderer.Canvas(plotter);
+                        r = new canvascell.Renderer(plotter);
                         this.__renderer.push(r);
                         break;
 
                     case 'BARPLOT':
-                        var plotter = new remocular.ui.table.cellplotter.Bar({
+                        var plotter = new canvascell.plotter.Bar({
                             fill   : p.fill,
                             border : p.border
                         });
 
-                        r = new remocular.ui.table.cellrenderer.Canvas(plotter);
+                        r = new canvascell.Renderer(plotter);
                         this.__renderer.push(r);
                         break;
 
                     case 'SPARKLINE':
-                        var plotter = new remocular.ui.table.cellplotter.SparkLine({
+                        var plotter = new canvascell.plotter.SparkLine({
                             lineWidth   : p.line_width || 0.5,
                             lineColor   : p.line_color || '#2f2',
                             sparkRadius : p.spark_radius || 1,
@@ -292,7 +292,7 @@ qx.Class.define('remocular.util.DataProcessor', {
                             depth       : p.depth || 30
                         });
 
-                        r = new remocular.ui.table.cellrenderer.Canvas(plotter);
+                        r = new canvascell.Renderer(plotter);
                         this.__renderer.push(r);
                         break;
 
