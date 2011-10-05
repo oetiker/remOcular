@@ -18,5 +18,5 @@ AUTOMAKE_OPTIONS =  foreign
 
 SUBDIRS = frontend backend
 
-EXTRA_DIST = setup/build-perl-modules.sh setup/sdbs.inc
+EXTRA_DIST = COPYRIGHT LICENSE CHANGES setup/build-perl-modules.sh setup/sdbs.inc
 

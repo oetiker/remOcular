@@ -1,0 +1,17 @@
+*~
+Makefile
+Makefile.in
+config.status
+configure
+config.log
+aclocal.m4
+DEADJOE
+autom4te.cache/
+conftools/
+frontend/cache/
+frontend/source/script/
+remocular-*.tar.gz
+thirdparty/
+backend/public/index.html
+backend/public/resource/
+backend/public/script/

@@ -14,8 +14,18 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, USA.
 
+AUTOMAKE_OPTIONS =  foreign
 
-EXTRA_DIST = remocular.cfg.dist
 
-etcdir = $(sysconfdir)
-etc_DATA = $(EXTRA_DIST)
+RES =  $(shell find resource -type f)        
+
+EXTRA_DIST = script/remocular.js index.html $(RES)
+
+webappdir = $(prefix)/public
+nobase_webapp_DATA = $(EXTRA_DIST)
+
+script/remocular.js: $(shell find ../../frontend/source/class/remocular -name "*.js")
+	cd ../../frontend && $(QOOXDOO_PATH)/tool/bin/generator.py -m QOOXDOO_PATH:$(QOOXDOO_PATH) -m CACHE:./cache -m BUILD_PATH:../backend/public build
+ 
+
+

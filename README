@@ -10,7 +10,6 @@ remOcular -  your eyes in the cloud
 
 Author:  Tobi Oetiker <tobi@oetiker.ch>
 Version: #VERSION#
-Date:    #DATE#
 
  http://www.remocular.org
 
@@ -33,20 +32,17 @@ See http://www.remocular.org for more information
 INSTALLATION
 ------------
 
-You can use the installer.sh script to setup remOcular
+Use the regular
 
- ./installer.sh /opt/remocular
+ ./configure
+ make
+ make install
 
-This will place the server part of the installation into
-/opt/remocular. Remocular requires a few extra perl modules to run:
-Mojlicious, Config::Grammar and IPC::Run.  The installer will check if the
-modules are present on your system.  If not, it will download them and
-install a LOCAL-COPY into /opt/remocular
+aproach. The configure script will check if the reuqired perl modules are
+installed. If they are missing, it will tell you how to install them.
 
-* The installer does NOT modify any files on your system. 
-* All installation happens in /opt/remocular
-* The installer can be run as a normal user as long as it can write
-  into the installation directoreis.
+The installer can be run as a normal user as long as it can write
+into the installation directoreis.
 
 The remOcular backend server can run in a wide variety of ways: FastCGI,
 mod_perl, psgi and CGI.  RemOcular also has a built in webserver so that it
@@ -54,7 +50,6 @@ can run standalone.
 
 Once the installer has completed its task it will show some additional
 installation information.
-
 
 DEVELOPEMENT
 ------------
@@ -65,12 +60,40 @@ framework. See http://www.mojolicious.org for more information.
 The GUI is written in pure javascript using the qooxdoo toolkit.  
 See http://www.qooxdoo.org for more information.
 
+If you want to start hacking the gui, get a copy of the qooxdoo-sdk from
+www.qooxdoo.org and specify its location when running configure:
+
+ ./configure --with-qooxdoo-path=/opt/qooxdoo-1.5-sdk
+
+And you may want to get a copy of the required perl modules into place by
+running
+
+ ./setup/build-perl-modules.sh backend/thirdparty
+
+To build the source version of remOcular frontend, run
+
+ cd frontend
+ make
+
+And then access it via the built in webserver:
+
+ cd backend/bin
+ env REMOCULAR_CONF=../etc/remocular.cfg.dist ./remocular.pl daemon 
+
+It might also be a good idea to fork smokeping on github and work within
+your copy, so that you can easily feed back your changes to the master
+version. Run
+
+ ./autogen.sh
+
+in your git tree, to build the configure script and the Makefile.in files.
+
 If you want to enhance remOcular with additional plugins, you only have to
-change the server side.  No JavaScript programming is required.  See the
-existing plugins for inspiration and add the new plugin to the remocular.cfg
-file.  There is also a plugin testing tool in the bin directory to help you
-test plugins without going through the webserver.
+change the server side.  No JavaScript/Qooxdoo programming is required.  See
+the existing plugins for inspiration and add the new plugin to the
+remocular.cfg file.  There is also a plugin testing tool in the bin
+directory to help you test plugins without going through the webserver.
 
-Get the source on https://github.com/oetiker/remOcular
+The Git repo is on https://github.com/oetiker/remOcular
 
-Tobi Oetiker <tobi@oetiker.ch>, #DATE#
+Tobi Oetiker <tobi@oetiker.ch>

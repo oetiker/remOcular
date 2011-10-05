@@ -1,3 +1,7 @@
+0.9.0 - 2011-10-05 - Tobi Oetiker <tobi@oetiker.ch>
+-------------------------------------------------
+* Added Autoconf
+
 0.8 - 2010-12-01 - Tobi Oetiker <tobi@oetiker.ch>
 -------------------------------------------------
-Initial Release
+* Initial Release

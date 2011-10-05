@@ -16,15 +16,9 @@
 
 AUTOMAKE_OPTIONS =  foreign
 
-SUBDIRS = bin etc lib
+SUBDIRS = bin etc lib public
 
-WEBAPP =  $(exec find public -type f)
-
-EXTRA_DIST = $(wildcard t/*.t) $(WEBAPP)
-
-webappdir = $(prefix)/public
-nobase_webapp_DATA = $(WEBAPP)
-
+EXTRA_DIST = $(wildcard t/*.t) 
 
 dist-hook:
 	$(PERL) -i -p -e '"$(PACKAGE_VERSION)" =~ /(\d+)\.(\d+)\.(\d+)/ and $$v = sprintf("%d.%03d%03d",$$1,$$2,$$3) and s/^\$$VERSION\s+=\s+".+?"/\$$VERSION = "$$d"/'  $(distdir)/lib/remOcular.pm

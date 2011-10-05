@@ -22,8 +22,8 @@ AC_PREREQ([2.59])
 AC_CONFIG_AUX_DIR(conftools)
 AC_CANONICAL_TARGET
 m4_version_prereq(2.60, [AC_USE_SYSTEM_EXTENSIONS], [#])
-AM_INIT_AUTOMAKE(1.9)
-AM_MAINTAINER_MODE
+# need this to allow long path names
+AM_INIT_AUTOMAKE([1.9 tar-ustar])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 AC_PREFIX_DEFAULT(/opt/remocular-$PACKAGE_VERSION)
@@ -51,7 +51,9 @@ HTDOCSDIR=${prefix}/htdocs
 AC_ARG_WITH(htdocs-dir,[  --with-htdocs-dir=[DIR]    Where to install htdocs [PREFIX/htdocs]], [HTDOCSDIR=$withval])
 AC_SUBST(HTDOCSDIR)
 
-#AC_ARG_WITH(perl5lib,  [  --with-perl5lib=[A:B:C]  Colon separated list of perl library directories], [PERL5LIB=$withval])
+AC_ARG_WITH(qooxdoo-path,[  --with-qooxdoo-path=[DIR]    Where can we find the qooxdoo sdk (required to rebuild the web ui) ], [QOOXDOO_PATH=$withval])
+AC_SUBST(QOOXDOO_PATH)
+
 
 AC_ARG_VAR(PERL5LIB,   [Colon separated list of perl library directories])
 
@@ -88,7 +90,7 @@ if test "$enable_pkgonly" != yes; then
    Now you can install local copies of the missing modules 
    by running
 
-     ./install/build_missing_perlmodules.sh ${prfx}/thirdparty
+     ./setup/build-perl-modules.sh ${prfx}/thirdparty
 
 NOTES
       exit 1
@@ -97,7 +99,15 @@ NOTES
 fi
 
 
-AC_CONFIG_FILES([Makefile backend/Makefile backend/bin/Makefile backend/lib/Makefile backend/etc/Makefile])
+AC_CONFIG_FILES([
+	Makefile
+	backend/Makefile
+	backend/bin/Makefile
+	backend/lib/Makefile
+	backend/etc/Makefile
+	backend/public/Makefile
+	frontend/Makefile
+	])
 
 AC_SUBST(VERSION)
 
