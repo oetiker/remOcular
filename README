@@ -44,12 +44,21 @@ installed. If they are missing, it will tell you how to install them.
 The installer can be run as a normal user as long as it can write
 into the installation directoreis.
 
-The remOcular backend server can run in a wide variety of ways: FastCGI,
-mod_perl, psgi and CGI.  RemOcular also has a built in webserver so that it
-can run standalone.
 
-Once the installer has completed its task it will show some additional
-installation information.
+CONFIGURATION
+-------------
+In the PREFIX/etc directory you find a configuration skeleton. Adjust it to
+your needs.
+
+RUNNING
+-------
+
+Use remocular.fcgi.dist in PREFIX/htdocs as a template to create your
+fastcgi script.
+
+You can also run remocular standalone:
+
+  PREFIX/bin/remocular.pl daemon
 
 DEVELOPEMENT
 ------------
@@ -78,7 +87,7 @@ To build the source version of remOcular frontend, run
 And then access it via the built in webserver:
 
  cd backend/bin
- env REMOCULAR_CONF=../etc/remocular.cfg.dist ./remocular.pl daemon 
+ env QX_SRC_MODE=1 REMOCULAR_CONF=../etc/remocular.cfg.dist ./remocular.pl daemon 
 
 It might also be a good idea to fork smokeping on github and work within
 your copy, so that you can easily feed back your changes to the master
