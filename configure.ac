@@ -43,20 +43,21 @@ else
 fi
 
 AC_ARG_ENABLE(pkgonly,
-        [AC_HELP_STRING([--enable-pkgonly],
-                        [Skip all checking])])
+        AC_HELP_STRING([--enable-pkgonly],
+                        [Skip all checking]))
 AC_SUBST(enable_pkgonly)
 
 HTDOCSDIR=${prefix}/htdocs
-AC_ARG_WITH(htdocs-dir,[  --with-htdocs-dir=[DIR]    Where to install htdocs [PREFIX/htdocs]], [HTDOCSDIR=$withval])
+AC_ARG_WITH(htdocs-dir,AC_HELP_STRING([--with-htdocs-dir=[DIR]],[Where to install htdocs [PREFIX/htdocs]]]), [HTDOCSDIR=$withval])
 AC_SUBST(HTDOCSDIR)
 
-AC_ARG_WITH(qooxdoo-path,[  --with-qooxdoo-path=[DIR]    Where can we find the qooxdoo sdk (required to rebuild the web ui) ], [QOOXDOO_PATH=$withval])
+QOOXDOO_PATH=no
+AC_ARG_WITH(qooxdoo-sdk,AC_HELP_STRING([--with-qooxdoo-sdk=[DIR]],[Where can we find the qooxdoo sdk (required to rebuild the web ui)]]), [QOOXDOO_PATH=$withval])
 AC_SUBST(QOOXDOO_PATH)
 
+AM_CONDITIONAL(BUILD_QOOXDOO_APP,[test $QOOXDOO_PATH != no])
 
 AC_ARG_VAR(PERL5LIB,   [Colon separated list of perl library directories])
-
 AC_SUBST(PERL5LIB)
 
 # Check the necessary Perl modules

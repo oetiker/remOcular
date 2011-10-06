@@ -16,16 +16,18 @@
 
 AUTOMAKE_OPTIONS =  foreign
 
-
-RES =  $(shell find resource -type f)        
+RES =  $(shell test -d resource && find resource -type f)        
 
 EXTRA_DIST = script/remocular.js index.html $(RES)
 
 webappdir = $(prefix)/public
 nobase_webapp_DATA = $(EXTRA_DIST)
 
+if BUILD_QOOXDOO_APP
+
 script/remocular.js: $(shell find ../../frontend/source/class/remocular -name "*.js")
 	cd ../../frontend && $(QOOXDOO_PATH)/tool/bin/generator.py -m QOOXDOO_PATH:$(QOOXDOO_PATH) -m CACHE:./cache -m BUILD_PATH:../backend/public build
  
 
+endif
 
