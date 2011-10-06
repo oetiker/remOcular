@@ -82,12 +82,12 @@ running
 To build the source version of remOcular frontend, run
 
  cd frontend
- make
+ make source
 
 And then access it via the built in webserver:
 
  cd backend/bin
- env QX_SRC_MODE=1 REMOCULAR_CONF=../etc/remocular.cfg.dist ./remocular.pl daemon 
+ env QX_SRC_MODE=1 MOJO_LOG_LEVEL=debug REMOCULAR_CONF=../etc/remocular.cfg.dist ./remocular.pl daemon 
 
 It might also be a good idea to fork smokeping on github and work within
 your copy, so that you can easily feed back your changes to the master
