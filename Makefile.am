@@ -20,3 +20,9 @@ SUBDIRS = frontend backend
 
 EXTRA_DIST = COPYRIGHT LICENSE CHANGES setup/build-perl-modules.sh setup/sdbs.inc
 
+YEAR := $(shell date +%Y)
+DATE := $(shell date +%Y-%m-%d)
+
+dist-hook:
+	$(PERL) -i -p -e 's/#VERSION#/$(PACKAGE_VERSION)/g;s/#YEAR#/$(YEAR)/g;s/#DATE#/$(DATE)/g;'  $(distdir)/README $(distdir)/COPYRIGHT
+        

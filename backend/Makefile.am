@@ -20,9 +20,12 @@ SUBDIRS = bin etc lib public
 
 EXTRA_DIST = $(wildcard t/*.t) 
 
+YEAR := $(shell date +%Y)
+DATE := $(shell date +%Y-%m-%d)
+
 dist-hook:
-	$(PERL) -i -p -e '"$(PACKAGE_VERSION)" =~ /(\d+)\.(\d+)\.(\d+)/ and $$v = sprintf("%d.%03d%03d",$$1,$$2,$$3) and s/^\$$VERSION\s+=\s+".+?"/\$$VERSION = "$$d"/'  $(distdir)/lib/remOcular.pm
-	$(PERL) -i -p -e "s/#VERSION#/$(PACKAGE_VERSION)/g;" $(distdir)/public/script/remocular.js
+	$(PERL) -i -p -e '"$(PACKAGE_VERSION)" =~ /(\d+)\.(\d+)\.(\d+)/ and $$v = sprintf("%d.%03d%03d",$$1,$$2,$$3) and s/^\$$VERSION\s+=\s+".+?"/\$$VERSION = "$$d"/;'  $(distdir)/lib/remOcular.pm
+	$(PERL) -i -p -e "s/#VERSION#/$(PACKAGE_VERSION)/g;s/#YEAR#/$(YEAR)/g;" $(distdir)/public/script/remocular.js
 
 install-data-local:
 	mkdir -p $(DESTDIR)$(HTDOCSDIR)

@@ -16,8 +16,7 @@
 
 AUTOMAKE_OPTIONS =  foreign
 
-EXTRA_DIST = config.json generate.sh Manifest.json  readme.txt source/index.html $(wildcard source/class/remocular/*.js source/class/remocular/util/*.js source/class/remocular/util/aggregator/*.js source/class/remocular/theme/*.js source/class/remocular/ui/table/*.js source/class/remocular/ui/table/model/*.js source/class/remocular/ui/form/*.js source/class/remocular/ui/form/renderer/*.js source/translation/*.po source/resource/remocular/*.png   source/resource/remocular/*.gif)
-
+EXTRA_DIST = config.json Manifest.json  readme.txt source/index.html $(shell find source/class/remocular/ -name "*.js") $(wildcard source/translation/*.po source/resource/remocular/*.png  source/resource/remocular/*.gif)
 
 if BUILD_QOOXDOO_APP
 
