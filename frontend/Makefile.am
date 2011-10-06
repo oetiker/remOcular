@@ -21,14 +21,21 @@ EXTRA_DIST = config.json generate.sh Manifest.json  readme.txt source/index.html
 
 if BUILD_QOOXDOO_APP
 
-.PHONY: source
+.PHONY: source lint pretty
 
 source: source/script/remocular.js
 
+lint:
+	$(QOOXDOO_PATH)/tool/bin/generator.py -m QOOXDOO_PATH:$(QOOXDOO_PATH) -m CACHE:./cache lint
+
+pretty:
+	$(QOOXDOO_PATH)/tool/bin/generator.py -m QOOXDOO_PATH:$(QOOXDOO_PATH) -m CACHE:./cache pretty
+	
 source/script/remocular.js: $(shell find source/class/remocular -name "*.js")
 	$(QOOXDOO_PATH)/tool/bin/generator.py -m QOOXDOO_PATH:$(QOOXDOO_PATH) -m CACHE:./cache source
 
 endif
 
 clean-local:
-	test -d ./cache && rm -r ./cache
+	test -d ./cache && rm -r ./cache || true
+	test -f source/script/remocular.js && rm source/script/* || true
