@@ -18,7 +18,7 @@
 AUTOMAKE_OPTIONS =  foreign
 
 
-PM :=  $(wildcard *.pm remOcular/*.pm remOcular/plugins/*.pm) 
+PM :=  $(shell find -name "*.pm") 
 
 EXTRA_DIST = $(PM)
 
