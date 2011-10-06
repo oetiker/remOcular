@@ -14,14 +14,26 @@ qx.Theme.define("remocular.theme.Font", {
         hugeTitle : {
             size       : 130,
             lineHeight : 1.0,
-            family     : qx.bom.client.Platform.MAC ? [ "Lucida Grande" ] : qx.bom.client.System.WINVISTA ? [ "Segoe UI", "Candara" ] : [ "Tahoma", "Liberation Sans", "Arial" ],
-            bold       : true
+            family : qx.core.Environment.get("os.name") == "osx" ?
+                [ "Lucida Grande" ] :
+                ((qx.core.Environment.get("os.name") == "win" &&
+                (qx.core.Environment.get("os.version") == "7" ||
+                qx.core.Environment.get("os.version") == "vista"))) ?
+                [ "Segoe UI", "Candara" ] :
+                [ "Tahoma", "Liberation Sans", "Arial", "sans-serif" ],
+	    bold: true
         },
 
         smallTitle : {
             size       : 20,
             lineHeight : 1.0,
-            family     : qx.bom.client.Platform.MAC ? [ "Lucida Grande" ] : qx.bom.client.System.WINVISTA ? [ "Segoe UI", "Candara" ] : [ "Tahoma", "Liberation Sans", "Arial" ],
+            family : qx.core.Environment.get("os.name") == "osx" ?
+                [ "Lucida Grande" ] :
+                ((qx.core.Environment.get("os.name") == "win" &&
+                (qx.core.Environment.get("os.version") == "7" ||
+                qx.core.Environment.get("os.version") == "vista"))) ?
+                [ "Segoe UI", "Candara" ] :
+                [ "Tahoma", "Liberation Sans", "Arial", "sans-serif" ],
             bold       : true
         }
     }
