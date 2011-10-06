@@ -23,3 +23,10 @@ EXTRA_DIST = $(wildcard t/*.t)
 dist-hook:
 	$(PERL) -i -p -e '"$(PACKAGE_VERSION)" =~ /(\d+)\.(\d+)\.(\d+)/ and $$v = sprintf("%d.%03d%03d",$$1,$$2,$$3) and s/^\$$VERSION\s+=\s+".+?"/\$$VERSION = "$$d"/'  $(distdir)/lib/remOcular.pm
 	$(PERL) -i -p -e "s/#VERSION#/$(PACKAGE_VERSION)/g;" $(distdir)/public/script/remocular.js
+
+install-data-local:
+	mkdir -p $(DESTDIR)$(HTDOCSDIR)
+	echo "#!/bin/sh" > $(DESTDIR)$(HTDOCSDIR)/index.fcgi.dist
+	echo "export REMOCULAR_CONF=$(prefix)/etc/remocular.cfg" >> $(DESTDIR)$(HTDOCSDIR)/index.fcgi.dist
+	echo "$(prefix)/bin/remocular.pl fastcgi" >> $(DESTDIR)$(HTDOCSDIR)/index.fcgi.dist
+	chmod +x $(DESTDIR)$(HTDOCSDIR)/smokeping.fcgi.dist
