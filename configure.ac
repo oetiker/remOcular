@@ -20,17 +20,17 @@
 AC_INIT([remOcular],[0.9.0],[tobi@oetiker.ch])
 AC_PREREQ([2.59])
 AC_CONFIG_AUX_DIR(conftools)
-AC_CANONICAL_TARGET
+# AC_CANONICAL_TARGET
 m4_version_prereq(2.60, [AC_USE_SYSTEM_EXTENSIONS], [#])
 # need this to allow long path names
-AM_INIT_AUTOMAKE([1.9 tar-ustar])
+AM_INIT_AUTOMAKE([1.9 tar-ustar foreign])
+
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 AC_PREFIX_DEFAULT(/opt/remocular-$PACKAGE_VERSION)
 
 AC_ARG_VAR(PERL,   [Path to local perl binary])
 AC_PATH_PROG(PERL, perl, no)
-AC_PATH_PROGS(NROFF, [gnroff nroff])
 
 AC_ARG_VAR(GMAKE,   [Path to local GNU Make binary])
 AC_PATH_PROGS(GMAKE, [gnumake gmake make])
@@ -116,14 +116,14 @@ AC_OUTPUT
 
         cat <<NOTES
 
-** Ready to install Smokeping ******************************
+** Ready to install remOcular ******************************
    
    Settings:
 
      PERL5LIB = ${PERL5LIB:-"not set"}
      PERL = $PERL
 
-   The Smokeping Makefiles use GNU make functionality.
+   The remOcular Makefiles uses GNU make functionality.
    Continue installation with
 
      $GMAKE install

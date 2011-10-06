@@ -29,4 +29,4 @@ install-data-local:
 	echo "#!/bin/sh" > $(DESTDIR)$(HTDOCSDIR)/index.fcgi.dist
 	echo "export REMOCULAR_CONF=$(prefix)/etc/remocular.cfg" >> $(DESTDIR)$(HTDOCSDIR)/index.fcgi.dist
 	echo "$(prefix)/bin/remocular.pl fastcgi" >> $(DESTDIR)$(HTDOCSDIR)/index.fcgi.dist
-	chmod +x $(DESTDIR)$(HTDOCSDIR)/smokeping.fcgi.dist
+	chmod +x $(DESTDIR)$(HTDOCSDIR)/index.fcgi.dist
