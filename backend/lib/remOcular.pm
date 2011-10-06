@@ -33,7 +33,7 @@ sub startup {
         my $self = shift;
         my $rr_session;        
         if (my $id = $self->session('id')){
-           warn "* re use id $id\n";
+           $self->app->log->debug("use id $id");
            $rr_session = remOcular::Session->new('id' => $id);
         }
         else {
@@ -69,12 +69,12 @@ sub load_plugins {
         $plug_file =~ s|::|/|g;
         eval { require $plug_file.'.pm' };
         if ($@){
-            warn("Could not load $plug. Skipping it. ($@)");
+            $self->app->log->warn("Could not load $plug. Skipping it. ($@)");
             next;
         }
         my $hand = eval { ${plug}->new() };
         if ($@){
-            warn("Could not instanciate $plug. Skipping it. ($@)");
+            $self->app->log->warn("Could not instanciate $plug. Skipping it. ($@)");
             next;
         }
         $plugin_hand{$plug} = $hand;
