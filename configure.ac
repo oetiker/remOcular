@@ -17,7 +17,7 @@
 #
 
 
-AC_INIT([remOcular],[0.9.0],[tobi@oetiker.ch])
+AC_INIT([remOcular],[0.10.0],[tobi@oetiker.ch])
 AC_PREREQ([2.59])
 AC_CONFIG_AUX_DIR(conftools)
 # AC_CANONICAL_TARGET
@@ -118,10 +118,6 @@ fi
 AC_CONFIG_FILES([
 	Makefile
 	backend/Makefile
-	backend/bin/Makefile
-	backend/lib/Makefile
-	backend/etc/Makefile
-	backend/public/Makefile
 	frontend/Makefile
 	])
 
