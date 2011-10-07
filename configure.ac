@@ -32,6 +32,21 @@ AC_PREFIX_DEFAULT(/opt/remocular-$PACKAGE_VERSION)
 AC_ARG_VAR(PERL,   [Path to local perl binary])
 AC_PATH_PROG(PERL, perl, no)
 
+ac_perl_version="5.10.1"
+
+if test "x$PERL" != "x"; then
+  AC_MSG_CHECKING(for perl version greater than or equal to $ac_perl_version)
+  $PERL -e "use $ac_perl_version;" >/dev/null 2>&1
+  if test $? -ne 0; then
+    AC_MSG_RESULT(no);
+    AC_MSG_ERROR(at least version 5.10.1 is required to run remocular)
+  else
+    AC_MSG_RESULT(ok);
+  fi
+else
+  AC_MSG_ERROR(could not find perl)
+fi
+
 AC_ARG_VAR(GMAKE,   [Path to local GNU Make binary])
 AC_PATH_PROGS(GMAKE, [gnumake gmake make])
 
