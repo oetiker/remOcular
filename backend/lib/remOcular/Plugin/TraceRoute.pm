@@ -9,11 +9,11 @@ remOcular::Plugin::TraceRoute - TraceRoute Interface
 
 =head1 SYNOPSIS
 
- use remOcular::Plugin::Top
+ use remOcular::Plugin::TraceRoute
 
 =head1 DESCRIPTION
 
-Run the top process monitor
+Run the traceroute network monitor
 
 =cut
 
