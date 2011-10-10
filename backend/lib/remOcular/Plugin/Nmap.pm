@@ -19,8 +19,8 @@ Run the Nmap security scanner
 
 use Carp;
 use vars qw($VERSION);
-'$Revision: 363 $ ' =~ /Revision: (\S*)/;
-my $VERSION = "0.$1";
+'$Revision: 1 $ ' =~ /Revision: (\S*)/;
+my $VERSION = "0.9.1.$1";
 
 sub get_config {
     my $self = shift;
@@ -31,21 +31,29 @@ sub get_config {
         form=> [
             {
                 type=> 'TextField',
-                label=> 'network',
-                name=> 'network',
+                label=> 'Host',
+                name=> 'host',
                 required=> 1,
             },
             {
                 type=> 'SelectBox',
-                label=> 'technique',
-                name=> 'technique',
-                data=> [qw(default -sS -sT -sA -sW -sM -sU -sN -sF -sX)],
+                label=> 'Scan Technique',
+                name=> 'scan technique',
+                data=> [ 'default',
+                         'TCP SYN',
+                         'TCP Connect',
+                         'TCP ACK',
+                         'TCP Window',
+                         'TCP Maimon',
+                         'UDP Scan',
+                         'TCP Null',
+                         'TCP FIN',
+                         'TCP Xmax' ],
             },
             {
-                type=> 'Infos',
-                label=> 'infos',
-                name=> 'infos',
-                data=> [qw(default -sV)],
+                type=> 'TextField',
+                label=> 'Ports',
+                name=> 'ports',
             },
             {
                 type=> 'SelectBox',
@@ -53,6 +61,12 @@ sub get_config {
                 name=>  'iplevel',
     	        initial => 'IPv4',
                 data=> [qw(IPv4 IPv6)],
+            },
+            {
+                type=> 'Infos',
+                label=> 'Info',
+                name=> 'infos',
+                data=> [qw(default light full)],
             },
         ],
         byline => qq{Version $VERSION, 2011-10-07, by Roman Plessl},
@@ -68,33 +82,33 @@ sub check_params {
     my $self = shift;
     my $params = shift;
     my $error;
-    if (not defined $params->{network}){
-        return "No network or host defined";
+    if (not defined $params->{host}){
+        return "Error: host or network not defined";
     }
     return {
         table => [
-            { 
+            {
                 label    => 'port',
                 tooltip  => 'port',
                 width    => 3,
             },
-            { 
+            {
                 label    => 'state',
                 tooltip  => 'state',
                 width    => 1,
             },
-            { 
+            {
                 label    => 'service',
                 tooltip  => 'service',
                 width    => 3,
             },
-            { 
+            {
                 label    => 'version',
                 tooltip  => 'version',
                 width    => 3,
             },
         ],
-        title => "Nmap to $params->{network}",
+        title => "Nmap to $params->{host}",
     }
 }
 
@@ -109,11 +123,30 @@ sub start_instance {
         $self->append_data($outfile,"#ERROR\t$bin not found\n");
         return;
     }
-    my @cmd = ( $bin,'-sV');
+
+    my @cmd = ( $bin );
     push @cmd, ($params->{iplevel} =~ /IPv6/ ? '-6' : '');
-    push @cmd, $params->{network};
-   
-    open(my $fh, '-|', $bin, '-sV', $params->{network}) or do {
+    for ($params->{'scan technique'}) {
+        /'TCP SYN'/     && do { push @cmd, '-sS' };
+        /'TCP Connect'/ && do { push @cmd, '-sT' };
+        /'TCP ACK'/     && do { push @cmd, '-sA' };
+        /'TCP Window'/  && do { push @cmd, '-sW' };
+        /'TCP Maimon'/  && do { push @cmd, '-sM' };
+        /'UDP Scan'/    && do { push @cmd, '-sU' };
+        /'TCP Null'/    && do { push @cmd, '-sN' };
+        /'TCP FIN'/     && do { push @cmd, '-sF' };
+        /'TCP Xmas'/    && do { push @cmd, '-sX' };
+    };
+    for ($params->{infos}) {
+        /'normal'/      && do { push @cmd, '-sV' };
+        /'light'/       && do { push @cmd, '-sV --version-light' };
+        /'full'/       && do { push @cmd, '-sV --version-all' };
+    };
+    if ($params->{ports}) {
+        push @cmd, "-p $params->{ports}";
+    }
+    push @cmd, $params->{host};
+    open(my $fh, '-|', @cmd) or do {
          $self->append_data($outfile,"#ERROR\t$!\n");
          return;
     };
@@ -125,7 +158,7 @@ sub start_instance {
     my $scanfor=<$fh>;
     my $hostis=<$fh>;
     my $notshown=<$fh>;
-  
+
     while (<$fh>) {
        chomp;
        if (m/(^$|^Nmap.*$)/) {next;};
