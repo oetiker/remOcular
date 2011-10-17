@@ -148,7 +148,7 @@ S<Tobias Oetiker E<lt>tobi@oetiker.chE<gt>>
 =head1 HISTORY
 
  2009-12-11 to 0.363 first version for remocular
- 2011-10-09 rp 0.xxx fixed comments and licence
+ 2011-10-09 rp 0.364 fixed comments and licence
 
 =cut
 
