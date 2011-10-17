@@ -1,4 +1,5 @@
 package remOcular::Plugin::Nmap;
+use feature qw/switch/;
 use strict;
 use base 'remOcular::Plugin';
 use IPC::Run qw(run timeout new_chunker);
@@ -20,7 +21,7 @@ Run the Nmap security scanner
 use Carp;
 use vars qw($VERSION);
 '$Revision: 1 $ ' =~ /Revision: (\S*)/;
-my $VERSION = "0.9.1.$1";
+my $VERSION = "0.9.$1";
 
 sub get_config {
     my $self = shift;
@@ -38,8 +39,8 @@ sub get_config {
             {
                 type=> 'SelectBox',
                 label=> 'Scan Technique',
-                name=> 'scan technique',
-                data=> [ 'default',
+                name=> 'scantechnique',
+                data=> [ 'default' ,
                          'TCP SYN',
                          'TCP Connect',
                          'TCP ACK',
@@ -49,25 +50,40 @@ sub get_config {
                          'TCP Null',
                          'TCP FIN',
                          'TCP Xmax' ],
+                initial=> 'default',
             },
             {
                 type=> 'TextField',
                 label=> 'Ports',
                 name=> 'ports',
-            },
+             },
             {
                 type=> 'SelectBox',
                 label=> 'IP Level',
                 name=>  'iplevel',
-    	        initial => 'IPv4',
                 data=> [qw(IPv4 IPv6)],
+    	        initial => 'IPv4',
             },
             {
-                type=> 'Infos',
-                label=> 'Info',
+                type=> 'SelectBox',
+                label=> 'Infos',
                 name=> 'infos',
-                data=> [qw(default light full)],
+                data=> [ 'disabled',
+                         'normal',
+                         'light',
+                         'full' ],
+                initial=> 'disabled',
             },
+#            {
+#                type=> 'Checkbox',
+#                label=> 'remote NMAP',
+#                name=> 'rnmap',
+#            },
+#            {
+#                type=> 'TextField',
+#                label=> 'Remote NMAP bin',
+#                name=> 'nmap',
+#            },
         ],
         byline => qq{Version $VERSION, 2011-10-07, by Roman Plessl},
         link  => qq{http://roman.plessl.info/},
@@ -82,33 +98,40 @@ sub check_params {
     my $self = shift;
     my $params = shift;
     my $error;
+#    if (not defined $params->{rnmap}){
+#        return "Error: No NMAP binary defined";
+#    }
     if (not defined $params->{host}){
-        return "Error: host or network not defined";
+        return "Error: No host or network defined";
     }
+    if ($params->{host} =~ m/!(^(([a-zA-Z]|[a-zA-Z][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z]|[A-Za-z][A-Za-z0-9\-]*[A-Za-z0-9])|(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5]))$/){
+        return "Error: not an valid hostname or IP given";
+    }
+
     return {
         table => [
             {
-                label    => 'port',
+                label    => 'Port',
                 tooltip  => 'port',
-                width    => 3,
+                width    => 1,
             },
             {
-                label    => 'state',
+                label    => 'State',
                 tooltip  => 'state',
                 width    => 1,
             },
             {
-                label    => 'service',
+                label    => 'Service',
                 tooltip  => 'service',
                 width    => 3,
             },
             {
-                label    => 'version',
+                label    => 'Version',
                 tooltip  => 'version',
                 width    => 3,
             },
         ],
-        title => "Nmap to $params->{host}",
+        title => "Nmap to $params->{network}",
     }
 }
 
@@ -118,37 +141,45 @@ sub start_instance {
     my $outfile = shift;
     my $params = shift;
     my $data = '';
-    my $bin =  '/usr/bin/nmap';
+    my $bin = '/usr/bin/nmap';
     if (not -x $bin){
         $self->append_data($outfile,"#ERROR\t$bin not found\n");
         return;
     }
-
-    my @cmd = ( $bin );
-    push @cmd, ($params->{iplevel} =~ /IPv6/ ? '-6' : '');
-    for ($params->{'scan technique'}) {
-        /'TCP SYN'/     && do { push @cmd, '-sS' };
-        /'TCP Connect'/ && do { push @cmd, '-sT' };
-        /'TCP ACK'/     && do { push @cmd, '-sA' };
-        /'TCP Window'/  && do { push @cmd, '-sW' };
-        /'TCP Maimon'/  && do { push @cmd, '-sM' };
-        /'UDP Scan'/    && do { push @cmd, '-sU' };
-        /'TCP Null'/    && do { push @cmd, '-sN' };
-        /'TCP FIN'/     && do { push @cmd, '-sF' };
-        /'TCP Xmas'/    && do { push @cmd, '-sX' };
-    };
-    for ($params->{infos}) {
-        /'normal'/      && do { push @cmd, '-sV' };
-        /'light'/       && do { push @cmd, '-sV --version-light' };
-        /'full'/       && do { push @cmd, '-sV --version-all' };
-    };
+    my @cmd;
+    if ($params->{iplevel} =~ /IPv6/) {
+        push @cmd, '-6';
+    }
+    given ($params->{'scantechnique'}) {
+        when ( 'TCP SYN' )     { push @cmd, '-sS' }
+        when ( 'TCP Connect' ) { push @cmd, '-sT' }
+        when ( 'TCP ACK' )     { push @cmd, '-sA' }
+        when ( 'TCP Window' )  { push @cmd, '-sW' }
+        when ( 'TCP Maimon' )  { push @cmd, '-sM' }
+        when ( 'UDP Scan' )    { push @cmd, '-sU' }
+        when ( 'TCP Null' )    { push @cmd, '-sN' }
+        when ( 'TCP FIN' )     { push @cmd, '-sF' }
+        when ( 'TCP Xmas' )    { push @cmd, '-sX' }
+    }
+    given ($params->{infos}) {
+        when ( 'normal' )      { push @cmd, '-sV' }
+        when ( 'light' )       { push @cmd, '-sV --version-light' }
+        when ( 'full' )        { push @cmd, '-sV --version-all' }
+    }
     if ($params->{ports}) {
         push @cmd, "-p $params->{ports}";
     }
-    push @cmd, $params->{host};
-    open(my $fh, '-|', @cmd) or do {
-         $self->append_data($outfile,"#ERROR\t$!\n");
-         return;
+    push @cmd, "$params->{host}";
+
+#    my $errorlog = Mojo::Log->new (
+#        path  => '/tmp/nmap.log',
+#        level => 'debug',
+#    );
+#    $errorlog->debug( '-|', "$bin" . ' '. join(" ", @cmd) );
+
+    open(my $fh, '-|', "$bin" . ' ' . join(" ", @cmd) ) or do {
+        $self->append_data($outfile,"#ERROR\t$!\n");
+        return;
     };
 
     my $ok = 0;
@@ -161,7 +192,11 @@ sub start_instance {
 
     while (<$fh>) {
        chomp;
-       if (m/(^$|^Nmap.*$)/) {next;};
+       if (m/(^$|^PORT.*$|^Nmap.*$|^Service detection performed.*$)/) {next;};
+       if (m/^Service\sInfo:/) {
+           $_ =~ s/Service\sInfo.*Host/Service_Info_Host/;
+           $_ = "\t".'.'."\t".$_;
+       }
        $data .= join("\t", "#PUSH", split(/\s+/,$_,4))."\n";
     }
     close $fh;
