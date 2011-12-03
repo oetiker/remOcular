@@ -217,7 +217,7 @@ __END__
 
 =head1 COPYRIGHT
 
-Copyright (c) 2008 by OETIKER+PARTNER AG. All rights reserved.
+Copyright (c) 2009-2011 by OETIKER+PARTNER AG. All rights reserved.
 
 =head1 LICENSE
 

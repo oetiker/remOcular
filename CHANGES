@@ -1,3 +1,5 @@
+* Added NMAP Plugin  [Roman Plessl <roman.plessl@oetiker.ch>]
+
 * require perl 5.10.1
 
 0.9.0 - 2011-10-05 - Tobi Oetiker <tobi@oetiker.ch>
