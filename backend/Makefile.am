@@ -45,7 +45,7 @@ public/script/$(QX_CLASS).js: $(shell find ../frontend/source/class/$(QX_CLASS) 
 endif
          
 install-exec-hook:
-	[ "$(PERL5LIB)" != "" ] && cd "$(DESTDIR)$(bindir)" && $(PERL) -i -p -e 's{^#!.*perl.*}{#!$(PERL)}; s{.*# PERL5LIB}{use lib qw($(PERL5LIB)); # PERL5LIB}' $(dist_bin_SCRIPTS)
+	[ "$(PERL5LIB)" != "" ] && cd "$(DESTDIR)$(bindir)/.." && $(PERL) -i -p -e 's{^#!.*perl.*}{#!$(PERL)}; s{.*# PERL5LIB}{use lib qw($(PERL5LIB)); # PERL5LIB}' $(dist_bin_SCRIPTS)
         
         
 dist-hook:
