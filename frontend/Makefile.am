@@ -30,7 +30,7 @@ lint:
 pretty:
 	$(QOOXDOO_PATH)/tool/bin/generator.py -m QOOXDOO_PATH:$(QOOXDOO_PATH) -m CACHE:./cache pretty
 	
-source/script/remocular.js: $(shell find source/class/remocular -name "*.js")
+source/script/remocular.js: $(shell find source/class/remocular -name "*.js") $(QOOXDOO_PATH)/framework/config.json
 	$(QOOXDOO_PATH)/tool/bin/generator.py -m QOOXDOO_PATH:$(QOOXDOO_PATH) -m CACHE:./cache source
 
 endif
