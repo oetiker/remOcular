@@ -83,7 +83,7 @@ if test "$enable_pkgonly" != yes; then
    if test x$prfx = xNONE; then
        prfx=$ac_default_prefix
    fi
-   for module in Mojolicious Mojo::Server::FastCGI Config::Grammar IPC::Run; do
+   for module in Mojolicious Mojo::Server::FastCGI MojoX::Dispatcher::Qooxdoo::Jsonrpc Config::Grammar IPC::Run; do
      AC_MSG_CHECKING([checking for perl module '$module'])
      if ${PERL} -I$prfx/thirdparty/lib/perl5 -e 'use '$module 2>/dev/null ; then
          AC_MSG_RESULT([Ok])

@@ -31,6 +31,12 @@ sub startup {
 
     $self->app->hook(before_dispatch => sub {
         my $self = shift;
+
+        my $uri = $self->req->env->{SCRIPT_URI};
+        my $path_info = $self->req->env->{PATH_INFO};
+        $uri =~ s|/?${path_info}$|/| if $path_info and $uri;       
+        $self->req->url->base(Mojo::URL->new($uri)) if $uri;
+
         my $rr_session;        
         if (my $id = $self->session('id')){
            $self->app->log->debug("use id $id");

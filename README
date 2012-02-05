@@ -29,17 +29,22 @@ is a plugin module (written in perl) on the server side.
 
 See http://www.remocular.org for more information
 
-INSTALLATION
-------------
+INSTALLATION from tar file
+--------------------------
 
 Use the regular
 
- ./configure
+ ./configure --prefix=$INSTALL_DIR
  make
  make install
 
 aproach. The configure script will check if the reuqired perl modules are
-installed. If they are missing, it will tell you how to install them.
+installed. If they are missing, it will tell you how to install them using a
+line like this:
+
+ ./setup/build-perl-modules.sh $INSTALL_DIR/thirdparty
+
+Now try running configure again, it should be happy now.
 
 The installer can be run as a normal user as long as it can write
 into the installation directoreis.
@@ -59,6 +64,16 @@ fastcgi script.
 You can also run remocular standalone:
 
   PREFIX/bin/remocular.pl daemon
+
+
+INSTALLING from Git
+-------------------
+
+* run ./autogetn.sh to create the configure script
+
+* get a copy of the qooxdoo sdk from www.qooxdoo.org
+
+* configure with --with-qooxdoo-sdk=path-to-sdk
 
 DEVELOPEMENT
 ------------
@@ -89,13 +104,9 @@ And then access it via the built in webserver:
  cd backend/bin
  env QX_SRC_MODE=1 MOJO_LOG_LEVEL=debug REMOCULAR_CONF=../etc/remocular.cfg.dist ./remocular.pl daemon 
 
-It might also be a good idea to fork smokeping on github and work within
+It might also be a good idea to fork remocular github and work within
 your copy, so that you can easily feed back your changes to the master
-version. Run
-
- ./autogen.sh
-
-in your git tree, to build the configure script and the Makefile.in files.
+version.
 
 If you want to enhance remOcular with additional plugins, you only have to
 change the server side.  No JavaScript/Qooxdoo programming is required.  See
