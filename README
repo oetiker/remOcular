@@ -58,13 +58,34 @@ your needs.
 RUNNING
 -------
 
-Use remocular.fcgi.dist in PREFIX/htdocs as a template to create your
-fastcgi script.
-
-You can also run remocular standalone:
+You can run remOcular standalone:
 
   PREFIX/bin/remocular.pl daemon
 
+When running from Apache, it is best to use the FastCGI mode of remocular.
+
+Use remocular.fcgi.dist in PREFIX/htdocs as a template to create your script.
+
+For security reasons it is best to configure your apache to run with suexec.
+
+Sample virtual host config:
+
+  <VirtualHost *:443>
+  # suexec will only work for directory underneath
+  # /var/www or wherever else your apache copy has its default
+  # document root
+
+  DocumentRoot /var/www/remocular
+
+  SuexecUserGroup extopus extopus
+  AddHandler fcgid-script .fcgi
+
+  RewriteEngine On
+  RewriteBase /var/www/remocular
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule (.*) remocular.fcgi/$1 [L]
+
+  </VirtualHost>
 
 INSTALLING from Git
 -------------------
