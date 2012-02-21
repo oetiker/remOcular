@@ -221,7 +221,7 @@ sub start_instance {
     my $self = shift;
     my $outfile = shift;
     my $params = shift;  
-    my $bin =  '/usr/sbin/traceroute';
+    my $bin = ''.(grep { -x $_.'/traceroute' } qw(/usr/bin /bin /usr/sbin /sbin))[0].'/traceroute';
     if (not -x $bin){
         $self->save($outfile,"#ERROR\t$bin not found\n");
         return;
