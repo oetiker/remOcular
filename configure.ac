@@ -67,11 +67,28 @@ HTDOCSDIR=${prefix}/htdocs
 AC_ARG_WITH(htdocs-dir,AC_HELP_STRING([--with-htdocs-dir=[DIR]],[Where to install htdocs [PREFIX/htdocs]]]), [HTDOCSDIR=$withval])
 AC_SUBST(HTDOCSDIR)
 
-QOOXDOO_PATH=no
-AC_ARG_WITH(qooxdoo-sdk,AC_HELP_STRING([--with-qooxdoo-sdk=[DIR]],[Where can we find the qooxdoo sdk (required to rebuild the web ui)]]), [QOOXDOO_PATH=$withval])
+QOOXDOO_PATH=
+AC_ARG_WITH(qooxdoo-sdk,AC_HELP_STRING([--with-qooxdoo-sdk=DIR],[Where can we find the qooxdoo sdk (required to rebuild the web ui)]), [
+        if test -d $withval/framework; then
+             QOOXDOO_PATH=$withval
+        else
+        cat <<NOTES
+
+** Aborting Configure ******************************
+   
+   You specified --with-qooxdoo-sdk=DIR without pointing it
+   to a copy of the qooxdoo sdk. If you specify the option,
+   make sure there is a copy of the qooxdoo sdk present.
+   get your copy form www.qooxdoo.org.
+
+NOTES
+          exit 1
+        fi
+])
+
 AC_SUBST(QOOXDOO_PATH)
 
-AM_CONDITIONAL(BUILD_QOOXDOO_APP,[test $QOOXDOO_PATH != no])
+AM_CONDITIONAL(BUILD_QOOXDOO_APP,[test x$QOOXDOO_PATH != x])
 
 AC_ARG_VAR(PERL5LIB,   [Colon separated list of perl library directories])
 AC_SUBST(PERL5LIB)
@@ -126,13 +143,13 @@ AC_SUBST(VERSION)
 
 AC_OUTPUT
 
-if test $QOOXDOO_PATH = no; then
+if test x$QOOXDOO_PATH = x; then
 
 cat <<NOTES
 
 *******************************************************
 
-You did NOT specify the --with-qooxdoo-sdk configuration
+You did NOT specify the --with-qooxdoo-sdk=DIR configuration
 option. So I do not have the means of re-compiling the
 javascript parts (webinterface) of the application. If
 you intend to modify them, make sure to re-configure
