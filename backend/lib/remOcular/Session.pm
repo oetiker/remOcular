@@ -208,17 +208,6 @@ sub delete {
     unlink $self->{_file};
 }
 
-=head2 $sess->id();
-
-Return the id.
-
-=cut
-
-sub id {
-    my $self = shift;
-    return $self->{_id};
-}
-
 1;
 
 __END__

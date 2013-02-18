@@ -7,9 +7,6 @@ use lib "$FindBin::Bin/../lib";
 use lib "$FindBin::Bin/../thirdparty/lib/perl5"; 
 # PERL5LIB
 use Mojolicious::Commands;
-use remOcular;
-
-$ENV{MOJO_APP} = remOcular->new;
 
 # Start commands
-Mojolicious::Commands->start;
+Mojolicious::Commands->start_app('remOcular');

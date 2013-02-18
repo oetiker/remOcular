@@ -17,7 +17,7 @@
 #
 
 
-AC_INIT([remOcular],[0.10.0],[tobi@oetiker.ch])
+AC_INIT([remOcular],[0.11.0],[tobi@oetiker.ch])
 AC_PREREQ([2.59])
 AC_CONFIG_AUX_DIR(conftools)
 # AC_CANONICAL_TARGET
