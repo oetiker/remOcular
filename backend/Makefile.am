@@ -23,7 +23,7 @@ ETC = etc/remocular.cfg.dist
 BIN = bin/remocular.pl
 
 PM :=  $(shell find lib/ -name "*.pm")
-RES :=  $(shell test -d public/resource/$(QX_CLASS) && find public/resource/$(QX_CLASS) -type f)        
+RES :=  $(shell test -d public/resource && find public/resource -type f)        
 
 PUB = public/script/$(QX_CLASS).js public/index.html $(RES)
 
@@ -59,6 +59,6 @@ dist-hook:
 install-data-local:
 	mkdir -p $(DESTDIR)$(HTDOCSDIR)
 	echo "#!/bin/sh" > $(DESTDIR)$(HTDOCSDIR)/index.fcgi.dist
-	echo "export REMOCULAR_CONF=$(prefix)/etc/remocular.cfg" >> $(DESTDIR)$(HTDOCSDIR)/index.fcgi.dist
-	echo "$(prefix)/bin/remocular fastcgi" >> $(DESTDIR)$(HTDOCSDIR)/index.fcgi.dist
+	echo "export REMOCULAR_CONF=$(prefix)/etc/remocular.cfg" >> $(DESTDIR)$(HTDOCSDIR)/remo.fcgi.dist
+	echo "$(prefix)/bin/remocular.pl fastcgi" >> $(DESTDIR)$(HTDOCSDIR)/remo.fcgi.dist
 	chmod +x $(DESTDIR)$(HTDOCSDIR)/index.fcgi.dist
