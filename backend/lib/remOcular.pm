@@ -27,7 +27,7 @@ sub startup {
         }
     }
 
-    $self->secret($gcfg->{secret});
+    $self->secrets([$gcfg->{secret}]);
 
     $self->app->hook(before_dispatch => sub {
         my $self = shift;
